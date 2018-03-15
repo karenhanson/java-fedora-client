@@ -1,0 +1,7 @@
+{
+	"@id": "https://example.org/fedora/publishers/1",
+	"name": "Publisher A",
+	"journals": ["https://example.org/fedora/journals/1","https://example.org/fedora/journals/2"],
+	"pmcParticipation": "A"
+}
+	

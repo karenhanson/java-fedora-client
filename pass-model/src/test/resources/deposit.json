@@ -1,0 +1,9 @@
+{
+	"@id": "https://example.org/fedora/deposits/1",
+	"status": "prepared",
+	"repository": "https://example.org/fedora/repositories/1",
+	"assignedId": "PMC12345",
+	"accessUrl": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/",
+	"requested": true
+}
+	
