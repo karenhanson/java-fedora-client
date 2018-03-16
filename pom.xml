@@ -18,11 +18,32 @@
     <module>pass-model-ext-nihms</module>
     <module>pass-client-util</module>
   </modules>
+
+  <profiles>
+
+    <profile>
+      <id>external</id>
+      <activation>
+        <property>
+          <name>external</name>
+        </property>
+      </activation>
+      <properties>
+        <scp.port>122</scp.port>
+      </properties>
+    </profile>
+
+  </profiles>
   
   <properties>
+    <scp.port>22</scp.port>
+
     <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
     <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
     <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+    <maven.deploy.plugin.version>2.8.2</maven.deploy.plugin.version>
+    <maven.wagon.ssh.version>2.10</maven.wagon.ssh.version>
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <joda-time.version>2.9.9</joda-time.version>
     <org-json.version>20180130</org-json.version>
@@ -64,7 +85,22 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
         </plugin>
-        
+
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>${maven.deploy.plugin.version}</version>
+          <configuration>
+            <retryFailedDeploymentCount>5</retryFailedDeploymentCount>
+          </configuration>
+          <!-- See https://jira.codehaus.org/browse/WAGON-393 -->
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-ssh</artifactId>
+              <version>${maven.wagon.ssh.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
       </plugins>
     </pluginManagement>
     
@@ -125,5 +161,22 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
+  <distributionManagement>
+
+    <repository>
+      <id>dc.public.releases</id>
+      <name>Data Conservancy Release Maven Repository</name>
+      <url>scp://maven.dataconservancy.org:${scp.port}/data/maven-dc/public/releases/</url>
+    </repository>
+
+    <snapshotRepository>
+      <id>dc.public.snapshots</id>
+      <name>Data Conservancy Snapshot Maven Repository</name>
+      <url>scp://maven.dataconservancy.org:${scp.port}/data/maven-dc/public/snapshots/</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+
+  </distributionManagement>
+
 </project>
