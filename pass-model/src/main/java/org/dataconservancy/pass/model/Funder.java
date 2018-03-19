@@ -47,6 +47,10 @@ public class Funder extends PassEntity {
      */
     private URI policy;
 
+    /** 
+     * ID assigned to the funder within the researcher's institution 
+     */
+    private String localId;
     
     @Override
     public String getType() {
@@ -100,6 +104,23 @@ public class Funder extends PassEntity {
     public void setPolicy(URI policy) {
         this.policy = policy;
     }
+
+    
+    /**
+     * @return the localId
+     */
+    public String getLocalId() {
+        return localId;
+    }
+
+    
+    /**
+     * @param localId the localId to set
+     */
+    public void setLocalId(String localId) {
+        this.localId = localId;
+    }
+
     
 
     @Override
@@ -114,6 +135,7 @@ public class Funder extends PassEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
         if (policy != null ? !policy.equals(that.policy) : that.policy != null) return false;
+        if (localId != null ? !localId.equals(that.localId) : that.localId != null) return false;
         return true;
     }
 
@@ -125,6 +147,7 @@ public class Funder extends PassEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (policy != null ? policy.hashCode() : 0);
+        result = 31 * result + (localId != null ? localId.hashCode() : 0);
         return result;
     }
     

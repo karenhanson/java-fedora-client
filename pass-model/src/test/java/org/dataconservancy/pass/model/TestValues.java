@@ -48,6 +48,7 @@ public class TestValues {
         
     public static final String FUNDER_NAME = "Funder A";
     public static final String FUNDER_URL = "https://nih.gov";
+    public static final String FUNDER_LOCALID = "A12345";
 
     public static final String GRANT_AWARD_NUMBER = "RH1234CDE";
     public static final Grant.AwardStatus GRANT_STATUS = Grant.AwardStatus.ACTIVE;
