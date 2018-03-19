@@ -115,8 +115,10 @@ public class Submission extends PassEntity {
     public enum Status {
         @JsonProperty("in-progress")
         IN_PROGRESS("in-progress"),
-        @JsonProperty("complete")
-        COMPLETE("complete");
+        @JsonProperty("compliant")
+        COMPLIANT("compliant"),
+        @JsonProperty("non-compliant")
+        NON_COMPLIANT("non-compliant");
         
         private String value;
         private Status(String value){
