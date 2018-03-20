@@ -51,10 +51,15 @@ public class Submission extends PassEntity {
     private String title;
 
     /** 
-     * List of person URIs for authors for work represented by Submission 
+     * Contact name for corresponding author
      */
-    private List<URI> authors = new ArrayList<>();
+    private String corrAuthorName;
 
+    /** 
+     * Contact email for corresponding author 
+     */
+    private String corrAuthorEmail;
+    
     /** 
      * Abstract for work represented by Submission 
      */
@@ -179,18 +184,34 @@ public class Submission extends PassEntity {
 
     
     /**
-     * @return the List of URIs of authors related to submission
+     * @return corrAuthorName the corresponding author name
      */
-    public List<URI> getAuthors() {
-        return authors;
+    public String getCorrAuthorName() {
+        return corrAuthorName;
     }
 
     
     /**
-     * @param authors the List of Person URIs of authors to set
+     * @param the corresponding author name
      */
-    public void setAuthors(List<URI> authors) {
-        this.authors = authors;
+    public void setCorrAuthorName(String corrAuthorName) {
+        this.corrAuthorName = corrAuthorName;
+    }
+
+    
+    /**
+     * @return corrAuthorEmail the corresponding author email
+     */
+    public String getCorrAuthorEmail() {
+        return corrAuthorEmail;
+    }
+
+    
+    /**
+     * @param the corresponding author email
+     */
+    public void setCorrAuthorEmail(String corrAuthorEmail) {
+        this.corrAuthorEmail = corrAuthorEmail;
     }
 
     
@@ -364,7 +385,8 @@ public class Submission extends PassEntity {
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (authors != null ? !authors.equals(that.authors) : that.authors != null) return false;
+        if (corrAuthorName != null ? !corrAuthorName.equals(that.corrAuthorName) : that.corrAuthorName != null) return false;
+        if (corrAuthorEmail != null ? !corrAuthorEmail.equals(that.corrAuthorEmail) : that.corrAuthorEmail != null) return false;
         if (submissionAbstract != null ? !submissionAbstract.equals(that.submissionAbstract) : that.submissionAbstract != null) return false;
         if (doi != null ? !doi.equals(that.doi) : that.doi != null) return false;
         if (journal != null ? !journal.equals(that.journal) : that.journal != null) return false;
@@ -385,7 +407,8 @@ public class Submission extends PassEntity {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (authors != null ? authors.hashCode() : 0);
+        result = 31 * result + (corrAuthorName != null ? corrAuthorName.hashCode() : 0);
+        result = 31 * result + (corrAuthorEmail != null ? corrAuthorEmail.hashCode() : 0);
         result = 31 * result + (submissionAbstract != null ? submissionAbstract.hashCode() : 0);
         result = 31 * result + (doi != null ? doi.hashCode() : 0);
         result = 31 * result + (journal != null ? journal.hashCode() : 0);

@@ -87,6 +87,8 @@ public class TestValues {
     
     public static final Submission.Status SUBMISSION_STATUS = Submission.Status.IN_PROGRESS;
     public static final String SUBMISSION_TITLE = "Some article";
+    public static final String SUBMISSION_CORRAUTHNAME = "B. Goodman";
+    public static final String SUBMISSION_CORRAUTHEMAIL = "author@example.com";
     public static final String SUBMISSION_ABSTRACT = "An article about something";
     public static final String SUBMISSION_DOI = "10.0101/1234abcd";
     public static final String SUBMISSION_VOLUME = "5";

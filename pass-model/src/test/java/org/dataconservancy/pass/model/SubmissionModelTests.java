@@ -59,8 +59,8 @@ public class SubmissionModelTests {
         assertEquals("Submission", submission.getType());
         assertEquals(TestValues.SUBMISSION_STATUS, submission.getStatus());
         assertEquals(TestValues.SUBMISSION_TITLE, submission.getTitle());
-        assertEquals(TestValues.PERSON_ID_1, submission.getAuthors().get(0).toString());
-        assertEquals(TestValues.PERSON_ID_2, submission.getAuthors().get(1).toString());
+        assertEquals(TestValues.SUBMISSION_CORRAUTHNAME, submission.getCorrAuthorName());
+        assertEquals(TestValues.SUBMISSION_CORRAUTHEMAIL, submission.getCorrAuthorEmail());
         assertEquals(TestValues.SUBMISSION_ABSTRACT, submission.getSubmissionAbstract());
         assertEquals(TestValues.SUBMISSION_DOI, submission.getDoi());
         assertEquals(TestValues.JOURNAL_ID_1, submission.getJournal().toString());
@@ -91,8 +91,8 @@ public class SubmissionModelTests {
         assertEquals(root.getString("@type"),"Submission");
         assertEquals(root.getString("status"),TestValues.SUBMISSION_STATUS.getValue());
         assertEquals(root.getString("title"),TestValues.SUBMISSION_TITLE);
-        assertEquals(root.getJSONArray("authors").get(0),TestValues.PERSON_ID_1);
-        assertEquals(root.getJSONArray("authors").get(1),TestValues.PERSON_ID_2);
+        assertEquals(root.getString("corrAuthorName"),TestValues.SUBMISSION_CORRAUTHNAME);
+        assertEquals(root.getString("corrAuthorEmail"),TestValues.SUBMISSION_CORRAUTHEMAIL);
         assertEquals(root.getString("abstract"),TestValues.SUBMISSION_ABSTRACT);
         assertEquals(root.getString("doi"),TestValues.SUBMISSION_DOI);
         assertEquals(root.getString("journal"),TestValues.JOURNAL_ID_1);
@@ -133,12 +133,8 @@ public class SubmissionModelTests {
         submission.setId(new URI(TestValues.SUBMISSION_ID_1));
         submission.setStatus(TestValues.SUBMISSION_STATUS);
         submission.setTitle(TestValues.SUBMISSION_TITLE);
-        
-        List<URI> authors = new ArrayList<URI>();
-        authors.add(new URI(TestValues.PERSON_ID_1));
-        authors.add(new URI(TestValues.PERSON_ID_2));
-        submission.setAuthors(authors);
-        
+        submission.setCorrAuthorName(TestValues.SUBMISSION_CORRAUTHNAME);
+        submission.setCorrAuthorEmail(TestValues.SUBMISSION_CORRAUTHEMAIL);
         submission.setSubmissionAbstract(TestValues.SUBMISSION_ABSTRACT);
         submission.setDoi(TestValues.SUBMISSION_DOI);
         submission.setJournal(new URI(TestValues.JOURNAL_ID_1));
