@@ -73,7 +73,7 @@ public class FedoraPassClient implements PassClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> PassEntity readResource(URI uri, Class<T> modelClass) {
+    public <T extends PassEntity> T readResource(URI uri, Class<T> modelClass) {
         return crudClient.readResource(uri, modelClass);
     }
 
@@ -81,7 +81,7 @@ public class FedoraPassClient implements PassClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> URI findByAttribute(Class<T> modelClass, String attribute, Object value) {
+    public <T extends PassEntity> URI findByAttribute(Class<T> modelClass, String attribute, Object value) {
         return indexClient.findByAttribute(modelClass, attribute, value);
     }
 
@@ -89,7 +89,7 @@ public class FedoraPassClient implements PassClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value) {
+    public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value) {
         return indexClient.findAllByAttribute(modelClass, attribute, value);
     }
 
@@ -98,7 +98,7 @@ public class FedoraPassClient implements PassClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> valueAttributesMap) {
+    public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> valueAttributesMap) {
         return indexClient.findAllByAttributes(modelClass, valueAttributesMap);
     }
 

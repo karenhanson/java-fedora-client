@@ -16,7 +16,7 @@
 package org.dataconservancy.pass.model;
 
 import java.net.URI;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -42,7 +42,7 @@ public class Publisher extends PassEntity {
     /** 
      * URIs of Journals associated with publisher
      */
-    private List<URI> journals;
+    private List<URI> journals = new ArrayList<>();
     
     /** 
      * This field indicates whether a journal participates in the NIH Public Access Program by sending final 

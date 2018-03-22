@@ -24,3 +24,15 @@ String localAwardId = "AB123456";
 PassClient client = new FedoraPassClient();
 URI grantUri = client.findByAttribute(Grant.class, "localAwardId", localAwardId);
 ```
+
+## Integration with Fedora
+
+The integration test module `pass-client-integration` uses Docker to spin up an instance of Fedora for testing the client against.
+
+By default, it uses a statically-defined JSON-LD context, presently at `pass-client-integration/src/test/resources/docker/mnt/context.jsonld`.  Editing this (and re-starting the docker container, if applicable) will alow the client to be tested against unpublished contexts.
+
+To run a Fedora instance manually, from within `pass-client-integration`, do
+
+    mvn docker:run -Pstandard
+
+This will run Fedora at standard ports (8080). This mode is very useful for testing/debugging/developing against Fedora within the IDE.   Repository content is stored in `target`, so if it is run after integration tests, the repository will still retain all data deposited during.

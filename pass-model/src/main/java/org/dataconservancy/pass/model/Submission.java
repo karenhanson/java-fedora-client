@@ -16,7 +16,7 @@
 package org.dataconservancy.pass.model;
 
 import java.net.URI;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -53,7 +53,7 @@ public class Submission extends PassEntity {
     /** 
      * List of person URIs for authors for work represented by Submission 
      */
-    private List<URI> authors;
+    private List<URI> authors = new ArrayList<>();
 
     /** 
      * Abstract for work represented by Submission 
@@ -84,17 +84,17 @@ public class Submission extends PassEntity {
     /** 
      * List of places the submission will be deposited to 
      */
-    private List<URI> deposits;
+    private List<URI> deposits = new ArrayList<>();
 
     /** 
      * List of URIs for grants associated with the submission 
      */
-    private List<URI> grants;
+    private List<URI> grants = new ArrayList<>();
 
     /** 
      * List of URIs of Workflows to track the status of submission process 
      */
-    private List<URI> workflows;
+    private List<URI> workflows = new ArrayList<>();
 
     /** 
      * Date the record was submitted by the User through PASS 

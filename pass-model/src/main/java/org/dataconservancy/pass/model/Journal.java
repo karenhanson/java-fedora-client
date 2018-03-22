@@ -16,7 +16,7 @@
 package org.dataconservancy.pass.model;
 
 import java.net.URI;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -42,7 +42,7 @@ public class Journal extends PassEntity {
     /** 
      * Array of ISSN(s) for Journal 
      */
-    private List<String> issns;
+    private List<String> issns = new ArrayList<>();
     
     /** 
      * ID of publisher 

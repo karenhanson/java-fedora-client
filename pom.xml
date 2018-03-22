@@ -17,6 +17,7 @@
     <module>pass-client-api</module>
     <module>pass-model-ext-nihms</module>
     <module>pass-client-util</module>
+    <module>pass-client-integration</module>
   </modules>
 
   <profiles>
@@ -38,20 +39,28 @@
   <properties>
     <scp.port>22</scp.port>
 
+    <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
+    <docker-maven-plugin.version>0.24.0</docker-maven-plugin.version>
     <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+    <maven-failsafe-plugin.version>2.21.0</maven-failsafe-plugin.version>
     <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
     <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
     <maven.deploy.plugin.version>2.8.2</maven.deploy.plugin.version>
     <maven.wagon.ssh.version>2.10</maven.wagon.ssh.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    
+    <commons-io.version>2.6</commons-io.version>
+    <commons-beanutils.version>1.9.3</commons-beanutils.version>
     <joda-time.version>2.9.9</joda-time.version>
     <org-json.version>20180130</org-json.version>
     <junit.version>4.12</junit.version>
     <jackson.version>2.9.4</jackson.version>
     <fcrepo-java-client.version>0.3.0</fcrepo-java-client.version>
     <logback.version>1.2.3</logback.version>
+    <openpojo.version>0.8.10</openpojo.version>
     <slf4j.version>1.7.25</slf4j.version>
+    <unitils.version>3.4.6</unitils.version>
   </properties>
 
 
@@ -101,6 +110,25 @@
             </dependency>
           </dependencies>
         </plugin>
+        
+        <plugin>
+          <groupId>io.fabric8</groupId>
+          <artifactId>docker-maven-plugin</artifactId>
+          <version>${docker-maven-plugin.version}</version>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>${build-helper-maven-plugin.version}</version>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>${maven-failsafe-plugin.version}</version>
+        </plugin>
+        
       </plugins>
     </pluginManagement>
     
@@ -158,6 +186,32 @@
         <artifactId>logback-classic</artifactId>
         <version>${logback.version}</version>
         <scope>test</scope>
+      </dependency>
+      
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${commons-io.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.unitils</groupId>
+        <artifactId>unitils-core</artifactId>
+        <version>${unitils.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>${commons-beanutils.version}</version>
+      </dependency>
+
+      <dependency>
+       <groupId>com.openpojo</groupId>
+       <artifactId>openpojo</artifactId>
+       <version>${openpojo.version}</version>
+       <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

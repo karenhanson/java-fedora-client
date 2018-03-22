@@ -16,7 +16,7 @@
 package org.dataconservancy.pass.model;
 
 import java.net.URI;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -78,7 +78,7 @@ public class Grant extends PassEntity {
     /** 
      * Co-principal investigator list 
      */
-    private List<URI> coPis;
+    private List<URI> coPis = new ArrayList<>();
     
     /* TODO: need to decide how to handle these dates that have no times. 
      * Using zulu date for now**/
@@ -98,7 +98,7 @@ public class Grant extends PassEntity {
     private DateTime endDate;
     
     /** List of Submission URIs related to Grant */
-    private List<URI> submissions;
+    private List<URI> submissions = new ArrayList<>();
     
     /** Status of award/grant */
     public enum AwardStatus {

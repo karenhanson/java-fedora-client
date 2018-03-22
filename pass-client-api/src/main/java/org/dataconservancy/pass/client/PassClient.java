@@ -70,7 +70,7 @@ public interface PassClient {
      * @param modelClass
      * @return
      */
-    public <T> PassEntity readResource(URI uri, Class<T> modelClass);
+    public <T extends PassEntity> T readResource(URI uri, Class<T> modelClass);
     
     /**
      * Retrieves URI for a SINGLE RECORD by matching the entity type and filtering by the field
@@ -85,7 +85,7 @@ public interface PassClient {
      * @param value
      * @return
      */
-    public <T> URI findByAttribute(Class<T> modelClass, String attribute, Object value);
+    public <T extends PassEntity> URI findByAttribute(Class<T> modelClass, String attribute, Object value);
     
     
     /**
@@ -100,7 +100,7 @@ public interface PassClient {
      * @param value
      * @return
      */
-    public <T> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value);
+    public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value);
     
     
     /**
@@ -119,7 +119,7 @@ public interface PassClient {
      * @param value
      * @return
      */
-    public <T> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> attributeValuesMap);
+    public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> attributeValuesMap);
        
     
 }

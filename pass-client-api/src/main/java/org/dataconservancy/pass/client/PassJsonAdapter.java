@@ -41,7 +41,7 @@ public interface PassJsonAdapter {
      * @param valueType
      * @return
      */
-    public <T> PassEntity toModel(byte[] jsonData, Class<T> valueType);
+    public <T extends PassEntity> T toModel(byte[] jsonData, Class<T> valueType);
     
     
     /**
@@ -50,7 +50,6 @@ public interface PassJsonAdapter {
      * @param valueType
      * @return
      */
-    public <T> PassEntity toModel(InputStream jsonData, Class<T> valueType);
-
+    public <T extends PassEntity> T toModel(InputStream jsonData, Class<T> valueType);
 
 }

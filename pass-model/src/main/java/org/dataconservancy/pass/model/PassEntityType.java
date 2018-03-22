@@ -24,7 +24,7 @@ public enum PassEntityType {
     DEPOSIT ("Deposit", "deposits"),
     FUNDER ("Funder", "funders"),
     GRANT ("Grant", "grants"),
-    JOURNAL ("Journal", "journal"),
+    JOURNAL ("Journal", "journals"),
     PERSON ("Person", "people"),
     POLICY ("Policy", "policies"),
     PUBLISHER ("Publisher", "publishers"),

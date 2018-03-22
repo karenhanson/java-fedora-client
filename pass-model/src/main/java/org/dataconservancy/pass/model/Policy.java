@@ -16,7 +16,7 @@
 package org.dataconservancy.pass.model;
 
 import java.net.URI;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -47,7 +47,7 @@ public class Policy extends PassEntity {
     /** 
      * List of URIs for repositories that can satisfying this policy 
      */
-    private List<URI> repositories;
+    private List<URI> repositories = new ArrayList<>();
     
     /** 
      * True if this policy should appear for all submission. This can be used to identify a policy or 
