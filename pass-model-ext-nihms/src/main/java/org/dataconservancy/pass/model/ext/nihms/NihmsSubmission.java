@@ -18,7 +18,7 @@ package org.dataconservancy.pass.model.ext.nihms;
 import org.dataconservancy.pass.model.Submission;
 
 /**
- * 
+ * Additional fields required for NIHMS 
  * @author Karen Hanson
  */
 public class NihmsSubmission extends Submission {
@@ -34,6 +34,13 @@ public class NihmsSubmission extends Submission {
     public String getPmid() {
         return pmid;
     }
+    
+    /**
+     * @param pmid
+     */
+    public void setPmid(String pmid) {
+        this.pmid = pmid;
+    }       
 
     @Override
     public boolean equals(Object o) {
