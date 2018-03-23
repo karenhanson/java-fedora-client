@@ -40,7 +40,7 @@ public class JsonAdapterTests {
     
     private static final String DEPOSIT_ID_1 = "https://example.org/fedora/deposits/1";
     private static final String REPOSITORY_ID_1 = "https://example.org/fedora/repositories/1";
-    private static final Deposit.Status DEPOSIT_STATUS = Deposit.Status.PREPARED;
+    private static final Deposit.Status DEPOSIT_STATUS = Deposit.Status.IN_PREPARATION;
     private static final String DEPOSIT_ASSIGNEDID = "PMC12345";
     private static final String DEPOSIT_ACCESSURL = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/";
     private static final Boolean DEPOSIT_REQUESTED = true;
@@ -90,7 +90,7 @@ public class JsonAdapterTests {
         assertEquals(root.getString("@id"),DEPOSIT_ID_1);
         assertEquals(root.getString("@type"),"Deposit");
         assertEquals(root.getString("@context"),CONTEXT);
-        assertEquals(root.getString("status"),DEPOSIT_STATUS.name().toLowerCase());
+        assertEquals(root.getString("status"),DEPOSIT_STATUS.getValue());
         assertEquals(root.getString("repository"),REPOSITORY_ID_1);
         assertEquals(root.getString("assignedId"),DEPOSIT_ASSIGNEDID);
         assertEquals(root.getString("accessUrl"),DEPOSIT_ACCESSURL);
@@ -112,7 +112,7 @@ public class JsonAdapterTests {
         assertEquals(root.getString("@id"),DEPOSIT_ID_1);
         assertEquals(root.getString("@type"),"Deposit");
         assertEquals(root.has("@context"),false);
-        assertEquals(root.getString("status"),DEPOSIT_STATUS.name().toLowerCase());
+        assertEquals(root.getString("status"),DEPOSIT_STATUS.getValue());
         assertEquals(root.getString("repository"),REPOSITORY_ID_1);
         assertEquals(root.getString("assignedId"),DEPOSIT_ASSIGNEDID);
         assertEquals(root.getString("accessUrl"),DEPOSIT_ACCESSURL);

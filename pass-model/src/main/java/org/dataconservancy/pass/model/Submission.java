@@ -115,16 +115,37 @@ public class Submission extends PassEntity {
     
     
     /** 
-     * Status of submission 
+     * Possible statuses of a submission, this is dependent on information from the server and
+     * is calculated using the status of associated Deposits
      */
     public enum Status {
-        @JsonProperty("in-progress")
-        IN_PROGRESS("in-progress"),
-        @JsonProperty("compliant")
-        COMPLIANT("compliant"),
-        @JsonProperty("non-compliant")
-        NON_COMPLIANT("non-compliant");
-        
+        /**
+         * The submission is not yet in compliance with applicable policies. 
+         * One or more required Deposits have not been initiated.
+         */
+        @JsonProperty("non-compliant-not-started")
+        NON_COMPLIANT_NOT_STARTED("non-compliant-not-started"),
+        /**
+         * All required Deposits for the Submission have been initiated, 
+         * but at least one could not be completed and may require additional work by 
+         * the user before being classified as compliant
+         */
+        @JsonProperty("non-compliant-in-progress")
+        NON_COMPLIANT_IN_PROGRESS("non-compliant-in-progress"),
+        /**
+         * Submission is in compliance with all known applicable policies. 
+         * All of the required Deposits have been initiated, but at least one has 
+         * not yet reached the `Accepted` status.
+         */
+        @JsonProperty("compliant-in-progress")
+        COMPLIANT_IN_PROGRESS("compliant-in-progress"),
+        /**
+         * Submission is in compliance with all known applicable policies. 
+         * All related Deposits have a status of Accepted
+         */
+        @JsonProperty("compliant-complete")
+        COMPLIANT_COMPLETE("compliant-complete");
+
         private String value;
         private Status(String value){
             this.value = value;
