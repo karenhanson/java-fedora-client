@@ -41,10 +41,11 @@ public class TestValues {
     public static final String USER_ID_1 = "https://example.org/fedora/users/1";
     public static final String WORKFLOW_ID_1 = "https://example.org/fedora/workflows/1";
 
-    public static final Deposit.Status DEPOSIT_STATUS = Deposit.Status.PREPARED;
+    public static final Deposit.Status DEPOSIT_STATUS = Deposit.Status.SUBMITTED;
     public static final String DEPOSIT_ASSIGNEDID = "PMC12345";
     public static final String DEPOSIT_ACCESSURL = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/";
     public static final Boolean DEPOSIT_REQUESTED = true;
+    public static final Boolean DEPOSIT_USERACTIONREQ = false;
         
     public static final String FUNDER_NAME = "Funder A";
     public static final String FUNDER_URL = "https://nih.gov";
@@ -85,8 +86,10 @@ public class TestValues {
     public static final String REPOSITORY_DESCRIPTION = "An OA repository run by funder A";
     public static final String REPOSITORY_URL = "https://repo-example.org/";
     
-    public static final Submission.Status SUBMISSION_STATUS = Submission.Status.IN_PROGRESS;
+    public static final Submission.Status SUBMISSION_STATUS = Submission.Status.COMPLIANT_IN_PROGRESS;
     public static final String SUBMISSION_TITLE = "Some article";
+    public static final String SUBMISSION_CORRAUTHNAME = "B. Goodman";
+    public static final String SUBMISSION_CORRAUTHEMAIL = "author@example.com";
     public static final String SUBMISSION_ABSTRACT = "An article about something";
     public static final String SUBMISSION_DOI = "10.0101/1234abcd";
     public static final String SUBMISSION_VOLUME = "5";
