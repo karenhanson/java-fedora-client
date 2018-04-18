@@ -30,8 +30,7 @@ public enum PassEntityType {
     PUBLISHER ("Publisher", "publishers"),
     REPOSITORY ("Repository", "repositories"),
     SUBMISSION ("Submission", "submissions"),
-    USER ("User", "users"),
-    WORKFLOW ("Workflow", "workflows");
+    USER ("User", "users");
     
     private String name;
     private String plural;

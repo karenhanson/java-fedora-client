@@ -71,8 +71,6 @@
     "source": {"@id": "pass:source"},
     "status": {"@id": "pass:status"},
     "startDate": {"@id": "pass:startDate", "@type": "xsd:dateTime"},
-    "step": {"@id": "pass:step"},
-    "steps": {"@id": "pass:steps"},
     "submission": {"@id": "pass:submission", "@type": "@id"},
     "submissions": {"@id": "pass:submissions", "@container": "@set", "@type": "@id"},
     "submittedDate": {"@id": "pass:submittedDate", "@type": "xsd:dateTime"},
@@ -82,7 +80,6 @@
     "url": {"@id": "pass:url"},
     "userActionRequired": {"@id": "pass:userActionRequired"},
     "username": {"@id": "pass:username"},
-    "volume": {"@id": "pass:volume"},
-    "workflows": {"@id": "pass:workflows", "@container": "@set", "@type": "@id"}
+    "volume": {"@id": "pass:volume"}
   }
 }

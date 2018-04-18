@@ -16,6 +16,7 @@
 package org.dataconservancy.pass.model;
 
 import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,11 +98,6 @@ public class Submission extends PassEntity {
     private List<URI> grants = new ArrayList<>();
 
     /** 
-     * List of URIs of Workflows to track the status of submission process 
-     */
-    private List<URI> workflows = new ArrayList<>();
-
-    /** 
      * Date the record was submitted by the User through PASS 
      */
     @JsonSerialize(using = ZuluDateTimeSerializer.class)
@@ -153,6 +149,7 @@ public class Submission extends PassEntity {
         public String getValue() {
             return this.value;
         }
+        
     }
 
 
@@ -347,23 +344,6 @@ public class Submission extends PassEntity {
         this.grants = grants;
     }
 
-    
-    /**
-     * @return the URIs of workflows associated with submission
-     */
-    public List<URI> getWorkflows() {
-        return workflows;
-    }
-
-    
-    /**
-     * @param workflows the list of workflow URIs to set
-     */
-    public void setWorkflows(List<URI> workflows) {
-        this.workflows = workflows;
-    }
-
-    
     /**
      * @return the submittedDate
      */
@@ -415,7 +395,6 @@ public class Submission extends PassEntity {
         if (issue != null ? !issue.equals(that.issue) : that.issue != null) return false;
         if (deposits != null ? !deposits.equals(that.deposits) : that.deposits != null) return false;
         if (grants != null ? !grants.equals(that.grants) : that.grants != null) return false;
-        if (workflows != null ? !workflows.equals(that.workflows) : that.workflows != null) return false;
         if (submittedDate != null ? !submittedDate.equals(that.submittedDate) : that.submittedDate != null) return false;
         if (source != null ? !source.equals(that.source) : that.source != null) return false;
         return true;
@@ -437,7 +416,6 @@ public class Submission extends PassEntity {
         result = 31 * result + (issue != null ? issue.hashCode() : 0);
         result = 31 * result + (deposits != null ? deposits.hashCode() : 0);
         result = 31 * result + (grants != null ? grants.hashCode() : 0);
-        result = 31 * result + (workflows != null ? workflows.hashCode() : 0);
         result = 31 * result + (submittedDate != null ? submittedDate.hashCode() : 0);
         result = 31 * result + (source != null ? source.hashCode() : 0);
         return result;

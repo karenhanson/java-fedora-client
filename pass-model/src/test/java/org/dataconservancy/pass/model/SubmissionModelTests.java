@@ -70,7 +70,6 @@ public class SubmissionModelTests {
         assertEquals(TestValues.DEPOSIT_ID_2, submission.getDeposits().get(1).toString());
         assertEquals(TestValues.GRANT_ID_1, submission.getGrants().get(0).toString());
         assertEquals(TestValues.GRANT_ID_2, submission.getGrants().get(1).toString());
-        assertEquals(TestValues.WORKFLOW_ID_1, submission.getWorkflows().get(0).toString());
         assertEquals(TestValues.SUBMISSION_DATE_STR, dateFormatter.print(submission.getSubmittedDate()));
     }
 
@@ -102,7 +101,6 @@ public class SubmissionModelTests {
         assertEquals(root.getJSONArray("deposits").get(1),TestValues.DEPOSIT_ID_2);
         assertEquals(root.getJSONArray("grants").get(0),TestValues.GRANT_ID_1);
         assertEquals(root.getJSONArray("grants").get(1),TestValues.GRANT_ID_2);
-        assertEquals(root.getJSONArray("workflows").get(0),TestValues.WORKFLOW_ID_1);
         assertEquals(root.getString("submittedDate"),TestValues.SUBMISSION_DATE_STR);    
     }
     
@@ -150,10 +148,6 @@ public class SubmissionModelTests {
         grants.add(new URI(TestValues.GRANT_ID_1));
         grants.add(new URI(TestValues.GRANT_ID_2));
         submission.setGrants(grants);
-
-        List<URI> workflows = new ArrayList<URI>();
-        workflows.add(new URI(TestValues.WORKFLOW_ID_1));
-        submission.setWorkflows(workflows);
 
         DateTime dt = dateFormatter.parseDateTime(TestValues.SUBMISSION_DATE_STR);
         submission.setSubmittedDate(dt);

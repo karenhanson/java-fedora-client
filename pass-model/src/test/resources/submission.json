@@ -11,7 +11,6 @@
 	"issue": "123",
 	"deposits": ["https://example.org/fedora/deposits/1","https://example.org/fedora/deposits/2"],
 	"grants": ["https://example.org/fedora/grants/1","https://example.org/fedora/grants/2"],
-	"workflows": ["https://example.org/fedora/workflows/1"],
 	"submittedDate": "2018-01-05T12:12:12.000Z",
 	"source": "other"
 }

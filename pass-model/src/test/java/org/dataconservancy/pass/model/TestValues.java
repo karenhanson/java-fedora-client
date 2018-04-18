@@ -39,7 +39,6 @@ public class TestValues {
     public static final String SUBMISSION_ID_1 = "https://example.org/fedora/submissions/1";
     public static final String SUBMISSION_ID_2 = "https://example.org/fedora/submissions/2";
     public static final String USER_ID_1 = "https://example.org/fedora/users/1";
-    public static final String WORKFLOW_ID_1 = "https://example.org/fedora/workflows/1";
 
     public static final Deposit.Status DEPOSIT_STATUS = Deposit.Status.SUBMITTED;
     public static final String DEPOSIT_ASSIGNEDID = "PMC12345";
@@ -99,9 +98,5 @@ public class TestValues {
 
     public static final String USER_NAME = "am12345";
     public static final User.Role USER_ROLE = User.Role.ADMIN;
-    
-    public static final String WORKFLOW_NAME = "A workflow";
-    public static final String WORKFLOW_STEP = "1";
-    public static final String WORKFLOW_STEPS = "1,3,4,5,6";
-    
+        
 }
