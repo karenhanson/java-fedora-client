@@ -59,6 +59,7 @@
     <fcrepo-java-client.version>0.3.0</fcrepo-java-client.version>
     <logback.version>1.2.3</logback.version>
     <openpojo.version>0.8.10</openpojo.version>
+    <elasticsearch-client.version>6.2.3</elasticsearch-client.version>
     <slf4j.version>1.7.25</slf4j.version>
     <unitils.version>3.4.6</unitils.version>
   </properties>
@@ -193,6 +194,13 @@
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
       </dependency>
+      
+      <dependency>
+        <groupId>org.elasticsearch.client</groupId>
+        <artifactId>elasticsearch-rest-high-level-client</artifactId>
+        <version>${elasticsearch-client.version}</version>
+      </dependency>
+    
       
       <dependency>
         <groupId>org.unitils</groupId>
