@@ -15,7 +15,6 @@
     <module>pass-json-adapter</module>
     <module>pass-fedora-client</module>
     <module>pass-client-api</module>
-    <module>pass-model-nihms</module>
     <module>pass-client-util</module>
     <module>pass-client-integration</module>
   </modules>

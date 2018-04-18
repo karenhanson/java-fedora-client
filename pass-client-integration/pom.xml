@@ -139,13 +139,7 @@
       <artifactId>pass-model</artifactId>
       <version>${project.version}</version>
     </dependency>
-
-    <dependency>
-      <groupId>org.dataconservancy.pass</groupId>
-      <artifactId>pass-model-nihms</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
+    
     <dependency>
       <groupId>org.dataconservancy.pass</groupId>
       <artifactId>pass-fedora-client</artifactId>
