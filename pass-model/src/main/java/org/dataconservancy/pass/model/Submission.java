@@ -46,47 +46,11 @@ public class Submission extends PassEntity {
      */
     private Status status;
 
-    /** 
-     * Title of work represented by Submission e.g. the title of the article 
+    /**
+     * URI of Publication associated with the Submission
      */
-    private String title;
-
-    /** 
-     * Contact name for corresponding author
-     */
-    private String corrAuthorName;
-
-    /** 
-     * Contact email for corresponding author 
-     */
-    private String corrAuthorEmail;
+    private URI publication;
     
-    /** 
-     * Abstract for work represented by Submission 
-     */
-    @JsonProperty("abstract")
-    private String submissionAbstract;
-
-    /** 
-     * DOI of item being submitted 
-     */
-    private String doi;
-
-    /** 
-     * URI of the journal the submission is part of (if article) 
-     */
-    private URI journal;
-
-    /** 
-     * Volume of journal that contains item (if article) 
-     */
-    private String volume;
-
-    /** 
-     * Issue of journal that contains item (if article) 
-     */
-    private String issue;
-
     /** 
      * List of places the submission will be deposited to 
      */
@@ -186,134 +150,6 @@ public class Submission extends PassEntity {
 
     
     /**
-     * @return the title
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    
-    /**
-     * @param title the title to set
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    
-    /**
-     * @return corrAuthorName the corresponding author name
-     */
-    public String getCorrAuthorName() {
-        return corrAuthorName;
-    }
-
-    
-    /**
-     * @param the corresponding author name
-     */
-    public void setCorrAuthorName(String corrAuthorName) {
-        this.corrAuthorName = corrAuthorName;
-    }
-
-    
-    /**
-     * @return corrAuthorEmail the corresponding author email
-     */
-    public String getCorrAuthorEmail() {
-        return corrAuthorEmail;
-    }
-
-    
-    /**
-     * @param the corresponding author email
-     */
-    public void setCorrAuthorEmail(String corrAuthorEmail) {
-        this.corrAuthorEmail = corrAuthorEmail;
-    }
-
-    
-    /**
-     * @return the submissionAbstract
-     */
-    public String getSubmissionAbstract() {
-        return submissionAbstract;
-    }
-
-    
-    /**
-     * @param submissionAbstract the submissionAbstract to set
-     */
-    public void setSubmissionAbstract(String submissionAbstract) {
-        this.submissionAbstract = submissionAbstract;
-    }
-
-    
-    /**
-     * @return the doi
-     */
-    public String getDoi() {
-        return doi;
-    }
-
-    
-    /**
-     * @param doi the doi to set
-     */
-    public void setDoi(String doi) {
-        this.doi = doi;
-    }
-
-    
-    /**
-     * @return the URI of the Journal
-     */
-    public URI getJournal() {
-        return journal;
-    }
-
-    
-    /**
-     * @param journal the URI journal to set
-     */
-    public void setJournal(URI journal) {
-        this.journal = journal;
-    }
-
-    
-    /**
-     * @return the volume
-     */
-    public String getVolume() {
-        return volume;
-    }
-
-    
-    /**
-     * @param volume the volume to set
-     */
-    public void setVolume(String volume) {
-        this.volume = volume;
-    }
-
-    
-    /**
-     * @return the issue
-     */
-    public String getIssue() {
-        return issue;
-    }
-
-    
-    /**
-     * @param issue the issue to set
-     */
-    public void setIssue(String issue) {
-        this.issue = issue;
-    }
-
-    
-    /**
      * @return the deposits
      */
     public List<URI> getDeposits() {
@@ -366,6 +202,22 @@ public class Submission extends PassEntity {
         return source;
     }
 
+    
+    /**
+     * @return the URI of the Publication
+     */
+    public URI getPublication() {
+        return publication;
+    }
+
+    
+    /**
+     * @param publication the URI publication to set
+     */
+    public void setPublication(URI publication) {
+        this.publication = publication;
+    }
+    
 
     /**
      * @param source the source to set
@@ -385,14 +237,7 @@ public class Submission extends PassEntity {
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (corrAuthorName != null ? !corrAuthorName.equals(that.corrAuthorName) : that.corrAuthorName != null) return false;
-        if (corrAuthorEmail != null ? !corrAuthorEmail.equals(that.corrAuthorEmail) : that.corrAuthorEmail != null) return false;
-        if (submissionAbstract != null ? !submissionAbstract.equals(that.submissionAbstract) : that.submissionAbstract != null) return false;
-        if (doi != null ? !doi.equals(that.doi) : that.doi != null) return false;
-        if (journal != null ? !journal.equals(that.journal) : that.journal != null) return false;
-        if (volume != null ? !volume.equals(that.volume) : that.volume != null) return false;
-        if (issue != null ? !issue.equals(that.issue) : that.issue != null) return false;
+        if (publication != null ? !publication.equals(that.publication) : that.publication != null) return false;
         if (deposits != null ? !deposits.equals(that.deposits) : that.deposits != null) return false;
         if (grants != null ? !grants.equals(that.grants) : that.grants != null) return false;
         if (submittedDate != null ? !submittedDate.equals(that.submittedDate) : that.submittedDate != null) return false;
@@ -406,14 +251,7 @@ public class Submission extends PassEntity {
         int result = super.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (corrAuthorName != null ? corrAuthorName.hashCode() : 0);
-        result = 31 * result + (corrAuthorEmail != null ? corrAuthorEmail.hashCode() : 0);
-        result = 31 * result + (submissionAbstract != null ? submissionAbstract.hashCode() : 0);
-        result = 31 * result + (doi != null ? doi.hashCode() : 0);
-        result = 31 * result + (journal != null ? journal.hashCode() : 0);
-        result = 31 * result + (volume != null ? volume.hashCode() : 0);
-        result = 31 * result + (issue != null ? issue.hashCode() : 0);
+        result = 31 * result + (publication != null ? publication.hashCode() : 0);
         result = 31 * result + (deposits != null ? deposits.hashCode() : 0);
         result = 31 * result + (grants != null ? grants.hashCode() : 0);
         result = 31 * result + (submittedDate != null ? submittedDate.hashCode() : 0);

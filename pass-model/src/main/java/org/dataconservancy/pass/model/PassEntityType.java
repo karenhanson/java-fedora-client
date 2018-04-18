@@ -27,6 +27,7 @@ public enum PassEntityType {
     JOURNAL ("Journal", "journals"),
     PERSON ("Person", "people"),
     POLICY ("Policy", "policies"),
+    PUBLICATION ("Publication", "publications"),
     PUBLISHER ("Publisher", "publishers"),
     REPOSITORY ("Repository", "repositories"),
     SUBMISSION ("Submission", "submissions"),

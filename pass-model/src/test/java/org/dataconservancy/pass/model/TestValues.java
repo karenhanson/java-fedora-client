@@ -33,6 +33,7 @@ public class TestValues {
     public static final String PERSON_ID_2 = "https://example.org/fedora/people/2";
     public static final String PERSON_ID_3 = "https://example.org/fedora/people/3";
     public static final String POLICY_ID_1 = "https://example.org/fedora/policies/1";
+    public static final String PUBLICATION_ID_1 = "https://example.org/fedora/publications/1";
     public static final String PUBLISHER_ID_1 = "https://example.org/fedora/publishers/1";
     public static final String REPOSITORY_ID_1 = "https://example.org/fedora/repositories/1";
     public static final String REPOSITORY_ID_2 = "https://example.org/fedora/repositories/2";
@@ -86,15 +87,15 @@ public class TestValues {
     public static final String REPOSITORY_URL = "https://repo-example.org/";
     
     public static final Submission.Status SUBMISSION_STATUS = Submission.Status.COMPLIANT_IN_PROGRESS;
-    public static final String SUBMISSION_TITLE = "Some article";
-    public static final String SUBMISSION_CORRAUTHNAME = "B. Goodman";
-    public static final String SUBMISSION_CORRAUTHEMAIL = "author@example.com";
-    public static final String SUBMISSION_ABSTRACT = "An article about something";
-    public static final String SUBMISSION_DOI = "10.0101/1234abcd";
-    public static final String SUBMISSION_VOLUME = "5";
-    public static final String SUBMISSION_ISSUE = "123";
     public static final String SUBMISSION_DATE_STR = "2018-01-05T12:12:12.000Z";
     public static final Submission.Source SUBMISSION_SOURCE = Submission.Source.OTHER;
+    
+    public static final String PUBLICATION_TITLE = "Some article";
+    public static final String PUBLICATION_ABSTRACT = "An article about something";
+    public static final String PUBLICATION_PMID = "12345678";
+    public static final String PUBLICATION_DOI = "10.0101/1234abcd";
+    public static final String PUBLICATION_VOLUME = "5";
+    public static final String PUBLICATION_ISSUE = "123";
 
     public static final String USER_NAME = "am12345";
     public static final User.Role USER_ROLE = User.Role.ADMIN;
