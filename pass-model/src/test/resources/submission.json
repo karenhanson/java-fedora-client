@@ -1,6 +1,6 @@
 {
 	"@id": "https://example.org/fedora/submissions/1",
-	"status": "compliant-in-progress",
+	"aggregatedDepositStatus": "in-progress",
 	"publication": "https://example.org/fedora/publications/1",
 	"repositories": ["https://example.org/fedora/repositories/1","https://example.org/fedora/repositories/2"],
 	"grants": ["https://example.org/fedora/grants/1","https://example.org/fedora/grants/2"],

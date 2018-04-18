@@ -56,7 +56,7 @@ public class SubmissionModelTests {
         
         assertEquals(TestValues.SUBMISSION_ID_1, submission.getId().toString());
         assertEquals("Submission", submission.getType());
-        assertEquals(TestValues.SUBMISSION_STATUS, submission.getStatus());
+        assertEquals(TestValues.SUBMISSION_STATUS, submission.getAggregatedDepositStatus());
         assertEquals(TestValues.PUBLICATION_ID_1, submission.getPublication().toString());
         assertEquals(TestValues.REPOSITORY_ID_1, submission.getRepositories().get(0).toString());
         assertEquals(TestValues.REPOSITORY_ID_2, submission.getRepositories().get(1).toString());
@@ -102,7 +102,7 @@ public class SubmissionModelTests {
         Submission submission2 = createSubmission();
         
         assertEquals(submission1,submission2);
-        submission1.setStatus(Submission.Status.COMPLIANT_COMPLETE);
+        submission1.setAggregatedDepositStatus(Submission.AggregatedDepositStatus.ACCEPTED);
         assertTrue(!submission1.equals(submission2));
         
         assertTrue(submission1.hashCode()!=submission2.hashCode());
@@ -114,7 +114,7 @@ public class SubmissionModelTests {
     private Submission createSubmission() throws Exception {
         Submission submission = new Submission();
         submission.setId(new URI(TestValues.SUBMISSION_ID_1));
-        submission.setStatus(TestValues.SUBMISSION_STATUS);
+        submission.setAggregatedDepositStatus(TestValues.SUBMISSION_STATUS);
         submission.setPublication(new URI(TestValues.PUBLICATION_ID_1));
         
         List<URI> repositories = new ArrayList<URI>();

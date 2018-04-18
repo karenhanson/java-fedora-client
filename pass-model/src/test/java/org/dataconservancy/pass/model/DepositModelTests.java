@@ -53,7 +53,6 @@ public class DepositModelTests {
         assertEquals(TestValues.DEPOSIT_ASSIGNEDID, deposit.getAssignedId());
         assertEquals(TestValues.DEPOSIT_ACCESSURL, deposit.getAccessUrl());
         assertEquals(TestValues.DEPOSIT_REQUESTED, deposit.getRequested());
-        assertEquals(TestValues.DEPOSIT_USERACTIONREQ, deposit.getUserActionRequired());
         assertEquals(TestValues.SUBMISSION_ID_1, deposit.getSubmission().toString());
         
     }
@@ -78,7 +77,6 @@ public class DepositModelTests {
         assertEquals(root.getString("assignedId"),TestValues.DEPOSIT_ASSIGNEDID);
         assertEquals(root.getString("accessUrl"),TestValues.DEPOSIT_ACCESSURL);
         assertEquals(root.getBoolean("requested"),TestValues.DEPOSIT_REQUESTED);        
-        assertEquals(root.getBoolean("userActionRequired"),TestValues.DEPOSIT_USERACTIONREQ);
         assertEquals(root.getString("submission"),TestValues.SUBMISSION_ID_1);
     }
     
@@ -112,7 +110,6 @@ public class DepositModelTests {
         deposit.setAssignedId(TestValues.DEPOSIT_ASSIGNEDID);
         deposit.setAccessUrl(TestValues.DEPOSIT_ACCESSURL);
         deposit.setRequested(TestValues.DEPOSIT_REQUESTED);
-        deposit.setUserActionRequired(TestValues.DEPOSIT_USERACTIONREQ);
         deposit.setSubmission(new URI(TestValues.SUBMISSION_ID_1));
         return deposit;
     }

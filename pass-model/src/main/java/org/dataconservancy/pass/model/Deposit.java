@@ -59,12 +59,6 @@ public class Deposit extends PassEntity {
     private Boolean requested;
     
     /**
-     * True if the Deposit has stalled due to a need for further action by the User. 
-     * This action may need to take place outside of the scope of the PASS system
-     */
-    private Boolean userActionRequired;
-    
-    /**
      * URI of the Submission that this Deposit is a part of
      */
     private URI submission;
@@ -74,35 +68,21 @@ public class Deposit extends PassEntity {
      */
     public enum Status {
         /**
-         * In progress in PASS GUI
-         */
-        @JsonProperty("in-preparation")
-        IN_PREPARATION("in-preparation"),
-        /**
-         * User has clicked to submit, but it has not yet been sent to repository
-         */
-        @JsonProperty("ready-to-submit")
-        READY_TO_SUBMIT("ready-to-submit"),
-        /**
-         * PASS has sent files to the repository, waiting for response.
+         * PASS has sent a package to the target Repository and is waiting for an update on the status
          */
         @JsonProperty("submitted")
         SUBMITTED("submitted"),
-        /**
-         * The target repository has indicated that the files have been received
-         */
-        @JsonProperty("received")
-        RECEIVED("received"),
-        /**
-         * The target repository is processing the files.
-         */
-        @JsonProperty("in-progress")
-        IN_PROGRESS("in-progress"),
-        /**
-         * The target repository has accepted the files, and publication is pending if not already complete.
+         /**
+         * The target Repository has rejected the Deposit
          */
         @JsonProperty("accepted")
-        ACCEPTED("accepted");
+        ACCEPTED("accepted"),
+        /**
+        * The target Repository has accepted the files into the repository. More steps may be performed by the Repository, but the 
+        * requirements of the Deposit have been satisfied
+        */
+       @JsonProperty("rejected")
+       REJECTED("rejected");
                 
         private String value;
         private Status(String value){
@@ -199,23 +179,7 @@ public class Deposit extends PassEntity {
         this.requested = requested;
     }
 
-
-    /**
-     * @return the userActionRequired
-     */
-    public Boolean getUserActionRequired() {
-        return userActionRequired;
-    }
-
-
-    /**
-     * @param userActionRequired the userActionRequired to set
-     */
-    public void setUserActionRequired(Boolean userActionRequired) {
-        this.userActionRequired = userActionRequired;
-    }
-
-
+    
     /**
      * @return the submission
      */
@@ -246,7 +210,6 @@ public class Deposit extends PassEntity {
         if (assignedId != null ? !assignedId.equals(that.assignedId) : that.assignedId != null) return false;
         if (accessUrl != null ? !accessUrl.equals(that.accessUrl) : that.accessUrl != null) return false;
         if (requested != null ? !requested.equals(that.requested) : that.requested != null) return false;
-        if (userActionRequired != null ? !userActionRequired.equals(that.userActionRequired) : that.userActionRequired != null) return false;
         if (submission != null ? !submission.equals(that.submission) : that.submission != null) return false;
         return true;
     }
@@ -261,7 +224,6 @@ public class Deposit extends PassEntity {
         result = 31 * result + (assignedId != null ? assignedId.hashCode() : 0);
         result = 31 * result + (accessUrl != null ? accessUrl.hashCode() : 0);
         result = 31 * result + (requested != null ? requested.hashCode() : 0);
-        result = 31 * result + (userActionRequired != null ? userActionRequired.hashCode() : 0);
         result = 31 * result + (submission != null ? submission.hashCode() : 0);
         return result;
     }

@@ -44,7 +44,7 @@ public class Submission extends PassEntity {
     /** 
      * Status of Submission 
      */
-    private Status status;
+    private AggregatedDepositStatus aggregatedDepositStatus;
 
     /**
      * URI of Publication associated with the Submission
@@ -75,39 +75,29 @@ public class Submission extends PassEntity {
     
     
     /** 
-     * Possible statuses of a submission, this is dependent on information from the server and
+     * Possible aggregatedDepositStatus of a submission, this is dependent on information from the server and
      * is calculated using the status of associated Deposits
      */
-    public enum Status {
+    public enum AggregatedDepositStatus {
         /**
-         * The submission is not yet in compliance with applicable policies. 
-         * One or more required Deposits have not been initiated.
+         * No Deposits have been initiated for the Submission
          */
-        @JsonProperty("non-compliant-not-started")
-        NON_COMPLIANT_NOT_STARTED("non-compliant-not-started"),
+        @JsonProperty("not-started")
+        NOT_STARTED("not-started"),
         /**
-         * All required Deposits for the Submission have been initiated, 
-         * but at least one could not be completed and may require additional work by 
-         * the user before being classified as compliant
+         * One or more Deposits for the Submission have been initiated, and at least one 
+         * has not reached the status of "accepted"
          */
-        @JsonProperty("non-compliant-in-progress")
-        NON_COMPLIANT_IN_PROGRESS("non-compliant-in-progress"),
+        @JsonProperty("in-progress")
+        IN_PROGRESS("in-progress"),
         /**
-         * Submission is in compliance with all known applicable policies. 
-         * All of the required Deposits have been initiated, but at least one has 
-         * not yet reached the `Accepted` status.
+         * All related Deposits have a status of "accepted"
          */
-        @JsonProperty("compliant-in-progress")
-        COMPLIANT_IN_PROGRESS("compliant-in-progress"),
-        /**
-         * Submission is in compliance with all known applicable policies. 
-         * All related Deposits have a status of Accepted
-         */
-        @JsonProperty("compliant-complete")
-        COMPLIANT_COMPLETE("compliant-complete");
+        @JsonProperty("accepted")
+        ACCEPTED("accepted");
 
         private String value;
-        private Status(String value){
+        private AggregatedDepositStatus(String value){
             this.value = value;
         }
         public String getValue() {
@@ -134,18 +124,18 @@ public class Submission extends PassEntity {
         
         
     /**
-     * @return the status
+     * @return the aggregatedDepositStatus
      */
-    public Status getStatus() {
-        return status;
+    public AggregatedDepositStatus getAggregatedDepositStatus() {
+        return aggregatedDepositStatus;
     }
 
     
     /**
-     * @param status the status to set
+     * @param aggregatedDepositStatus the aggregatedDepositStatus to set
      */
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setAggregatedDepositStatus(AggregatedDepositStatus aggregatedDepositStatus) {
+        this.aggregatedDepositStatus = aggregatedDepositStatus;
     }
 
     
@@ -236,7 +226,7 @@ public class Submission extends PassEntity {
         Submission that = (Submission) o;
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (aggregatedDepositStatus != null ? !aggregatedDepositStatus.equals(that.aggregatedDepositStatus) : that.aggregatedDepositStatus != null) return false;
         if (publication != null ? !publication.equals(that.publication) : that.publication != null) return false;
         if (repositories != null ? !repositories.equals(that.repositories) : that.repositories != null) return false;
         if (grants != null ? !grants.equals(that.grants) : that.grants != null) return false;
@@ -250,7 +240,7 @@ public class Submission extends PassEntity {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (aggregatedDepositStatus != null ? aggregatedDepositStatus.hashCode() : 0);
         result = 31 * result + (publication != null ? publication.hashCode() : 0);
         result = 31 * result + (repositories != null ? repositories.hashCode() : 0);
         result = 31 * result + (grants != null ? grants.hashCode() : 0);

@@ -5,6 +5,5 @@
 	"assignedId": "PMC12345",
 	"accessUrl": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/",
 	"requested": true,
-	"userActionRequired": false,
 	"submission": "https://example.org/fedora/submissions/1"
 }

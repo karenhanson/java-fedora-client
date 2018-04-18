@@ -45,7 +45,6 @@ public class TestValues {
     public static final String DEPOSIT_ASSIGNEDID = "PMC12345";
     public static final String DEPOSIT_ACCESSURL = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/";
     public static final Boolean DEPOSIT_REQUESTED = true;
-    public static final Boolean DEPOSIT_USERACTIONREQ = false;
         
     public static final String FUNDER_NAME = "Funder A";
     public static final String FUNDER_URL = "https://nih.gov";
@@ -86,7 +85,7 @@ public class TestValues {
     public static final String REPOSITORY_DESCRIPTION = "An OA repository run by funder A";
     public static final String REPOSITORY_URL = "https://repo-example.org/";
     
-    public static final Submission.Status SUBMISSION_STATUS = Submission.Status.COMPLIANT_IN_PROGRESS;
+    public static final Submission.AggregatedDepositStatus SUBMISSION_STATUS = Submission.AggregatedDepositStatus.IN_PROGRESS;
     public static final String SUBMISSION_DATE_STR = "2018-01-05T12:12:12.000Z";
     public static final Submission.Source SUBMISSION_SOURCE = Submission.Source.OTHER;
     
