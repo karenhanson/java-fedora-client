@@ -58,8 +58,8 @@ public class SubmissionModelTests {
         assertEquals("Submission", submission.getType());
         assertEquals(TestValues.SUBMISSION_STATUS, submission.getStatus());
         assertEquals(TestValues.PUBLICATION_ID_1, submission.getPublication().toString());
-        assertEquals(TestValues.DEPOSIT_ID_1, submission.getDeposits().get(0).toString());
-        assertEquals(TestValues.DEPOSIT_ID_2, submission.getDeposits().get(1).toString());
+        assertEquals(TestValues.REPOSITORY_ID_1, submission.getRepositories().get(0).toString());
+        assertEquals(TestValues.REPOSITORY_ID_2, submission.getRepositories().get(1).toString());
         assertEquals(TestValues.GRANT_ID_1, submission.getGrants().get(0).toString());
         assertEquals(TestValues.GRANT_ID_2, submission.getGrants().get(1).toString());
         assertEquals(TestValues.SUBMISSION_DATE_STR, dateFormatter.print(submission.getSubmittedDate()));
@@ -82,8 +82,8 @@ public class SubmissionModelTests {
         assertEquals(root.getString("@type"),"Submission");
         assertEquals(root.getString("status"),TestValues.SUBMISSION_STATUS.getValue());
         assertEquals(root.getString("publication"),TestValues.PUBLICATION_ID_1);
-        assertEquals(root.getJSONArray("deposits").get(0),TestValues.DEPOSIT_ID_1);
-        assertEquals(root.getJSONArray("deposits").get(1),TestValues.DEPOSIT_ID_2);
+        assertEquals(root.getJSONArray("repositories").get(0),TestValues.REPOSITORY_ID_1);
+        assertEquals(root.getJSONArray("repositories").get(1),TestValues.REPOSITORY_ID_2);
         assertEquals(root.getJSONArray("grants").get(0),TestValues.GRANT_ID_1);
         assertEquals(root.getJSONArray("grants").get(1),TestValues.GRANT_ID_2);
         assertEquals(root.getString("submittedDate"),TestValues.SUBMISSION_DATE_STR);    
@@ -117,10 +117,10 @@ public class SubmissionModelTests {
         submission.setStatus(TestValues.SUBMISSION_STATUS);
         submission.setPublication(new URI(TestValues.PUBLICATION_ID_1));
         
-        List<URI> deposits = new ArrayList<URI>();
-        deposits.add(new URI(TestValues.DEPOSIT_ID_1));
-        deposits.add(new URI(TestValues.DEPOSIT_ID_2));
-        submission.setDeposits(deposits);
+        List<URI> repositories = new ArrayList<URI>();
+        repositories.add(new URI(TestValues.REPOSITORY_ID_1));
+        repositories.add(new URI(TestValues.REPOSITORY_ID_2));
+        submission.setRepositories(repositories);
 
         List<URI> grants = new ArrayList<URI>();
         grants.add(new URI(TestValues.GRANT_ID_1));

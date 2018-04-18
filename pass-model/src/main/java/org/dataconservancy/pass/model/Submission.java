@@ -52,9 +52,9 @@ public class Submission extends PassEntity {
     private URI publication;
     
     /** 
-     * List of places the submission will be deposited to 
+     * List of repositories that the submission will be deposited to 
      */
-    private List<URI> deposits = new ArrayList<>();
+    private List<URI> repositories = new ArrayList<>();
 
     /** 
      * List of URIs for grants associated with the submission 
@@ -150,18 +150,18 @@ public class Submission extends PassEntity {
 
     
     /**
-     * @return the deposits
+     * @return the repositories
      */
-    public List<URI> getDeposits() {
-        return deposits;
+    public List<URI> getRepositories() {
+        return repositories;
     }
 
     
     /**
-     * @param deposits the deposits to set
+     * @param repositories the repositories to set
      */
-    public void setDeposits(List<URI> deposits) {
-        this.deposits = deposits;
+    public void setRepositories(List<URI> repositories) {
+        this.repositories = repositories;
     }
 
     
@@ -238,7 +238,7 @@ public class Submission extends PassEntity {
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (publication != null ? !publication.equals(that.publication) : that.publication != null) return false;
-        if (deposits != null ? !deposits.equals(that.deposits) : that.deposits != null) return false;
+        if (repositories != null ? !repositories.equals(that.repositories) : that.repositories != null) return false;
         if (grants != null ? !grants.equals(that.grants) : that.grants != null) return false;
         if (submittedDate != null ? !submittedDate.equals(that.submittedDate) : that.submittedDate != null) return false;
         if (source != null ? !source.equals(that.source) : that.source != null) return false;
@@ -252,7 +252,7 @@ public class Submission extends PassEntity {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (publication != null ? publication.hashCode() : 0);
-        result = 31 * result + (deposits != null ? deposits.hashCode() : 0);
+        result = 31 * result + (repositories != null ? repositories.hashCode() : 0);
         result = 31 * result + (grants != null ? grants.hashCode() : 0);
         result = 31 * result + (submittedDate != null ? submittedDate.hashCode() : 0);
         result = 31 * result + (source != null ? source.hashCode() : 0);
