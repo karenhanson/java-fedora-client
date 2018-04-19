@@ -2,6 +2,7 @@
 	"@id": "https://example.org/fedora/repositories/1",
 	"name": "Repository A",
 	"description": "An OA repository run by funder A",
-	"url": "https://repo-example.org/"
+	"url": "https://repo-example.org/",
+	"formSchema":"{\"customFieldName\": \"String\"}"
 }
 	

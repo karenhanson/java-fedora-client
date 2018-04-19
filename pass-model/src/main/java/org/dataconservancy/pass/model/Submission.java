@@ -42,6 +42,29 @@ public class Submission extends PassEntity {
      */
     @JsonProperty("@type")
     private String type = PassEntityType.SUBMISSION.getName();
+
+    /** 
+     * Stringified JSON representation of metadata captured by the relevant repository forms
+     */
+    private String metadata;
+    
+    /** 
+     * Source of Submission record 
+     */
+    private Source source;
+    
+    /** 
+     * When true, this value signals that the Submission will no longer be edited by the User. 
+     * It indicates to Deposit services that it can generate Deposits for any Repositories that need one. 
+     */
+    private Boolean submitted;
+
+    /** 
+     * Date the record was submitted by the User through PASS 
+     */
+    @JsonSerialize(using = ZuluDateTimeSerializer.class)
+    @JsonDeserialize(using = ZuluDateTimeDeserializer.class)
+    private DateTime submittedDate;
     
     /** 
      * Status of Submission 
@@ -58,22 +81,15 @@ public class Submission extends PassEntity {
      */
     private List<URI> repositories = new ArrayList<>();
 
+    /**
+     * URI of the User responsible for managing the Submission.
+     */
+    private URI user;
+
     /** 
      * List of URIs for grants associated with the submission 
      */
     private List<URI> grants = new ArrayList<>();
-
-    /** 
-     * Date the record was submitted by the User through PASS 
-     */
-    @JsonSerialize(using = ZuluDateTimeSerializer.class)
-    @JsonDeserialize(using = ZuluDateTimeDeserializer.class)
-    private DateTime submittedDate;
-    
-    /** 
-     * Source of Submission record 
-     */
-    private Source source;
     
     
     /** 
@@ -136,8 +152,72 @@ public class Submission extends PassEntity {
     public String getType() {
         return type;
     }
-        
-        
+
+    
+    /**
+    * @return the metadata
+    */
+    public String getMetadata() {
+        return metadata;
+    }
+
+    
+    /**
+     * @param metadata the metadata to set
+     */
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
+    }
+
+    
+    /**
+     * @return the source
+     */
+    public Source getSource() {
+        return source;
+    }
+
+    
+    /**
+     * @param source the source to set
+     */
+    public void setSource(Source source) {
+        this.source = source;
+    }
+
+    
+    /**
+     * @return the submitted
+     */
+    public Boolean getSubmitted() {
+        return submitted;
+    }
+
+    
+    /**
+     * @param submitted the submitted to set
+     */
+    public void setSubmitted(Boolean submitted) {
+        this.submitted = submitted;
+    }
+
+    
+    /**
+     * @return the submittedDate
+     */
+    public DateTime getSubmittedDate() {
+        return submittedDate;
+    }
+
+    
+    /**
+     * @param submittedDate the submittedDate to set
+     */
+    public void setSubmittedDate(DateTime submittedDate) {
+        this.submittedDate = submittedDate;
+    }
+
+    
     /**
      * @return the aggregatedDepositStatus
      */
@@ -155,6 +235,22 @@ public class Submission extends PassEntity {
 
     
     /**
+     * @return the publication
+     */
+    public URI getPublication() {
+        return publication;
+    }
+
+    
+    /**
+     * @param publication the publication to set
+     */
+    public void setPublication(URI publication) {
+        this.publication = publication;
+    }
+
+    
+    /**
      * @return the repositories
      */
     public List<URI> getRepositories() {
@@ -168,10 +264,26 @@ public class Submission extends PassEntity {
     public void setRepositories(List<URI> repositories) {
         this.repositories = repositories;
     }
+    
+    
+    /**
+     * @return the user
+     */
+    public URI getUser() {
+        return user;
+    }
 
     
     /**
-     * @return the URIs of grants associated with the submission
+     * @param user the user to set
+     */
+    public void setUser(URI user) {
+        this.user = user;
+    }
+
+    
+    /**
+     * @return the grants
      */
     public List<URI> getGrants() {
         return grants;
@@ -179,58 +291,12 @@ public class Submission extends PassEntity {
 
     
     /**
-     * @param grants List of URIs of grants to set
+     * @param grants the grants to set
      */
     public void setGrants(List<URI> grants) {
         this.grants = grants;
     }
 
-    /**
-     * @return the submittedDate
-     */
-    public DateTime getSubmittedDate() {
-        return submittedDate;
-    }
-
-    
-    /**
-     * @param submittedDate the submittedDate to set
-     */
-    public void setSubmittedDate(DateTime submittedDate) {
-        this.submittedDate = submittedDate;
-    }
-    
-    /**
-     * @return the source
-     */
-    public Source getSource() {
-        return source;
-    }
-
-    
-    /**
-     * @return the URI of the Publication
-     */
-    public URI getPublication() {
-        return publication;
-    }
-
-    
-    /**
-     * @param publication the URI publication to set
-     */
-    public void setPublication(URI publication) {
-        this.publication = publication;
-    }
-    
-
-    /**
-     * @param source the source to set
-     */
-    public void setSource(Source source) {
-        this.source = source;
-    }    
-    
 
     @Override
     public boolean equals(Object o) {
@@ -241,12 +307,15 @@ public class Submission extends PassEntity {
         Submission that = (Submission) o;
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (metadata != null ? !metadata.equals(that.metadata) : that.metadata != null) return false;
+        if (source != null ? !source.equals(that.source) : that.source != null) return false;
+        if (submitted != null ? !submitted.equals(that.submitted) : that.submitted != null) return false;
+        if (submittedDate != null ? !submittedDate.equals(that.submittedDate) : that.submittedDate != null) return false;        
         if (aggregatedDepositStatus != null ? !aggregatedDepositStatus.equals(that.aggregatedDepositStatus) : that.aggregatedDepositStatus != null) return false;
         if (publication != null ? !publication.equals(that.publication) : that.publication != null) return false;
         if (repositories != null ? !repositories.equals(that.repositories) : that.repositories != null) return false;
+        if (user != null ? !user.equals(that.user) : that.user != null) return false;
         if (grants != null ? !grants.equals(that.grants) : that.grants != null) return false;
-        if (submittedDate != null ? !submittedDate.equals(that.submittedDate) : that.submittedDate != null) return false;
-        if (source != null ? !source.equals(that.source) : that.source != null) return false;
         return true;
     }
 
@@ -255,12 +324,15 @@ public class Submission extends PassEntity {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
+        result = 31 * result + (source != null ? source.hashCode() : 0);
+        result = 31 * result + (submitted != null ? submitted.hashCode() : 0);
+        result = 31 * result + (submittedDate != null ? submittedDate.hashCode() : 0);
         result = 31 * result + (aggregatedDepositStatus != null ? aggregatedDepositStatus.hashCode() : 0);
         result = 31 * result + (publication != null ? publication.hashCode() : 0);
         result = 31 * result + (repositories != null ? repositories.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (grants != null ? grants.hashCode() : 0);
-        result = 31 * result + (submittedDate != null ? submittedDate.hashCode() : 0);
-        result = 31 * result + (source != null ? source.hashCode() : 0);
         return result;
     }
 

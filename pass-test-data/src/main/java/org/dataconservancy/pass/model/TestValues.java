@@ -92,6 +92,8 @@ public class TestValues {
     public static final String REPOSITORY_NAME = "Repository A";
     public static final String REPOSITORY_DESCRIPTION = "An OA repository run by funder A";
     public static final String REPOSITORY_URL = "https://repo-example.org/";
+    //TODO: verify format of formSchema field
+    public static final String REPOSITORY_FORMSCHEMA = "{\"customFieldName\": \"String\"}";
     
     public static final String REPOSITORYCOPY_STATUS = "accepted";
     public static final String REPOSITORYCOPY_EXTERNALID_1 = "PMC12345";
@@ -101,6 +103,8 @@ public class TestValues {
     public static final String SUBMISSION_STATUS = "in-progress";
     public static final String SUBMISSION_DATE_STR = "2018-01-05T12:12:12.000Z";
     public static final String SUBMISSION_SOURCE = "other";
+    public static final Boolean SUBMISSION_SUBMITTED = true;
+    public static final String SUBMISSION_METADATA = "{\"customFieldName\": \"value\"}";
 
     public static final String USER_NAME = "am12345";
     public static final String USER_FIRST_NAME = "June";
