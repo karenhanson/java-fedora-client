@@ -75,12 +75,12 @@ public class Grant extends PassEntity {
     private URI directFunder;
 
     /** 
-     * URI of the Principal investigator 
+     * URI of the User who is the Principal investigator
      */
     private URI pi;
     
     /** 
-     * Co-principal investigator list 
+     * List of URIs of the [User] who are the co-principal investigators
      */
     private List<URI> coPis = new ArrayList<>();
     
@@ -100,10 +100,7 @@ public class Grant extends PassEntity {
     @JsonSerialize(using = ZuluDateTimeSerializer.class)
     @JsonDeserialize(using = ZuluDateTimeDeserializer.class)
     private DateTime endDate;
-    
-    /** List of Submission URIs related to Grant */
-    private List<URI> submissions = new ArrayList<>();
-    
+        
     /** Status of award/grant */
     public enum AwardStatus {
         @JsonProperty("active")
@@ -143,7 +140,7 @@ public class Grant extends PassEntity {
     public String getType() {
         return type;
     }
-    
+
     
     /**
      * @return the awardNumber
@@ -160,7 +157,7 @@ public class Grant extends PassEntity {
         this.awardNumber = awardNumber;
     }
 
-
+    
     /**
      * @return the awardStatus
      */
@@ -175,7 +172,7 @@ public class Grant extends PassEntity {
     public void setAwardStatus(AwardStatus awardStatus) {
         this.awardStatus = awardStatus;
     }
-    
+
     
     /**
      * @return the localKey
@@ -210,7 +207,7 @@ public class Grant extends PassEntity {
 
     
     /**
-     * @return the URI of the primaryFunder
+     * @return the primaryFunder
      */
     public URI getPrimaryFunder() {
         return primaryFunder;
@@ -218,7 +215,7 @@ public class Grant extends PassEntity {
 
     
     /**
-     * @param primaryFunder the URI of the primaryFunder to set
+     * @param primaryFunder the primaryFunder to set
      */
     public void setPrimaryFunder(URI primaryFunder) {
         this.primaryFunder = primaryFunder;
@@ -226,7 +223,7 @@ public class Grant extends PassEntity {
 
     
     /**
-     * @return the URI of the directFunder
+     * @return the directFunder
      */
     public URI getDirectFunder() {
         return directFunder;
@@ -234,7 +231,7 @@ public class Grant extends PassEntity {
 
     
     /**
-     * @param directFunder the URI of the directFunder to set
+     * @param directFunder the directFunder to set
      */
     public void setDirectFunder(URI directFunder) {
         this.directFunder = directFunder;
@@ -242,7 +239,7 @@ public class Grant extends PassEntity {
 
     
     /**
-     * @return the URI of the pi
+     * @return the pi
      */
     public URI getPi() {
         return pi;
@@ -250,7 +247,7 @@ public class Grant extends PassEntity {
 
     
     /**
-     * @param pi the URI of the pi to set
+     * @param pi the pi to set
      */
     public void setPi(URI pi) {
         this.pi = pi;
@@ -258,7 +255,7 @@ public class Grant extends PassEntity {
 
     
     /**
-     * @return the coPi User URIs
+     * @return the coPis
      */
     public List<URI> getCoPis() {
         return coPis;
@@ -266,13 +263,13 @@ public class Grant extends PassEntity {
 
     
     /**
-     * @param coPis the User URIs of the coPis to set
+     * @param coPis the coPis to set
      */
     public void setCoPis(List<URI> coPis) {
         this.coPis = coPis;
     }
 
-
+    
     /**
      * @return the awardDate
      */
@@ -320,22 +317,6 @@ public class Grant extends PassEntity {
         this.endDate = endDate;
     }
 
-    
-    /**
-     * @return the list of submission URIs
-     */
-    public List<URI> getSubmissions() {
-        return submissions;
-    }
-
-    
-    /**
-     * @param submissions the submission URIs to set
-     */
-    public void setSubmissions(List<URI> submissions) {
-        this.submissions = submissions;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -356,7 +337,6 @@ public class Grant extends PassEntity {
         if (awardDate != null ? !awardDate.equals(that.awardDate) : that.awardDate != null) return false;
         if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
         if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
-        if (submissions != null ? !submissions.equals(that.submissions) : that.submissions != null) return false;
         return true;
 
     }
@@ -377,7 +357,6 @@ public class Grant extends PassEntity {
         result = 31 * result + (awardDate != null ? awardDate.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
-        result = 31 * result + (submissions != null ? submissions.hashCode() : 0);
         return result;
     }
     

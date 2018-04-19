@@ -10,7 +10,6 @@
 	"coPis": ["https://example.org/fedora/users/2", "https://example.org/fedora/users/3"],
 	"awardDate": "2018-01-01T00:00:00.000Z",
 	"startDate": "2018-04-01T00:00:00.000Z",
-	"endDate": "2020-04-30T00:00:00.000Z",
-	"submissions": ["https://example.org/fedora/submissions/1", "https://example.org/fedora/submissions/2"]
+	"endDate": "2020-04-30T00:00:00.000Z"
 }
 	

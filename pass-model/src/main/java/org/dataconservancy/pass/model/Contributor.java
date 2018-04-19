@@ -91,7 +91,6 @@ public class Contributor extends PassEntity {
     private URI user;
     
 
-
     /** 
      * list of possible contributor Roles 
      */

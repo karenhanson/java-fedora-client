@@ -68,8 +68,6 @@ public class GrantModelTests {
         assertEquals(TestValues.GRANT_AWARD_DATE_STR, dateFormatter.print(grant.getAwardDate()));
         assertEquals(TestValues.GRANT_START_DATE_STR, dateFormatter.print(grant.getStartDate()));
         assertEquals(TestValues.GRANT_END_DATE_STR, dateFormatter.print(grant.getEndDate()));
-        assertEquals(TestValues.SUBMISSION_ID_1, grant.getSubmissions().get(0).toString());
-        assertEquals(TestValues.SUBMISSION_ID_2, grant.getSubmissions().get(1).toString());
         
     }
 
@@ -100,8 +98,6 @@ public class GrantModelTests {
         assertEquals(root.getString("awardDate").toString(),TestValues.GRANT_AWARD_DATE_STR);
         assertEquals(root.getString("startDate").toString(),TestValues.GRANT_START_DATE_STR);
         assertEquals(root.getString("endDate").toString(),TestValues.GRANT_END_DATE_STR);
-        assertEquals(root.getJSONArray("submissions").get(0),TestValues.SUBMISSION_ID_1);
-        assertEquals(root.getJSONArray("submissions").get(1),TestValues.SUBMISSION_ID_2);
     }
     
     /**
@@ -145,10 +141,6 @@ public class GrantModelTests {
         grant.setStartDate(dt);
         dt = dateFormatter.parseDateTime(TestValues.GRANT_END_DATE_STR);
         grant.setEndDate(dt);
-        List<URI> submissions = new ArrayList<URI>();
-        submissions.add(new URI(TestValues.SUBMISSION_ID_1));
-        submissions.add(new URI(TestValues.SUBMISSION_ID_2));
-        grant.setSubmissions(submissions);
         
         return grant;
     }
