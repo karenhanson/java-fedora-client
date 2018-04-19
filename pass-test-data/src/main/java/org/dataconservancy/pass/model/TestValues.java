@@ -31,6 +31,7 @@ public class TestValues {
     public static final String GRANT_ID_2 = "https://example.org/fedora/grants/2";
     public static final String JOURNAL_ID_1 = "https://example.org/fedora/journals/1";
     public static final String JOURNAL_ID_2 = "https://example.org/fedora/journals/2";
+    public static final String INSTITUTION_ID_1 = "https://example.org/fedora/institutions/1";
     public static final String POLICY_ID_1 = "https://example.org/fedora/policies/1";
     public static final String PUBLICATION_ID_1 = "https://example.org/fedora/publications/1";
     public static final String PUBLISHER_ID_1 = "https://example.org/fedora/publishers/1";
@@ -76,7 +77,7 @@ public class TestValues {
     
     public static final String POLICY_TITLE = "Policy A";
     public static final String POLICY_DESCRIPTION = "You must submit to any OA repo";
-    public static final Boolean POLICY_ISDEFAULT = false;
+    public static final String POLICY_URL = "https://somefunder.org/policy";
     
     public static final String PUBLICATION_TITLE = "Some article";
     public static final String PUBLICATION_ABSTRACT = "An article about something";
