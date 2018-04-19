@@ -21,6 +21,7 @@ package org.dataconservancy.pass.model;
  * @version $Id$
  */
 public class TestValues {
+    public static final String CONTRIBUTOR_ID_1 = "https://example.org/fedora/contributors/1";
     public static final String DEPOSIT_ID_1 = "https://example.org/fedora/deposits/1";
     public static final String DEPOSIT_ID_2 = "https://example.org/fedora/deposits/2";
     public static final String FUNDER_ID_1 = "https://example.org/fedora/funders/1";
@@ -29,9 +30,6 @@ public class TestValues {
     public static final String GRANT_ID_2 = "https://example.org/fedora/grants/2";
     public static final String JOURNAL_ID_1 = "https://example.org/fedora/journals/1";
     public static final String JOURNAL_ID_2 = "https://example.org/fedora/journals/2";
-    public static final String PERSON_ID_1 = "https://example.org/fedora/people/1";
-    public static final String PERSON_ID_2 = "https://example.org/fedora/people/2";
-    public static final String PERSON_ID_3 = "https://example.org/fedora/people/3";
     public static final String POLICY_ID_1 = "https://example.org/fedora/policies/1";
     public static final String PUBLICATION_ID_1 = "https://example.org/fedora/publications/1";
     public static final String PUBLISHER_ID_1 = "https://example.org/fedora/publishers/1";
@@ -40,7 +38,13 @@ public class TestValues {
     public static final String SUBMISSION_ID_1 = "https://example.org/fedora/submissions/1";
     public static final String SUBMISSION_ID_2 = "https://example.org/fedora/submissions/2";
     public static final String USER_ID_1 = "https://example.org/fedora/users/1";
+    public static final String USER_ID_2 = "https://example.org/fedora/users/2";
+    public static final String USER_ID_3 = "https://example.org/fedora/users/3";
 
+
+    public static final String CONTRIBUTOR_ROLE_1 = "first-author";
+    public static final String CONTRIBUTOR_ROLE_2 = "author";
+    
     public static final String DEPOSIT_STATUS = "submitted";
     public static final String DEPOSIT_ASSIGNEDID = "PMC12345";
     public static final String DEPOSIT_ACCESSURL = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/";
@@ -63,15 +67,6 @@ public class TestValues {
     public static final String JOURNAL_ISSN_2 = "5678-1234";
     public static final String JOURNAL_NLMTA = "TJ";
     public static final String JOURNAL_PMCPARTICIPATION = "B";
-        
-    public static final String PERSON_FIRST_NAME = "June";
-    public static final String PERSON_MIDDLE_NAME = "Marie";
-    public static final String PERSON_LAST_NAME = "Smith";
-    public static final String PERSON_DISPLAY_NAME = "June Smith";
-    public static final String PERSON_EMAIL = "js@example.com";
-    public static final String PERSON_INSTITUTIONAL_ID = "jms001";
-    public static final String PERSON_ORCID_ID = "https://orcid.org/0000-1111-2222-3333";
-    public static final String PERSON_AFFILIATION = "Johns Hopkins University";
     
     public static final String POLICY_TITLE = "Policy A";
     public static final String POLICY_DESCRIPTION = "You must submit to any OA repo";
@@ -96,6 +91,16 @@ public class TestValues {
     public static final String PUBLICATION_ISSUE = "123";
 
     public static final String USER_NAME = "am12345";
-    public static final String USER_ROLE = "admin";
+    public static final String USER_FIRST_NAME = "June";
+    public static final String USER_MIDDLE_NAME = "Marie";
+    public static final String USER_LAST_NAME = "Smith";
+    public static final String USER_DISPLAY_NAME = "June Smith";
+    public static final String USER_EMAIL = "js@example.com";
+    public static final String USER_INSTITUTIONAL_ID = "jms001";
+    public static final String USER_LOCALKEY = "abcdef";
+    public static final String USER_ORCID_ID = "https://orcid.org/0000-1111-2222-3333";
+    public static final String USER_AFFILIATION = "Johns Hopkins University";
+    public static final String USER_ROLE_1 = "admin";
+    public static final String USER_ROLE_2 = "submitter";
         
 }

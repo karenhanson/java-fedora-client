@@ -257,7 +257,7 @@ public class Grant extends PassEntity {
 
     
     /**
-     * @return the coPi Person URIs
+     * @return the coPi User URIs
      */
     public List<URI> getCoPis() {
         return coPis;
@@ -265,7 +265,7 @@ public class Grant extends PassEntity {
 
     
     /**
-     * @param coPis the Person URIs of the coPis to set
+     * @param coPis the User URIs of the coPis to set
      */
     public void setCoPis(List<URI> coPis) {
         this.coPis = coPis;

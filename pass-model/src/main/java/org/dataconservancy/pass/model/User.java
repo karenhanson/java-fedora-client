@@ -15,9 +15,9 @@
  */
 package org.dataconservancy.pass.model;
 
-import java.net.URI;
-
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,14 +41,57 @@ public class User extends PassEntity {
     private String username;
 
     /** 
-     * User role 
+     * First name(s) of User 
      */
-    private Role role;
+    private String firstName;
 
     /** 
-     * Person associated with the account 
+     * Middle name(s) of User 
      */
-    private URI person;
+    private String middleName;
+
+    /** 
+     * Last name(s) of User 
+     */
+    private String lastName;
+    
+    /** 
+     * Name for display. Separate names may not be available, but a person should always at least 
+     * have a display name.
+     */
+    private String displayName; 
+    
+    /** 
+     * Contact email for User
+     */
+    private String email;
+    
+    /** 
+     * Affiliation string for person. Where Person is embedded in Submission or Grant, 
+     * this is the affiliation relevant to that item 
+     */
+    private String affiliation; 
+    
+    /** 
+     * ID assigned by User's institution (JHED-ID for JHU)
+     */
+    private String institutionalId;
+    
+    /** 
+     * A key used to look up the User in a local system. In the case of JHU, this is the ID 
+     * from the person's COEUS record, which is different from the JHED-ID.
+     */
+    private String localKey;
+    
+    /** 
+     * ORCID ID for User 
+     */
+    private String orcidId;
+    
+    /** 
+     * User's system roles in PASS
+     */
+    private List<Role> roles = new ArrayList<Role>();
 
     /** 
      * list of possible user Roles 
@@ -56,8 +99,8 @@ public class User extends PassEntity {
     public enum Role {
         @JsonProperty("admin")
         ADMIN("admin"),
-        @JsonProperty("pi")
-        PI("pi");
+        @JsonProperty("submitter")
+        SUBMITTER("submitter");
 
         private static final Map<String, Role> map = new HashMap<>(values().length, 1);  
         static {
@@ -77,7 +120,7 @@ public class User extends PassEntity {
         public static Role of(String role) {
             Role result = map.get(role);
             if (result == null) {
-              throw new IllegalArgumentException("Invalid Deposit Status: " + role);
+              throw new IllegalArgumentException("Invalid Role: " + role);
             }
             return result;
           }
@@ -104,37 +147,164 @@ public class User extends PassEntity {
     public void setUsername(String username) {
         this.username = username;
     }
-
     
     /**
-     * @return the role
+     * @return the firstName
      */
-    public Role getRole() {
-        return role;
+    public String getFirstName() {
+        return firstName;
     }
 
     
     /**
-     * @param role the role to set
+     * @param firstName the firstName to set
      */
-    public void setRole(Role role) {
-        this.role = role;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     
     /**
-     * @return the person
+     * @return the middleName
      */
-    public URI getPerson() {
-        return person;
+    public String getMiddleName() {
+        return middleName;
     }
 
     
     /**
-     * @param person the person to set
+     * @param middleName the middleName to set
      */
-    public void setPerson(URI person) {
-        this.person = person;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    
+    /**
+     * @return the displayName
+     */
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    
+    /**
+     * @param displayName the displayName to set
+     */
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    
+    /**
+     * @return the affiliation
+     */
+    public String getAffiliation() {
+        return affiliation;
+    }
+
+    
+    /**
+     * @param affiliation the affiliation to set
+     */
+    public void setAffiliation(String affiliation) {
+        this.affiliation = affiliation;
+    }
+
+    
+    /**
+     * @return the institutionalId
+     */
+    public String getInstitutionalId() {
+        return institutionalId;
+    }
+
+    
+    /**
+     * @param institutionalId the institutionalId to set
+     */
+    public void setInstitutionalId(String institutionalId) {
+        this.institutionalId = institutionalId;
+    }
+
+    
+    /**
+     * @return the localKey
+     */
+    public String getLocalKey() {
+        return localKey;
+    }
+
+    
+    /**
+     * @param localKey the localKey to set
+     */
+    public void setLocalKey(String localKey) {
+        this.localKey = localKey;
+    }
+
+    
+    /**
+     * @return the orcidId
+     */
+    public String getOrcidId() {
+        return orcidId;
+    }
+
+    
+    /**
+     * @param orcidId the orcidId to set
+     */
+    public void setOrcidId(String orcidId) {
+        this.orcidId = orcidId;
+    }
+
+    
+    /**
+     * @return the list of roles
+     */
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    
+    /**
+     * @param role the roles list to set
+     */
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     
@@ -148,8 +318,16 @@ public class User extends PassEntity {
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
-        if (role != null ? !role.equals(that.role) : that.role != null) return false;
-        if (person != null ? !person.equals(that.person) : that.person != null) return false;
+        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
+        if (middleName != null ? !middleName.equals(that.middleName) : that.middleName != null) return false;
+        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
+        if (displayName != null ? !displayName.equals(that.displayName) : that.displayName != null) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (affiliation != null ? !affiliation.equals(that.affiliation) : that.affiliation != null) return false;
+        if (institutionalId != null ? !institutionalId.equals(that.institutionalId) : that.institutionalId != null) return false;
+        if (localKey != null ? !localKey.equals(that.localKey) : that.localKey != null) return false;
+        if (orcidId != null ? !orcidId.equals(that.orcidId) : that.orcidId != null) return false;
+        if (roles != null ? !roles.equals(that.roles) : that.roles != null) return false;
         return true;
     }
 
@@ -159,8 +337,16 @@ public class User extends PassEntity {
         int result = super.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (role != null ? role.hashCode() : 0);
-        result = 31 * result + (person != null ? person.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (affiliation != null ? affiliation.hashCode() : 0);
+        result = 31 * result + (institutionalId != null ? institutionalId.hashCode() : 0);
+        result = 31 * result + (localKey != null ? localKey.hashCode() : 0);
+        result = 31 * result + (orcidId != null ? orcidId.hashCode() : 0);
+        result = 31 * result + (roles != null ? roles.hashCode() : 0);
         return result;
     }
        

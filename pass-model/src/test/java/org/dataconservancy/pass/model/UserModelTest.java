@@ -19,6 +19,9 @@ import java.io.InputStream;
 
 import java.net.URI;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
@@ -50,8 +53,16 @@ public class UserModelTest {
         assertEquals(TestValues.USER_ID_1, user.getId().toString());
         assertEquals("User", user.getType());
         assertEquals(TestValues.USER_NAME, user.getUsername());
-        assertEquals(TestValues.USER_ROLE, user.getRole().getValue());
-        assertEquals(TestValues.PERSON_ID_1, user.getPerson().toString());
+        assertEquals(TestValues.USER_ROLE_1, user.getRoles().get(0).getValue());
+        assertEquals(TestValues.USER_ROLE_2, user.getRoles().get(1).getValue());
+        assertEquals(TestValues.USER_FIRST_NAME, user.getFirstName());
+        assertEquals(TestValues.USER_MIDDLE_NAME, user.getMiddleName());
+        assertEquals(TestValues.USER_LAST_NAME, user.getLastName());
+        assertEquals(TestValues.USER_DISPLAY_NAME, user.getDisplayName());
+        assertEquals(TestValues.USER_EMAIL, user.getEmail());
+        assertEquals(TestValues.USER_AFFILIATION, user.getAffiliation());
+        assertEquals(TestValues.USER_INSTITUTIONAL_ID, user.getInstitutionalId());
+        assertEquals(TestValues.USER_ORCID_ID, user.getOrcidId());
     }
 
     /**
@@ -70,8 +81,17 @@ public class UserModelTest {
         assertEquals(root.getString("@id"),TestValues.USER_ID_1);
         assertEquals(root.getString("@type"),"User");
         assertEquals(root.getString("username"),TestValues.USER_NAME);
-        assertEquals(root.getString("role"),TestValues.USER_ROLE);
-        assertEquals(root.getString("person"),TestValues.PERSON_ID_1);        
+        assertEquals(root.getString("firstName"),TestValues.USER_FIRST_NAME);
+        assertEquals(root.getString("middleName"),TestValues.USER_MIDDLE_NAME);
+        assertEquals(root.getString("lastName"),TestValues.USER_LAST_NAME);
+        assertEquals(root.getString("displayName"),TestValues.USER_DISPLAY_NAME);
+        assertEquals(root.getString("email"),TestValues.USER_EMAIL);        
+        assertEquals(root.getString("affiliation"),TestValues.USER_AFFILIATION);         
+        assertEquals(root.getString("institutionalId"),TestValues.USER_INSTITUTIONAL_ID);   
+        assertEquals(root.getString("localKey"),TestValues.USER_LOCALKEY);         
+        assertEquals(root.getString("orcidId"),TestValues.USER_ORCID_ID);              
+        assertEquals(root.getJSONArray("roles").get(0),TestValues.USER_ROLE_1);
+        assertEquals(root.getJSONArray("roles").get(1),TestValues.USER_ROLE_2);
     }
     
     /**
@@ -100,8 +120,20 @@ public class UserModelTest {
         User user = new User();
         user.setId(new URI(TestValues.USER_ID_1));
         user.setUsername(TestValues.USER_NAME);
-        user.setRole(Role.of(TestValues.USER_ROLE));
-        user.setPerson(new URI(TestValues.PERSON_ID_1));
+        user.setFirstName(TestValues.USER_FIRST_NAME);
+        user.setMiddleName(TestValues.USER_MIDDLE_NAME);
+        user.setLastName(TestValues.USER_LAST_NAME);
+        user.setDisplayName(TestValues.USER_DISPLAY_NAME);
+        user.setEmail(TestValues.USER_EMAIL);
+        user.setAffiliation(TestValues.USER_AFFILIATION);
+        user.setInstitutionalId(TestValues.USER_INSTITUTIONAL_ID);
+        user.setLocalKey(TestValues.USER_LOCALKEY);
+        user.setOrcidId(TestValues.USER_ORCID_ID);
+        
+        List<Role> roles = new ArrayList<Role>();
+        roles.add(Role.of(TestValues.USER_ROLE_1));
+        roles.add(Role.of(TestValues.USER_ROLE_2));
+        user.setRoles(roles);
         
         return user;
     }

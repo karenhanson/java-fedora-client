@@ -62,9 +62,9 @@ public class GrantModelTests {
         assertEquals(TestValues.GRANT_PROJECT_NAME, grant.getProjectName());
         assertEquals(TestValues.FUNDER_ID_1, grant.getPrimaryFunder().toString());
         assertEquals(TestValues.FUNDER_ID_2, grant.getDirectFunder().toString());
-        assertEquals(TestValues.PERSON_ID_1, grant.getPi().toString());
-        assertEquals(TestValues.PERSON_ID_2, grant.getCoPis().get(0).toString());
-        assertEquals(TestValues.PERSON_ID_3, grant.getCoPis().get(1).toString());
+        assertEquals(TestValues.USER_ID_1, grant.getPi().toString());
+        assertEquals(TestValues.USER_ID_2, grant.getCoPis().get(0).toString());
+        assertEquals(TestValues.USER_ID_3, grant.getCoPis().get(1).toString());
         assertEquals(TestValues.GRANT_AWARD_DATE_STR, dateFormatter.print(grant.getAwardDate()));
         assertEquals(TestValues.GRANT_START_DATE_STR, dateFormatter.print(grant.getStartDate()));
         assertEquals(TestValues.GRANT_END_DATE_STR, dateFormatter.print(grant.getEndDate()));
@@ -94,9 +94,9 @@ public class GrantModelTests {
         assertEquals(root.getString("projectName"),TestValues.GRANT_PROJECT_NAME);
         assertEquals(root.getString("primaryFunder"),TestValues.FUNDER_ID_1);
         assertEquals(root.getString("directFunder"),TestValues.FUNDER_ID_2);
-        assertEquals(root.getString("pi"),TestValues.PERSON_ID_1);
-        assertEquals(root.getJSONArray("coPis").get(0),TestValues.PERSON_ID_2);
-        assertEquals(root.getJSONArray("coPis").get(1),TestValues.PERSON_ID_3);
+        assertEquals(root.getString("pi"),TestValues.CONTRIBUTOR_ID_1);
+        assertEquals(root.getJSONArray("coPis").get(0),TestValues.USER_ID_2);
+        assertEquals(root.getJSONArray("coPis").get(1),TestValues.USER_ID_3);
         assertEquals(root.getString("awardDate").toString(),TestValues.GRANT_AWARD_DATE_STR);
         assertEquals(root.getString("startDate").toString(),TestValues.GRANT_START_DATE_STR);
         assertEquals(root.getString("endDate").toString(),TestValues.GRANT_END_DATE_STR);
@@ -133,10 +133,10 @@ public class GrantModelTests {
         grant.setProjectName(TestValues.GRANT_PROJECT_NAME);
         grant.setPrimaryFunder(new URI(TestValues.FUNDER_ID_1));
         grant.setDirectFunder(new URI(TestValues.FUNDER_ID_2));
-        grant.setPi(new URI(TestValues.PERSON_ID_1));
+        grant.setPi(new URI(TestValues.CONTRIBUTOR_ID_1));
         List<URI> coPis = new ArrayList<URI>();
-        coPis.add(new URI(TestValues.PERSON_ID_2));
-        coPis.add(new URI(TestValues.PERSON_ID_3));
+        coPis.add(new URI(TestValues.USER_ID_2));
+        coPis.add(new URI(TestValues.USER_ID_3));
         grant.setCoPis(coPis);
 
         DateTime dt = dateFormatter.parseDateTime(TestValues.GRANT_AWARD_DATE_STR);

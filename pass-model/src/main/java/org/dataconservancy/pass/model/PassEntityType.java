@@ -21,11 +21,11 @@ package org.dataconservancy.pass.model;
  * @author Karen Hanson
  */
 public enum PassEntityType {
+    CONTRIBUTOR ("Contributor", "contributors"),
     DEPOSIT ("Deposit", "deposits"),
     FUNDER ("Funder", "funders"),
     GRANT ("Grant", "grants"),
     JOURNAL ("Journal", "journals"),
-    PERSON ("Person", "people"),
     POLICY ("Policy", "policies"),
     PUBLICATION ("Publication", "publications"),
     PUBLISHER ("Publisher", "publishers"),
