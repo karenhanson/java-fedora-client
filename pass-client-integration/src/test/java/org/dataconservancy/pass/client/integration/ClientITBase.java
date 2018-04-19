@@ -29,9 +29,11 @@ import java.util.stream.Collectors;
 
 import org.dataconservancy.pass.client.PassClient;
 import org.dataconservancy.pass.client.fedora.FedoraPassClient;
+import org.dataconservancy.pass.model.Contributor;
 import org.dataconservancy.pass.model.PassEntity;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.dataconservancy.pass.model.User;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -143,8 +145,17 @@ public abstract class ClientITBase {
         @SuppressWarnings("rawtypes")
         final List list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            if (method.getName().equals("setIssns")) {
+            if (method.getName().equals("setIssns") || method.getName().equals("setExternalIds")) {
                 list.add(UUID.randomUUID().toString());
+            } else if (method.getName().equals("setRoles")) {
+                Object role = method.getDeclaringClass().newInstance();
+                if (role instanceof User) {
+                    User.Role[] values = User.Role.values();
+                    list.add(values[i]); 
+                } else if (role instanceof Contributor) {
+                    Contributor.Role[] values = Contributor.Role.values();
+                    list.add(values[i]);      
+                }
             } else {
                 list.add(URI.create("urn:uuid:" + UUID.randomUUID().toString()));
             }

@@ -21,6 +21,7 @@ import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEqua
 import org.dataconservancy.pass.model.PassEntity;
 
 import org.junit.Test;
+import org.dataconservancy.pass.model.User;
 import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 /**
@@ -31,7 +32,7 @@ import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 public class RoundTripIT extends ClientITBase {
 
-    /* Roundrtip with all lists containing multiple values */
+    /* Roundtrip with all lists containing multiple values */
     @Test
     public void roundTripWithFullListsTest() {
 
