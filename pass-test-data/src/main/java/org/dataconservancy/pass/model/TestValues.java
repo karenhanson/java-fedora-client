@@ -15,8 +15,6 @@
  */
 package org.dataconservancy.pass.model;
 
-import org.dataconservancy.pass.model.Deposit.DepositStatus;
-
 /**
  * Constants used in test data
  * @author Karen Hanson
@@ -43,7 +41,7 @@ public class TestValues {
     public static final String SUBMISSION_ID_2 = "https://example.org/fedora/submissions/2";
     public static final String USER_ID_1 = "https://example.org/fedora/users/1";
 
-    public static final DepositStatus DEPOSIT_STATUS = DepositStatus.SUBMITTED;
+    public static final String DEPOSIT_STATUS = "submitted";
     public static final String DEPOSIT_ASSIGNEDID = "PMC12345";
     public static final String DEPOSIT_ACCESSURL = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/";
     public static final Boolean DEPOSIT_REQUESTED = true;
@@ -53,8 +51,7 @@ public class TestValues {
     public static final String FUNDER_LOCALID = "A12345";
 
     public static final String GRANT_AWARD_NUMBER = "RH1234CDE";
-    public static final Grant.AwardStatus GRANT_STATUS = Grant.AwardStatus.ACTIVE;
-    public static final String GRANT_STATUS_STR = "active";
+    public static final String GRANT_STATUS = "active";
     public static final String GRANT_LOCAL_AWARDID = "ABC123";
     public static final String GRANT_PROJECT_NAME = "Project A";
     public static final String GRANT_AWARD_DATE_STR = "2018-01-01T00:00:00.000Z";
@@ -65,7 +62,7 @@ public class TestValues {
     public static final String JOURNAL_ISSN_1 = "1234-5678";
     public static final String JOURNAL_ISSN_2 = "5678-1234";
     public static final String JOURNAL_NLMTA = "TJ";
-    public static final PmcParticipation JOURNAL_PMCPARTICIPATION = PmcParticipation.B;
+    public static final String JOURNAL_PMCPARTICIPATION = "B";
         
     public static final String PERSON_FIRST_NAME = "June";
     public static final String PERSON_MIDDLE_NAME = "Marie";
@@ -81,15 +78,15 @@ public class TestValues {
     public static final Boolean POLICY_ISDEFAULT = false;
         
     public static final String PUBLISHER_NAME = "Publisher A";
-    public static final PmcParticipation PUBLISHER_PMCPARTICIPATION = PmcParticipation.A;
+    public static final String PUBLISHER_PMCPARTICIPATION = "A";
 
     public static final String REPOSITORY_NAME = "Repository A";
     public static final String REPOSITORY_DESCRIPTION = "An OA repository run by funder A";
     public static final String REPOSITORY_URL = "https://repo-example.org/";
     
-    public static final Submission.AggregatedDepositStatus SUBMISSION_STATUS = Submission.AggregatedDepositStatus.IN_PROGRESS;
+    public static final String SUBMISSION_STATUS = "in-progress";
     public static final String SUBMISSION_DATE_STR = "2018-01-05T12:12:12.000Z";
-    public static final Submission.Source SUBMISSION_SOURCE = Submission.Source.OTHER;
+    public static final String SUBMISSION_SOURCE = "other";
     
     public static final String PUBLICATION_TITLE = "Some article";
     public static final String PUBLICATION_ABSTRACT = "An article about something";
@@ -99,6 +96,6 @@ public class TestValues {
     public static final String PUBLICATION_ISSUE = "123";
 
     public static final String USER_NAME = "am12345";
-    public static final User.Role USER_ROLE = User.Role.ADMIN;
+    public static final String USER_ROLE = "admin";
         
 }

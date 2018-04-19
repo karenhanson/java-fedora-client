@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
 
+import org.dataconservancy.pass.model.User.Role;
 import org.json.JSONObject;
 
 import static org.junit.Assert.assertEquals;
@@ -49,7 +50,7 @@ public class UserModelTest {
         assertEquals(TestValues.USER_ID_1, user.getId().toString());
         assertEquals("User", user.getType());
         assertEquals(TestValues.USER_NAME, user.getUsername());
-        assertEquals(TestValues.USER_ROLE, user.getRole());
+        assertEquals(TestValues.USER_ROLE, user.getRole().getValue());
         assertEquals(TestValues.PERSON_ID_1, user.getPerson().toString());
     }
 
@@ -69,7 +70,7 @@ public class UserModelTest {
         assertEquals(root.getString("@id"),TestValues.USER_ID_1);
         assertEquals(root.getString("@type"),"User");
         assertEquals(root.getString("username"),TestValues.USER_NAME);
-        assertEquals(root.getString("role"),TestValues.USER_ROLE.name().toLowerCase());
+        assertEquals(root.getString("role"),TestValues.USER_ROLE);
         assertEquals(root.getString("person"),TestValues.PERSON_ID_1);        
     }
     
@@ -99,7 +100,7 @@ public class UserModelTest {
         User user = new User();
         user.setId(new URI(TestValues.USER_ID_1));
         user.setUsername(TestValues.USER_NAME);
-        user.setRole(TestValues.USER_ROLE);
+        user.setRole(Role.of(TestValues.USER_ROLE));
         user.setPerson(new URI(TestValues.PERSON_ID_1));
         
         return user;

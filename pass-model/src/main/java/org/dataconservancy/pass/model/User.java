@@ -17,6 +17,9 @@ package org.dataconservancy.pass.model;
 
 import java.net.URI;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -52,9 +55,32 @@ public class User extends PassEntity {
      */
     public enum Role {
         @JsonProperty("admin")
-        ADMIN,
+        ADMIN("admin"),
         @JsonProperty("pi")
-        PI
+        PI("pi");
+
+        private static final Map<String, Role> map = new HashMap<>(values().length, 1);  
+        static {
+          for (Role r : values()) map.put(r.value, r);
+        }
+        
+        private String value;
+        
+        private Role(String value){
+            this.value = value;
+        }
+        
+        public String getValue() {
+            return this.value;
+        }
+        
+        public static Role of(String role) {
+            Role result = map.get(role);
+            if (result == null) {
+              throw new IllegalArgumentException("Invalid Deposit Status: " + role);
+            }
+            return result;
+          }
     }
 
     

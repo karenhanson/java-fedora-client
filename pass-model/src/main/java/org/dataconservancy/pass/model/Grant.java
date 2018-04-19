@@ -16,8 +16,11 @@
 package org.dataconservancy.pass.model;
 
 import java.net.URI;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -103,11 +106,35 @@ public class Grant extends PassEntity {
     /** Status of award/grant */
     public enum AwardStatus {
         @JsonProperty("active")
-        ACTIVE,
+        ACTIVE("active"),
         @JsonProperty("pre-award")
-        PRE_AWARD,
+        PRE_AWARD("pre-award"),
         @JsonProperty("terminated")
-        TERMINATED;
+        TERMINATED("terminated");
+
+        private static final Map<String, AwardStatus> map = new HashMap<>(values().length, 1);  
+        static {
+          for (AwardStatus a : values()) map.put(a.value, a);
+        }
+        
+        private String value;
+        
+        private AwardStatus(String value){
+            this.value = value;
+        }
+        public String getValue() {
+            return this.value;
+        }
+        
+        public static AwardStatus of(String status) {
+            AwardStatus result = map.get(status);
+            if (result == null) {
+              throw new IllegalArgumentException("Invalid Award Status: " + status);
+            }
+            return result;
+        }
+        
+        
     }
 
     

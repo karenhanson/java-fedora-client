@@ -18,7 +18,9 @@ package org.dataconservancy.pass.model;
 import java.net.URI;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -96,6 +98,11 @@ public class Submission extends PassEntity {
         @JsonProperty("accepted")
         ACCEPTED("accepted");
 
+        private static final Map<String, AggregatedDepositStatus> map = new HashMap<>(values().length, 1);  
+        static {
+          for (AggregatedDepositStatus s : values()) map.put(s.value, s);
+        }
+        
         private String value;
         private AggregatedDepositStatus(String value){
             this.value = value;
@@ -103,6 +110,14 @@ public class Submission extends PassEntity {
         public String getValue() {
             return this.value;
         }
+        
+        public static AggregatedDepositStatus of(String status) {
+            AggregatedDepositStatus result = map.get(status);
+            if (result == null) {
+              throw new IllegalArgumentException("Invalid Aggregated Deposit Status: " + status);
+            }
+            return result;
+          }
         
     }
 

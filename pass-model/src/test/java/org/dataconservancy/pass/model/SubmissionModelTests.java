@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
 
+import org.dataconservancy.pass.model.Submission.AggregatedDepositStatus;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -56,7 +57,7 @@ public class SubmissionModelTests {
         
         assertEquals(TestValues.SUBMISSION_ID_1, submission.getId().toString());
         assertEquals("Submission", submission.getType());
-        assertEquals(TestValues.SUBMISSION_STATUS, submission.getAggregatedDepositStatus());
+        assertEquals(TestValues.SUBMISSION_STATUS, submission.getAggregatedDepositStatus().getValue());
         assertEquals(TestValues.PUBLICATION_ID_1, submission.getPublication().toString());
         assertEquals(TestValues.REPOSITORY_ID_1, submission.getRepositories().get(0).toString());
         assertEquals(TestValues.REPOSITORY_ID_2, submission.getRepositories().get(1).toString());
@@ -80,7 +81,7 @@ public class SubmissionModelTests {
 
         assertEquals(root.getString("@id"),TestValues.SUBMISSION_ID_1);
         assertEquals(root.getString("@type"),"Submission");
-        assertEquals(root.getString("aggregatedDepositStatus"),TestValues.SUBMISSION_STATUS.getValue());
+        assertEquals(root.getString("aggregatedDepositStatus"),TestValues.SUBMISSION_STATUS);
         assertEquals(root.getString("publication"),TestValues.PUBLICATION_ID_1);
         assertEquals(root.getJSONArray("repositories").get(0),TestValues.REPOSITORY_ID_1);
         assertEquals(root.getJSONArray("repositories").get(1),TestValues.REPOSITORY_ID_2);
@@ -114,7 +115,7 @@ public class SubmissionModelTests {
     private Submission createSubmission() throws Exception {
         Submission submission = new Submission();
         submission.setId(new URI(TestValues.SUBMISSION_ID_1));
-        submission.setAggregatedDepositStatus(TestValues.SUBMISSION_STATUS);
+        submission.setAggregatedDepositStatus(AggregatedDepositStatus.of(TestValues.SUBMISSION_STATUS));
         submission.setPublication(new URI(TestValues.PUBLICATION_ID_1));
         
         List<URI> repositories = new ArrayList<URI>();

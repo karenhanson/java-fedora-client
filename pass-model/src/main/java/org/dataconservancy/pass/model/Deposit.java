@@ -17,6 +17,9 @@ package org.dataconservancy.pass.model;
 
 import java.net.URI;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -81,9 +84,14 @@ public class Deposit extends PassEntity {
         * The target Repository has accepted the files into the repository. More steps may be performed by the Repository, but the 
         * requirements of the Deposit have been satisfied
         */
-       @JsonProperty("rejected")
-       REJECTED("rejected");
-                
+        @JsonProperty("rejected")
+        REJECTED("rejected");
+
+        private static final Map<String, DepositStatus> map = new HashMap<>(values().length, 1);  
+        static {
+          for (DepositStatus d : values()) map.put(d.value, d);
+        }
+        
         private String value;
         private DepositStatus(String value){
             this.value = value;
@@ -91,6 +99,15 @@ public class Deposit extends PassEntity {
         public String getValue() {
             return this.value;
         }
+        
+        public static DepositStatus of(String status) {
+            DepositStatus result = map.get(status);
+            if (result == null) {
+              throw new IllegalArgumentException("Invalid Deposit Status: " + status);
+            }
+            return result;
+        }
+        
     }
 
     
@@ -101,7 +118,7 @@ public class Deposit extends PassEntity {
     
     
     /**
-     * @return the status
+     * @return the deposit status
      */
     public DepositStatus getDepositStatus() {
         return depositStatus;
@@ -109,7 +126,7 @@ public class Deposit extends PassEntity {
 
     
     /**
-     * @param depositStatus the status to set
+     * @param deposit status the deposit status to set
      */
     public void setDepositStatus(DepositStatus depositStatus) {
         this.depositStatus = depositStatus;

@@ -29,26 +29,17 @@
     </dependency>  
     
     <dependency>
+      <groupId>org.dataconservancy.pass</groupId>
+      <artifactId>pass-test-data</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>test-jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
   
 </project>

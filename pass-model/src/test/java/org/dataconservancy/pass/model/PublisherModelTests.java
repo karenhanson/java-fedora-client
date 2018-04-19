@@ -54,7 +54,7 @@ public class PublisherModelTests {
         assertEquals(TestValues.PUBLISHER_NAME, publisher.getName());
         assertEquals(TestValues.JOURNAL_ID_1, publisher.getJournals().get(0).toString());
         assertEquals(TestValues.JOURNAL_ID_2, publisher.getJournals().get(1).toString());
-        assertEquals(TestValues.PUBLISHER_PMCPARTICIPATION, publisher.getPmcParticipation());
+        assertEquals(TestValues.PUBLISHER_PMCPARTICIPATION, publisher.getPmcParticipation().name());
     }
 
     /**
@@ -75,7 +75,7 @@ public class PublisherModelTests {
         assertEquals(root.getString("name"),TestValues.PUBLISHER_NAME);
         assertEquals(root.getJSONArray("journals").get(0),TestValues.JOURNAL_ID_1);
         assertEquals(root.getJSONArray("journals").get(1),TestValues.JOURNAL_ID_2);
-        assertEquals(root.getString("pmcParticipation"),TestValues.PUBLISHER_PMCPARTICIPATION.name());         
+        assertEquals(root.getString("pmcParticipation"),TestValues.PUBLISHER_PMCPARTICIPATION);         
     }
     
     /**
@@ -110,7 +110,7 @@ public class PublisherModelTests {
         journals.add(new URI(TestValues.JOURNAL_ID_2));
         publisher.setJournals(journals);
 
-        publisher.setPmcParticipation(TestValues.PUBLISHER_PMCPARTICIPATION);
+        publisher.setPmcParticipation(PmcParticipation.valueOf(TestValues.PUBLISHER_PMCPARTICIPATION));
         
         return publisher;
     }

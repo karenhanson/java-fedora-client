@@ -17,6 +17,7 @@
     <module>pass-client-api</module>
     <module>pass-client-util</module>
     <module>pass-client-integration</module>
+    <module>pass-test-data</module>
   </modules>
 
   <profiles>

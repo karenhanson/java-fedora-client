@@ -56,7 +56,7 @@ public class JournalModelTests {
         assertEquals(TestValues.JOURNAL_ISSN_2, journal.getIssns().get(1));
         assertEquals(TestValues.PUBLISHER_ID_1, journal.getPublisher().toString());
         assertEquals(TestValues.JOURNAL_NLMTA, journal.getNlmta());
-        assertEquals(TestValues.JOURNAL_PMCPARTICIPATION, journal.getPmcParticipation());
+        assertEquals(TestValues.JOURNAL_PMCPARTICIPATION, journal.getPmcParticipation().name());
     }
 
     /**
@@ -79,7 +79,7 @@ public class JournalModelTests {
         assertEquals(root.getJSONArray("issns").get(1),TestValues.JOURNAL_ISSN_2);
         assertEquals(root.getString("publisher"),TestValues.PUBLISHER_ID_1);
         assertEquals(root.getString("nlmta"),TestValues.JOURNAL_NLMTA);        
-        assertEquals(root.getString("pmcParticipation"),TestValues.JOURNAL_PMCPARTICIPATION.name());        
+        assertEquals(root.getString("pmcParticipation"),TestValues.JOURNAL_PMCPARTICIPATION);        
     }
     
     /**
@@ -114,7 +114,7 @@ public class JournalModelTests {
         journal.setIssns(issns);
         journal.setPublisher(new URI(TestValues.PUBLISHER_ID_1));
         journal.setNlmta(TestValues.JOURNAL_NLMTA);
-        journal.setPmcParticipation(TestValues.JOURNAL_PMCPARTICIPATION);
+        journal.setPmcParticipation(PmcParticipation.valueOf(TestValues.JOURNAL_PMCPARTICIPATION));
         return journal;
     }
     
