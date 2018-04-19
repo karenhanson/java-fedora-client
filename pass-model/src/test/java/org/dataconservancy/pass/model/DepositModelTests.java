@@ -50,11 +50,10 @@ public class DepositModelTests {
         assertEquals(TestValues.DEPOSIT_ID_1, deposit.getId().toString());
         assertEquals("Deposit", deposit.getType());
         assertEquals(DepositStatus.of(TestValues.DEPOSIT_STATUS), deposit.getDepositStatus());
-        assertEquals(TestValues.REPOSITORY_ID_1, deposit.getRepository().toString());
-        assertEquals(TestValues.DEPOSIT_ASSIGNEDID, deposit.getAssignedId());
-        assertEquals(TestValues.DEPOSIT_ACCESSURL, deposit.getAccessUrl());
-        assertEquals(TestValues.DEPOSIT_REQUESTED, deposit.getRequested());
+        assertEquals(TestValues.DEPOSIT_STATUSREF, deposit.getDepositStatusRef());
         assertEquals(TestValues.SUBMISSION_ID_1, deposit.getSubmission().toString());
+        assertEquals(TestValues.REPOSITORY_ID_1, deposit.getRepository().toString());
+        assertEquals(TestValues.REPOSITORYCOPY_ID_1, deposit.getRepositoryCopy().toString());
         
     }
 
@@ -74,11 +73,10 @@ public class DepositModelTests {
         assertEquals(root.getString("@id"),TestValues.DEPOSIT_ID_1);
         assertEquals(root.getString("@type"),"Deposit");
         assertEquals(root.getString("depositStatus"),TestValues.DEPOSIT_STATUS);
-        assertEquals(root.getString("repository"),TestValues.REPOSITORY_ID_1);
-        assertEquals(root.getString("assignedId"),TestValues.DEPOSIT_ASSIGNEDID);
-        assertEquals(root.getString("accessUrl"),TestValues.DEPOSIT_ACCESSURL);
-        assertEquals(root.getBoolean("requested"),TestValues.DEPOSIT_REQUESTED);        
+        assertEquals(root.getString("depositStatusRef"),TestValues.DEPOSIT_STATUSREF);
         assertEquals(root.getString("submission"),TestValues.SUBMISSION_ID_1);
+        assertEquals(root.getString("repositoryCopy"),TestValues.REPOSITORYCOPY_ID_1);   
+        assertEquals(root.getString("repositoryCopy"),TestValues.REPOSITORYCOPY_ID_1);   
     }
     
     /**
@@ -94,7 +92,7 @@ public class DepositModelTests {
         Deposit deposit2 = createDeposit();
         
         assertEquals(deposit1,deposit2);
-        deposit1.setRequested(!deposit1.getRequested());
+        deposit1.setDepositStatusRef("different");
         assertTrue(!deposit1.equals(deposit2));
         
         assertTrue(deposit1.hashCode()!=deposit2.hashCode());
@@ -106,12 +104,11 @@ public class DepositModelTests {
     private Deposit createDeposit() throws Exception {
         Deposit deposit = new Deposit();
         deposit.setId(new URI(TestValues.DEPOSIT_ID_1));
+        deposit.setDepositStatusRef(TestValues.DEPOSIT_STATUSREF);
         deposit.setDepositStatus(DepositStatus.of(TestValues.DEPOSIT_STATUS));
-        deposit.setRepository(new URI(TestValues.REPOSITORY_ID_1));
-        deposit.setAssignedId(TestValues.DEPOSIT_ASSIGNEDID);
-        deposit.setAccessUrl(TestValues.DEPOSIT_ACCESSURL);
-        deposit.setRequested(TestValues.DEPOSIT_REQUESTED);
         deposit.setSubmission(new URI(TestValues.SUBMISSION_ID_1));
+        deposit.setRepository(new URI(TestValues.REPOSITORY_ID_1));
+        deposit.setRepositoryCopy(new URI(TestValues.REPOSITORYCOPY_ID_1));
         return deposit;
     }
     

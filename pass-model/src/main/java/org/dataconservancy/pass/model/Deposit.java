@@ -37,34 +37,29 @@ public class Deposit extends PassEntity {
     private String type = PassEntityType.DEPOSIT.getName();
     
     /** 
+     * A URL or some kind of reference that can be dereferenced, entity body parsed, and used to determine the status of Deposit
+     */
+    private String depositStatusRef;
+    
+    /** 
      * Status of deposit 
      */
     private DepositStatus depositStatus;
-    
-    /** 
-     * URI of Repository being deposited to 
-     */
-    private URI repository;
-    
-    /** 
-     * ID assigned by repository 
-     */
-    private String assignedId;
-    
-    /** 
-     * URL to access the item in the repository 
-     */
-    private String accessUrl;
-    
-    /** 
-     * True if deposit was requested by the user rather than resulting from a required policy 
-     */
-    private Boolean requested;
     
     /**
      * URI of the Submission that this Deposit is a part of
      */
     private URI submission;
+   
+    /** 
+     * URI of Repository being deposited to 
+     */
+    private URI repository;
+    
+    /**
+     * URI of the Repository Copy representing the copy that is reltaed to this Deposit. The value is null if there is no copy
+     */
+    private URI repositoryCopy;
     
     /**
      * Possible deposit statuses. Note that some repositories may not go through every status.
@@ -147,53 +142,21 @@ public class Deposit extends PassEntity {
     public void setRepository(URI repository) {
         this.repository = repository;
     }
-
+    
     
     /**
-     * @return the assignedId
+     * @return the depositStatusRef
      */
-    public String getAssignedId() {
-        return assignedId;
+    public String getDepositStatusRef() {
+        return depositStatusRef;
     }
 
     
     /**
-     * @param assignedId the assignedId to set
+     * @param depositStatusRef the depositStatusRef to set
      */
-    public void setAssignedId(String assignedId) {
-        this.assignedId = assignedId;
-    }
-
-    
-    /**
-     * @return the accessUrl
-     */
-    public String getAccessUrl() {
-        return accessUrl;
-    }
-
-    
-    /**
-     * @param accessUrl the accessUrl to set
-     */
-    public void setAccessUrl(String accessUrl) {
-        this.accessUrl = accessUrl;
-    }
-
-    
-    /**
-     * @return the requested
-     */
-    public Boolean getRequested() {
-        return requested;
-    }
-
-    
-    /**
-     * @param requested the requested to set
-     */
-    public void setRequested(Boolean requested) {
-        this.requested = requested;
+    public void setDepositStatusRef(String depositStatusRef) {
+        this.depositStatusRef = depositStatusRef;
     }
 
     
@@ -211,6 +174,22 @@ public class Deposit extends PassEntity {
     public void setSubmission(URI submission) {
         this.submission = submission;
     }
+
+    
+    /**
+     * @return the repositoryCopy
+     */
+    public URI getRepositoryCopy() {
+        return repositoryCopy;
+    }
+
+
+    /**
+     * @param repositoryCopy the repositoryCopy to set
+     */
+    public void setRepositoryCopy(URI repositoryCopy) {
+        this.repositoryCopy = repositoryCopy;
+    }
     
     
     @Override
@@ -222,12 +201,11 @@ public class Deposit extends PassEntity {
         Deposit that = (Deposit) o;
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (depositStatusRef != null ? !depositStatusRef.equals(that.depositStatusRef) : that.depositStatusRef != null) return false;
         if (depositStatus != null ? !depositStatus.equals(that.depositStatus) : that.depositStatus != null) return false;
-        if (repository != null ? !repository.equals(that.repository) : that.repository != null) return false;
-        if (assignedId != null ? !assignedId.equals(that.assignedId) : that.assignedId != null) return false;
-        if (accessUrl != null ? !accessUrl.equals(that.accessUrl) : that.accessUrl != null) return false;
-        if (requested != null ? !requested.equals(that.requested) : that.requested != null) return false;
         if (submission != null ? !submission.equals(that.submission) : that.submission != null) return false;
+        if (repository != null ? !repository.equals(that.repository) : that.repository != null) return false;
+        if (repositoryCopy != null ? !repositoryCopy.equals(that.repositoryCopy) : that.repositoryCopy != null) return false;
         return true;
     }
     
@@ -236,12 +214,11 @@ public class Deposit extends PassEntity {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (depositStatusRef != null ? depositStatusRef.hashCode() : 0);
         result = 31 * result + (depositStatus != null ? depositStatus.hashCode() : 0);
-        result = 31 * result + (repository != null ? repository.hashCode() : 0);
-        result = 31 * result + (assignedId != null ? assignedId.hashCode() : 0);
-        result = 31 * result + (accessUrl != null ? accessUrl.hashCode() : 0);
-        result = 31 * result + (requested != null ? requested.hashCode() : 0);
         result = 31 * result + (submission != null ? submission.hashCode() : 0);
+        result = 31 * result + (repository != null ? repository.hashCode() : 0);
+        result = 31 * result + (repositoryCopy != null ? repositoryCopy.hashCode() : 0);
         return result;
     }
     

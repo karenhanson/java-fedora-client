@@ -30,6 +30,7 @@ public enum PassEntityType {
     PUBLICATION ("Publication", "publications"),
     PUBLISHER ("Publisher", "publishers"),
     REPOSITORY ("Repository", "repositories"),
+    REPOSITORY_COPY ("RepositoryCopy", "repositoryCopies"),
     SUBMISSION ("Submission", "submissions"),
     USER ("User", "users");
     
