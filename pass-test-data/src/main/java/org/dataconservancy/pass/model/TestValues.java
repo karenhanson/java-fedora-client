@@ -24,6 +24,7 @@ public class TestValues {
     public static final String CONTRIBUTOR_ID_1 = "https://example.org/fedora/contributors/1";
     public static final String DEPOSIT_ID_1 = "https://example.org/fedora/deposits/1";
     public static final String DEPOSIT_ID_2 = "https://example.org/fedora/deposits/2";
+    public static final String FILE_ID_1 = "https://example.org/fedora/files/1";
     public static final String FUNDER_ID_1 = "https://example.org/fedora/funders/1";
     public static final String FUNDER_ID_2 = "https://example.org/fedora/funders/2";
     public static final String GRANT_ID_1 = "https://example.org/fedora/grants/1";
@@ -48,7 +49,13 @@ public class TestValues {
     
     public static final String DEPOSIT_STATUS = "submitted";
     public static final String DEPOSIT_STATUSREF = "http://depositstatusref.example/abc";
-        
+
+    public static final String FILE_NAME = "article.pdf";
+    public static final String FILE_URI = "https://someplace.dl/a/b/c/article.pdf";
+    public static final String FILE_DESCRIPTION = "The file is an article";
+    public static final String FILE_ROLE = "manuscript";
+    public static final String FILE_MIMETYPE = "application/pdf";
+    
     public static final String FUNDER_NAME = "Funder A";
     public static final String FUNDER_URL = "https://nih.gov";
     public static final String FUNDER_LOCALID = "A12345";

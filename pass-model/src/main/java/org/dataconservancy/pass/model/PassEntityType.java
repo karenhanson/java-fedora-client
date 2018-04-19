@@ -23,6 +23,7 @@ package org.dataconservancy.pass.model;
 public enum PassEntityType {
     CONTRIBUTOR ("Contributor", "contributors"),
     DEPOSIT ("Deposit", "deposits"),
+    FILE ("File", "files"),
     FUNDER ("Funder", "funders"),
     GRANT ("Grant", "grants"),
     JOURNAL ("Journal", "journals"),
