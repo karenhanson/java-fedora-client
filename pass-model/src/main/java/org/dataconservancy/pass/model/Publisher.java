@@ -15,10 +15,6 @@
  */
 package org.dataconservancy.pass.model;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -38,11 +34,6 @@ public class Publisher extends PassEntity {
      * Name of publisher 
      */
     private String name;
-    
-    /** 
-     * URIs of Journals associated with publisher
-     */
-    private List<URI> journals = new ArrayList<>();
     
     /** 
      * This field indicates whether a journal participates in the NIH Public Access Program by sending final 
@@ -73,22 +64,6 @@ public class Publisher extends PassEntity {
 
     
     /**
-     * @return the journals
-     */
-    public List<URI> getJournals() {
-        return journals;
-    }
-
-    
-    /**
-     * @param journals list of URIs of journals to set
-     */
-    public void setJournals(List<URI> journals) {
-        this.journals = journals;
-    }
-
-    
-    /**
      * @return the pmcParticipation
      */
     public PmcParticipation getPmcParticipation() {
@@ -114,7 +89,6 @@ public class Publisher extends PassEntity {
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (journals != null ? !journals.equals(that.journals) : that.journals != null) return false;
         if (pmcParticipation != null ? !pmcParticipation.equals(that.pmcParticipation) : that.pmcParticipation != null) return false;
         return true;
     }
@@ -125,7 +99,6 @@ public class Publisher extends PassEntity {
         int result = super.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (journals != null ? journals.hashCode() : 0);
         result = 31 * result + (pmcParticipation != null ? pmcParticipation.hashCode() : 0);
         return result;
     }

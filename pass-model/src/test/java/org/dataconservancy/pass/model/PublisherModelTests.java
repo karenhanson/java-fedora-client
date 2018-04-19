@@ -19,9 +19,6 @@ import java.io.InputStream;
 
 import java.net.URI;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
@@ -52,8 +49,6 @@ public class PublisherModelTests {
         assertEquals(TestValues.PUBLISHER_ID_1, publisher.getId().toString());
         assertEquals("Publisher", publisher.getType());
         assertEquals(TestValues.PUBLISHER_NAME, publisher.getName());
-        assertEquals(TestValues.JOURNAL_ID_1, publisher.getJournals().get(0).toString());
-        assertEquals(TestValues.JOURNAL_ID_2, publisher.getJournals().get(1).toString());
         assertEquals(TestValues.PUBLISHER_PMCPARTICIPATION, publisher.getPmcParticipation().name());
     }
 
@@ -73,8 +68,6 @@ public class PublisherModelTests {
         assertEquals(root.getString("@id"),TestValues.PUBLISHER_ID_1);
         assertEquals(root.getString("@type"),"Publisher");
         assertEquals(root.getString("name"),TestValues.PUBLISHER_NAME);
-        assertEquals(root.getJSONArray("journals").get(0),TestValues.JOURNAL_ID_1);
-        assertEquals(root.getJSONArray("journals").get(1),TestValues.JOURNAL_ID_2);
         assertEquals(root.getString("pmcParticipation"),TestValues.PUBLISHER_PMCPARTICIPATION);         
     }
     
@@ -104,12 +97,6 @@ public class PublisherModelTests {
         Publisher publisher = new Publisher();
         publisher.setId(new URI(TestValues.PUBLISHER_ID_1));
         publisher.setName(TestValues.PUBLISHER_NAME);
-        
-        List<URI> journals = new ArrayList<URI>();
-        journals.add(new URI(TestValues.JOURNAL_ID_1));
-        journals.add(new URI(TestValues.JOURNAL_ID_2));
-        publisher.setJournals(journals);
-
         publisher.setPmcParticipation(PmcParticipation.valueOf(TestValues.PUBLISHER_PMCPARTICIPATION));
         
         return publisher;
