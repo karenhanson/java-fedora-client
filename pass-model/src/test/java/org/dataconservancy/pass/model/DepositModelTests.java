@@ -48,7 +48,7 @@ public class DepositModelTests {
         
         assertEquals(TestValues.DEPOSIT_ID_1, deposit.getId().toString());
         assertEquals("Deposit", deposit.getType());
-        assertEquals(TestValues.DEPOSIT_STATUS, deposit.getStatus());
+        assertEquals(TestValues.DEPOSIT_STATUS, deposit.getDepositStatus());
         assertEquals(TestValues.REPOSITORY_ID_1, deposit.getRepository().toString());
         assertEquals(TestValues.DEPOSIT_ASSIGNEDID, deposit.getAssignedId());
         assertEquals(TestValues.DEPOSIT_ACCESSURL, deposit.getAccessUrl());
@@ -72,7 +72,7 @@ public class DepositModelTests {
 
         assertEquals(root.getString("@id"),TestValues.DEPOSIT_ID_1);
         assertEquals(root.getString("@type"),"Deposit");
-        assertEquals(root.getString("status"),TestValues.DEPOSIT_STATUS.getValue());
+        assertEquals(root.getString("depositStatus"),TestValues.DEPOSIT_STATUS.getValue());
         assertEquals(root.getString("repository"),TestValues.REPOSITORY_ID_1);
         assertEquals(root.getString("assignedId"),TestValues.DEPOSIT_ASSIGNEDID);
         assertEquals(root.getString("accessUrl"),TestValues.DEPOSIT_ACCESSURL);
@@ -105,7 +105,7 @@ public class DepositModelTests {
     private Deposit createDeposit() throws Exception {
         Deposit deposit = new Deposit();
         deposit.setId(new URI(TestValues.DEPOSIT_ID_1));
-        deposit.setStatus(TestValues.DEPOSIT_STATUS);
+        deposit.setDepositStatus(TestValues.DEPOSIT_STATUS);
         deposit.setRepository(new URI(TestValues.REPOSITORY_ID_1));
         deposit.setAssignedId(TestValues.DEPOSIT_ASSIGNEDID);
         deposit.setAccessUrl(TestValues.DEPOSIT_ACCESSURL);

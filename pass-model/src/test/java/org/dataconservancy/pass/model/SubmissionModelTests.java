@@ -80,7 +80,7 @@ public class SubmissionModelTests {
 
         assertEquals(root.getString("@id"),TestValues.SUBMISSION_ID_1);
         assertEquals(root.getString("@type"),"Submission");
-        assertEquals(root.getString("status"),TestValues.SUBMISSION_STATUS.getValue());
+        assertEquals(root.getString("aggregatedDepositStatus"),TestValues.SUBMISSION_STATUS.getValue());
         assertEquals(root.getString("publication"),TestValues.PUBLICATION_ID_1);
         assertEquals(root.getJSONArray("repositories").get(0),TestValues.REPOSITORY_ID_1);
         assertEquals(root.getJSONArray("repositories").get(1),TestValues.REPOSITORY_ID_2);

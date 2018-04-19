@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import org.dataconservancy.pass.client.PassJsonAdapter;
 import org.dataconservancy.pass.model.Deposit;
+import org.dataconservancy.pass.model.Deposit.DepositStatus;
 import org.json.JSONObject;
 
 import static org.junit.Assert.assertEquals;
@@ -40,7 +41,7 @@ public class JsonAdapterTests {
     
     private static final String DEPOSIT_ID_1 = "https://example.org/fedora/deposits/1";
     private static final String REPOSITORY_ID_1 = "https://example.org/fedora/repositories/1";
-    private static final Deposit.Status DEPOSIT_STATUS = Deposit.Status.IN_PREPARATION;
+    private static final DepositStatus DEPOSIT_STATUS = DepositStatus.SUBMITTED;
     private static final String DEPOSIT_ASSIGNEDID = "PMC12345";
     private static final String DEPOSIT_ACCESSURL = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/";
     private static final Boolean DEPOSIT_REQUESTED = true;
@@ -67,7 +68,7 @@ public class JsonAdapterTests {
         Deposit deposit = (Deposit) adapter.toModel(compactJsonLd, Deposit.class);
 
         assertEquals(DEPOSIT_ID_1, deposit.getId());
-        assertEquals(DEPOSIT_STATUS, deposit.getStatus());
+        assertEquals(DEPOSIT_STATUS, deposit.getDepositStatus());
         assertEquals(DEPOSIT_ASSIGNEDID, deposit.getAssignedId());
         assertEquals(DEPOSIT_ACCESSURL, deposit.getAccessUrl());
         assertEquals(DEPOSIT_REQUESTED, deposit.getRequested());  
@@ -90,7 +91,7 @@ public class JsonAdapterTests {
         assertEquals(root.getString("@id"),DEPOSIT_ID_1);
         assertEquals(root.getString("@type"),"Deposit");
         assertEquals(root.getString("@context"),CONTEXT);
-        assertEquals(root.getString("status"),DEPOSIT_STATUS.getValue());
+        assertEquals(root.getString("depositStatus"),DEPOSIT_STATUS.getValue());
         assertEquals(root.getString("repository"),REPOSITORY_ID_1);
         assertEquals(root.getString("assignedId"),DEPOSIT_ASSIGNEDID);
         assertEquals(root.getString("accessUrl"),DEPOSIT_ACCESSURL);
@@ -112,7 +113,7 @@ public class JsonAdapterTests {
         assertEquals(root.getString("@id"),DEPOSIT_ID_1);
         assertEquals(root.getString("@type"),"Deposit");
         assertEquals(root.has("@context"),false);
-        assertEquals(root.getString("status"),DEPOSIT_STATUS.getValue());
+        assertEquals(root.getString("depositStatus"),DEPOSIT_STATUS.getValue());
         assertEquals(root.getString("repository"),REPOSITORY_ID_1);
         assertEquals(root.getString("assignedId"),DEPOSIT_ASSIGNEDID);
         assertEquals(root.getString("accessUrl"),DEPOSIT_ACCESSURL);
@@ -123,7 +124,7 @@ public class JsonAdapterTests {
     private Deposit createDeposit() throws Exception {
         Deposit deposit = new Deposit();
         deposit.setId(new URI(DEPOSIT_ID_1));
-        deposit.setStatus(DEPOSIT_STATUS);
+        deposit.setDepositStatus(DEPOSIT_STATUS);
         deposit.setRepository(new URI(REPOSITORY_ID_1));
         deposit.setAssignedId(DEPOSIT_ASSIGNEDID);
         deposit.setAccessUrl(DEPOSIT_ACCESSURL);

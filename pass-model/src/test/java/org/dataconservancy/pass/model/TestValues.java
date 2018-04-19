@@ -15,6 +15,8 @@
  */
 package org.dataconservancy.pass.model;
 
+import org.dataconservancy.pass.model.Deposit.DepositStatus;
+
 /**
  * Constants used in test data
  * @author Karen Hanson
@@ -41,7 +43,7 @@ public class TestValues {
     public static final String SUBMISSION_ID_2 = "https://example.org/fedora/submissions/2";
     public static final String USER_ID_1 = "https://example.org/fedora/users/1";
 
-    public static final Deposit.Status DEPOSIT_STATUS = Deposit.Status.SUBMITTED;
+    public static final DepositStatus DEPOSIT_STATUS = DepositStatus.SUBMITTED;
     public static final String DEPOSIT_ASSIGNEDID = "PMC12345";
     public static final String DEPOSIT_ACCESSURL = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/";
     public static final Boolean DEPOSIT_REQUESTED = true;

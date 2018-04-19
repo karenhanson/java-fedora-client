@@ -36,7 +36,7 @@ public class Deposit extends PassEntity {
     /** 
      * Status of deposit 
      */
-    private Status status;
+    private DepositStatus depositStatus;
     
     /** 
      * URI of Repository being deposited to 
@@ -66,7 +66,7 @@ public class Deposit extends PassEntity {
     /**
      * Possible deposit statuses. Note that some repositories may not go through every status.
      */
-    public enum Status {
+    public enum DepositStatus {
         /**
          * PASS has sent a package to the target Repository and is waiting for an update on the status
          */
@@ -85,7 +85,7 @@ public class Deposit extends PassEntity {
        REJECTED("rejected");
                 
         private String value;
-        private Status(String value){
+        private DepositStatus(String value){
             this.value = value;
         }
         public String getValue() {
@@ -103,16 +103,16 @@ public class Deposit extends PassEntity {
     /**
      * @return the status
      */
-    public Status getStatus() {
-        return status;
+    public DepositStatus getDepositStatus() {
+        return depositStatus;
     }
 
     
     /**
-     * @param status the status to set
+     * @param depositStatus the status to set
      */
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setDepositStatus(DepositStatus depositStatus) {
+        this.depositStatus = depositStatus;
     }
 
     
@@ -205,7 +205,7 @@ public class Deposit extends PassEntity {
         Deposit that = (Deposit) o;
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (depositStatus != null ? !depositStatus.equals(that.depositStatus) : that.depositStatus != null) return false;
         if (repository != null ? !repository.equals(that.repository) : that.repository != null) return false;
         if (assignedId != null ? !assignedId.equals(that.assignedId) : that.assignedId != null) return false;
         if (accessUrl != null ? !accessUrl.equals(that.accessUrl) : that.accessUrl != null) return false;
@@ -219,7 +219,7 @@ public class Deposit extends PassEntity {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (depositStatus != null ? depositStatus.hashCode() : 0);
         result = 31 * result + (repository != null ? repository.hashCode() : 0);
         result = 31 * result + (assignedId != null ? assignedId.hashCode() : 0);
         result = 31 * result + (accessUrl != null ? accessUrl.hashCode() : 0);
