@@ -51,7 +51,7 @@ public class FunderModelTests {
         assertEquals(TestValues.FUNDER_NAME, funder.getName());
         assertEquals(TestValues.FUNDER_URL, funder.getUrl());
         assertEquals(TestValues.POLICY_ID_1, funder.getPolicy().toString());
-        assertEquals(TestValues.FUNDER_LOCALID, funder.getLocalId());
+        assertEquals(TestValues.FUNDER_LOCALKEY, funder.getLocalKey());
     }
 
     /**
@@ -72,7 +72,7 @@ public class FunderModelTests {
         assertEquals(root.getString("name"),TestValues.FUNDER_NAME);
         assertEquals(root.getString("url"),TestValues.FUNDER_URL);
         assertEquals(root.getString("policy"),TestValues.POLICY_ID_1);
-        assertEquals(root.getString("localId"),TestValues.FUNDER_LOCALID);
+        assertEquals(root.getString("localKey"),TestValues.FUNDER_LOCALKEY);
     }
     
     /**
@@ -101,7 +101,7 @@ public class FunderModelTests {
         funder.setName(TestValues.FUNDER_NAME);
         funder.setUrl(TestValues.FUNDER_URL);
         funder.setPolicy(new URI(TestValues.POLICY_ID_1));
-        funder.setLocalId(TestValues.FUNDER_LOCALID);
+        funder.setLocalKey(TestValues.FUNDER_LOCALKEY);
         return funder;
     }
     

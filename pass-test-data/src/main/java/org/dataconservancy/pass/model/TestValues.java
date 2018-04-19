@@ -58,11 +58,11 @@ public class TestValues {
     
     public static final String FUNDER_NAME = "Funder A";
     public static final String FUNDER_URL = "https://nih.gov";
-    public static final String FUNDER_LOCALID = "A12345";
+    public static final String FUNDER_LOCALKEY = "A12345";
 
     public static final String GRANT_AWARD_NUMBER = "RH1234CDE";
     public static final String GRANT_STATUS = "active";
-    public static final String GRANT_LOCAL_AWARDID = "ABC123";
+    public static final String GRANT_LOCALKEY = "ABC123";
     public static final String GRANT_PROJECT_NAME = "Project A";
     public static final String GRANT_AWARD_DATE_STR = "2018-01-01T00:00:00.000Z";
     public static final String GRANT_START_DATE_STR = "2018-04-01T00:00:00.000Z";

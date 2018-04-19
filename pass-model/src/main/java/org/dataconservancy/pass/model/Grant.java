@@ -54,9 +54,10 @@ public class Grant extends PassEntity {
     private AwardStatus awardStatus;
     
     /** 
-     * Award number or ID assigned to the grant within the researcher's institution 
+     * A local key assigned to the Grant within the researcher's institution to support matching 
+     * between PASS and a local system. In the case of JHU this is the key assigned by COEUS
      */
-    private String localAwardId;
+    private String localKey;
     
     /** 
      * Title of the research project 
@@ -177,18 +178,18 @@ public class Grant extends PassEntity {
     
     
     /**
-     * @return the localAwardId
+     * @return the localKey
      */
-    public String getLocalAwardId() {
-        return localAwardId;
+    public String getLocalKey() {
+        return localKey;
     }
 
     
     /**
-     * @param localAwardId the localAwardId to set
+     * @param localKey the localKey to set
      */
-    public void setLocalAwardId(String localAwardId) {
-        this.localAwardId = localAwardId;
+    public void setLocalKey(String localKey) {
+        this.localKey = localKey;
     }
 
     
@@ -346,7 +347,7 @@ public class Grant extends PassEntity {
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (awardNumber != null ? !awardNumber.equals(that.awardNumber) : that.awardNumber != null) return false;
         if (awardStatus != null ? !awardStatus.equals(that.awardStatus) : that.awardStatus != null) return false;
-        if (localAwardId != null ? !localAwardId.equals(that.localAwardId) : that.localAwardId != null) return false;
+        if (localKey != null ? !localKey.equals(that.localKey) : that.localKey != null) return false;
         if (projectName != null ? !projectName.equals(that.projectName) : that.projectName != null) return false;
         if (primaryFunder != null ? !primaryFunder.equals(that.primaryFunder) : that.primaryFunder != null) return false;
         if (directFunder != null ? !directFunder.equals(that.directFunder) : that.directFunder != null) return false;
@@ -367,7 +368,7 @@ public class Grant extends PassEntity {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (awardNumber != null ? awardNumber.hashCode() : 0);
         result = 31 * result + (awardStatus != null ? awardStatus.hashCode() : 0);
-        result = 31 * result + (localAwardId != null ? localAwardId.hashCode() : 0);
+        result = 31 * result + (localKey != null ? localKey.hashCode() : 0);
         result = 31 * result + (projectName != null ? projectName.hashCode() : 0);
         result = 31 * result + (primaryFunder != null ? primaryFunder.hashCode() : 0);
         result = 31 * result + (directFunder != null ? directFunder.hashCode() : 0);

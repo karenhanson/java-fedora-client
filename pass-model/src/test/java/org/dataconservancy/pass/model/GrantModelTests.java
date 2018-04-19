@@ -58,7 +58,7 @@ public class GrantModelTests {
         assertEquals("Grant", grant.getType());
         assertEquals(TestValues.GRANT_AWARD_NUMBER, grant.getAwardNumber());
         assertEquals(TestValues.GRANT_STATUS, grant.getAwardStatus().getValue());
-        assertEquals(TestValues.GRANT_LOCAL_AWARDID, grant.getLocalAwardId());
+        assertEquals(TestValues.GRANT_LOCALKEY, grant.getLocalKey());
         assertEquals(TestValues.GRANT_PROJECT_NAME, grant.getProjectName());
         assertEquals(TestValues.FUNDER_ID_1, grant.getPrimaryFunder().toString());
         assertEquals(TestValues.FUNDER_ID_2, grant.getDirectFunder().toString());
@@ -90,7 +90,7 @@ public class GrantModelTests {
         assertEquals(root.getString("@type"),"Grant");
         assertEquals(root.getString("awardNumber"),TestValues.GRANT_AWARD_NUMBER);
         assertEquals(root.getString("awardStatus"),TestValues.GRANT_STATUS);
-        assertEquals(root.getString("localAwardId"),TestValues.GRANT_LOCAL_AWARDID);
+        assertEquals(root.getString("localKey"),TestValues.GRANT_LOCALKEY);
         assertEquals(root.getString("projectName"),TestValues.GRANT_PROJECT_NAME);
         assertEquals(root.getString("primaryFunder"),TestValues.FUNDER_ID_1);
         assertEquals(root.getString("directFunder"),TestValues.FUNDER_ID_2);
@@ -129,7 +129,7 @@ public class GrantModelTests {
         grant.setId(new URI(TestValues.GRANT_ID_1));
         grant.setAwardNumber(TestValues.GRANT_AWARD_NUMBER);
         grant.setAwardStatus(AwardStatus.of(TestValues.GRANT_STATUS));
-        grant.setLocalAwardId(TestValues.GRANT_LOCAL_AWARDID);
+        grant.setLocalKey(TestValues.GRANT_LOCALKEY);
         grant.setProjectName(TestValues.GRANT_PROJECT_NAME);
         grant.setPrimaryFunder(new URI(TestValues.FUNDER_ID_1));
         grant.setDirectFunder(new URI(TestValues.FUNDER_ID_2));

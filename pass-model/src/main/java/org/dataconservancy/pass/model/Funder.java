@@ -48,9 +48,10 @@ public class Funder extends PassEntity {
     private URI policy;
 
     /** 
-     * ID assigned to the funder within the researcher's institution 
+     * Local key assigned to the funder within the researcher's institution to support matching between 
+     * PASS and a local system. In the case of JHU this is the key assigned in COEUS
      */
-    private String localId;
+    private String localKey;
     
     @Override
     public String getType() {
@@ -107,18 +108,18 @@ public class Funder extends PassEntity {
 
     
     /**
-     * @return the localId
+     * @return the localKey
      */
-    public String getLocalId() {
-        return localId;
+    public String getLocalKey() {
+        return localKey;
     }
 
     
     /**
      * @param localId the localId to set
      */
-    public void setLocalId(String localId) {
-        this.localId = localId;
+    public void setLocalKey(String localKey) {
+        this.localKey = localKey;
     }
 
     
@@ -135,7 +136,7 @@ public class Funder extends PassEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
         if (policy != null ? !policy.equals(that.policy) : that.policy != null) return false;
-        if (localId != null ? !localId.equals(that.localId) : that.localId != null) return false;
+        if (localKey != null ? !localKey.equals(that.localKey) : that.localKey != null) return false;
         return true;
     }
 
@@ -147,7 +148,7 @@ public class Funder extends PassEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (policy != null ? policy.hashCode() : 0);
-        result = 31 * result + (localId != null ? localId.hashCode() : 0);
+        result = 31 * result + (localKey != null ? localKey.hashCode() : 0);
         return result;
     }
     

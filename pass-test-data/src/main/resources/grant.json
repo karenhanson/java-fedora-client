@@ -2,7 +2,7 @@
 	"@id": "https://example.org/fedora/grants/1",
 	"awardNumber": "RH1234CDE",
 	"awardStatus": "active",
-	"localAwardId": "ABC123",
+	"localKey": "ABC123",
 	"projectName": "Project A",
 	"primaryFunder": "https://example.org/fedora/funders/1",
 	"directFunder": "https://example.org/fedora/funders/2",
