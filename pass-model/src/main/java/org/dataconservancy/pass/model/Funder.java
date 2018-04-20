@@ -40,7 +40,7 @@ public class Funder extends PassEntity {
     /** 
      * Funder URL 
      */
-    private String url;
+    private URI url;
     
     /** 
      * URI of the Policy associated with funder
@@ -78,7 +78,7 @@ public class Funder extends PassEntity {
     /**
      * @return the url
      */
-    public String getUrl() {
+    public URI getUrl() {
         return url;
     }
 
@@ -86,7 +86,7 @@ public class Funder extends PassEntity {
     /**
      * @param url the url to set
      */
-    public void setUrl(String url) {
+    public void setUrl(URI url) {
         this.url = url;
     }
 

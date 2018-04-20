@@ -49,7 +49,7 @@ public class FunderModelTests {
         assertEquals(TestValues.FUNDER_ID_1, funder.getId().toString());
         assertEquals("Funder", funder.getType());
         assertEquals(TestValues.FUNDER_NAME, funder.getName());
-        assertEquals(TestValues.FUNDER_URL, funder.getUrl());
+        assertEquals(TestValues.FUNDER_URL, funder.getUrl().toString());
         assertEquals(TestValues.POLICY_ID_1, funder.getPolicy().toString());
         assertEquals(TestValues.FUNDER_LOCALKEY, funder.getLocalKey());
     }
@@ -99,7 +99,7 @@ public class FunderModelTests {
         Funder funder = new Funder();
         funder.setId(new URI(TestValues.FUNDER_ID_1));
         funder.setName(TestValues.FUNDER_NAME);
-        funder.setUrl(TestValues.FUNDER_URL);
+        funder.setUrl(new URI(TestValues.FUNDER_URL));
         funder.setPolicy(new URI(TestValues.POLICY_ID_1));
         funder.setLocalKey(TestValues.FUNDER_LOCALKEY);
         return funder;
