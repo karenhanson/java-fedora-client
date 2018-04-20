@@ -1,0 +1,8 @@
+{
+	"@id": "https://example.org/fedora/repositoryCopies/1",
+	"externalIds": ["PMC12345","NIHMS1234"],
+	"copyStatus": "accepted",
+	"accessUrl": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/",
+	"publication": "https://example.org/fedora/publications/1",
+	"repository": "https://example.org/fedora/repositories/1"
+}

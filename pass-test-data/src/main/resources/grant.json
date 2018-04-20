@@ -1,0 +1,15 @@
+{
+	"@id": "https://example.org/fedora/grants/1",
+	"awardNumber": "RH1234CDE",
+	"awardStatus": "active",
+	"localKey": "ABC123",
+	"projectName": "Project A",
+	"primaryFunder": "https://example.org/fedora/funders/1",
+	"directFunder": "https://example.org/fedora/funders/2",
+	"pi": "https://example.org/fedora/users/1",
+	"coPis": ["https://example.org/fedora/users/2", "https://example.org/fedora/users/3"],
+	"awardDate": "2018-01-01T00:00:00.000Z",
+	"startDate": "2018-04-01T00:00:00.000Z",
+	"endDate": "2020-04-30T00:00:00.000Z"
+}
+	

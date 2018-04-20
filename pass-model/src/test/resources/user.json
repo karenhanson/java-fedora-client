@@ -1,7 +1,0 @@
-{
-	"@id": "https://example.org/fedora/users/1",
-	"username": "am12345",
-	"role": "admin",
-	"person": "https://example.org/fedora/people/1"
-}
-	

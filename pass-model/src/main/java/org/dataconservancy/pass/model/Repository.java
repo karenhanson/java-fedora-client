@@ -15,6 +15,8 @@
  */
 package org.dataconservancy.pass.model;
 
+import java.net.URI;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -43,7 +45,13 @@ public class Repository extends PassEntity {
     /** 
      * URL to the homepage of the repository so that PASS users can view the platform before deciding whether to participate in it 
      */
-    private String url;
+    private URI url;
+
+    /** 
+     * Stringified JSON representing a form template to be loaded by the front-end when this Repository is selected
+     */
+    private String formSchema;
+
 
     
     @Override
@@ -87,7 +95,7 @@ public class Repository extends PassEntity {
     /**
      * @return the url
      */
-    public String getUrl() {
+    public URI getUrl() {
         return url;
     }
 
@@ -95,8 +103,24 @@ public class Repository extends PassEntity {
     /**
      * @param url the url to set
      */
-    public void setUrl(String url) {
+    public void setUrl(URI url) {
         this.url = url;
+    }
+
+    
+    /**
+     * @return the formSchema
+     */
+    public String getFormSchema() {
+        return formSchema;
+    }
+
+    
+    /**
+     * @param url the url to set
+     */
+    public void setFormSchema(String formSchema) {
+        this.formSchema = formSchema;
     }
 
 
@@ -112,6 +136,7 @@ public class Repository extends PassEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
+        if (formSchema != null ? !formSchema.equals(that.formSchema) : that.formSchema != null) return false;
         return true;
     }
 
@@ -123,6 +148,7 @@ public class Repository extends PassEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + (formSchema != null ? formSchema.hashCode() : 0);
         return result;
     }
     

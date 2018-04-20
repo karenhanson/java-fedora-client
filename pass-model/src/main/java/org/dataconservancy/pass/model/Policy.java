@@ -16,6 +16,7 @@
 package org.dataconservancy.pass.model;
 
 import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,15 +46,24 @@ public class Policy extends PassEntity {
     private String description;
     
     /** 
+     * A link to the actual policy on the policy-owner's page
+     */
+    private URI policyUrl;
+    
+    /** 
      * List of URIs for repositories that can satisfying this policy 
      */
     private List<URI> repositories = new ArrayList<>();
     
     /** 
-     * True if this policy should appear for all submission. This can be used to identify a policy or 
-     * policies that should show up for everything 
+     * URI of the Institution whose Policy this is (note: if institution has a value, funder should be null)
      */
-    private Boolean isDefault;
+    private URI institution;
+    
+    /** 
+     * URI of the Funder whose Policy this is (note: if funder has a value, institution should be null)
+     */
+    private URI funder;
 
     
     @Override
@@ -95,6 +105,54 @@ public class Policy extends PassEntity {
 
     
     /**
+     * @return the policy URL
+     */
+    public URI getPolicyUrl() {
+        return policyUrl;
+    }
+
+    
+    /**
+     * @param policyUrl the policyUrl to set
+     */
+    public void setPolicyUrl(URI policyUrl) {
+        this.policyUrl = policyUrl;
+    }
+
+    
+    /**
+     * @return the institution
+     */
+    public URI getInstitution() {
+        return institution;
+    }
+
+    
+    /**
+     * @param institution the institution to set
+     */
+    public void setInstitution(URI institution) {
+        this.institution = institution;
+    }
+
+    
+    /**
+     * @return the funder
+     */
+    public URI getFunder() {
+        return funder;
+    }
+
+    
+    /**
+     * @param institution the institution to set
+     */
+    public void setFunder(URI funder) {
+        this.funder = funder;
+    }
+
+    
+    /**
      * @return the list of URIs of repositories
      */
     public List<URI> getRepositories() {
@@ -110,22 +168,6 @@ public class Policy extends PassEntity {
     }
 
     
-    /**
-     * @return the isDefault
-     */
-    public Boolean getIsDefault() {
-        return isDefault;
-    }
-
-    
-    /**
-     * @param isDefault the isDefault to set
-     */
-    public void setIsDefault(Boolean isDefault) {
-        this.isDefault = isDefault;
-    }
-
-    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -137,8 +179,10 @@ public class Policy extends PassEntity {
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (policyUrl != null ? !policyUrl.equals(that.policyUrl) : that.policyUrl != null) return false;
         if (repositories != null ? !repositories.equals(that.repositories) : that.repositories != null) return false;
-        if (isDefault != null ? !isDefault.equals(that.isDefault) : that.isDefault != null) return false;
+        if (funder != null ? !funder.equals(that.funder) : that.funder != null) return false;
+        if (institution != null ? !institution.equals(that.institution) : that.institution != null) return false;
         return true;
     }
 
@@ -149,8 +193,10 @@ public class Policy extends PassEntity {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (policyUrl != null ? policyUrl.hashCode() : 0);
         result = 31 * result + (repositories != null ? repositories.hashCode() : 0);
-        result = 31 * result + (isDefault != null ? isDefault.hashCode() : 0);
+        result = 31 * result + (institution != null ? institution.hashCode() : 0);
+        result = 31 * result + (funder != null ? funder.hashCode() : 0);
         return result;
     }
        

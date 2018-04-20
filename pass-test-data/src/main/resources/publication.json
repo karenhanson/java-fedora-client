@@ -1,0 +1,11 @@
+{
+	"@id": "https://example.org/fedora/publications/1",
+	"title": "Some article",
+	"abstract": "An article about something",
+	"doi": "10.0101/1234abcd",
+	"pmid": "12345678",
+	"journal": "https://example.org/fedora/journals/1",
+	"volume": "5",
+	"issue": "123"
+}
+	

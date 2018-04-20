@@ -17,6 +17,9 @@ package org.dataconservancy.pass.model;
 
 import java.net.URI;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -34,83 +37,72 @@ public class Deposit extends PassEntity {
     private String type = PassEntityType.DEPOSIT.getName();
     
     /** 
+     * A URL or some kind of reference that can be dereferenced, entity body parsed, and used to determine the status of Deposit
+     */
+    private String depositStatusRef;
+    
+    /** 
      * Status of deposit 
      */
-    private Status status;
-    
-    /** 
-     * URI of Repository being deposited to 
-     */
-    private URI repository;
-    
-    /** 
-     * ID assigned by repository 
-     */
-    private String assignedId;
-    
-    /** 
-     * URL to access the item in the repository 
-     */
-    private String accessUrl;
-    
-    /** 
-     * True if deposit was requested by the user rather than resulting from a required policy 
-     */
-    private Boolean requested;
-    
-    /**
-     * True if the Deposit has stalled due to a need for further action by the User. 
-     * This action may need to take place outside of the scope of the PASS system
-     */
-    private Boolean userActionRequired;
+    private DepositStatus depositStatus;
     
     /**
      * URI of the Submission that this Deposit is a part of
      */
     private URI submission;
+   
+    /** 
+     * URI of Repository being deposited to 
+     */
+    private URI repository;
+    
+    /**
+     * URI of the Repository Copy representing the copy that is reltaed to this Deposit. The value is null if there is no copy
+     */
+    private URI repositoryCopy;
     
     /**
      * Possible deposit statuses. Note that some repositories may not go through every status.
      */
-    public enum Status {
+    public enum DepositStatus {
         /**
-         * In progress in PASS GUI
-         */
-        @JsonProperty("in-preparation")
-        IN_PREPARATION("in-preparation"),
-        /**
-         * User has clicked to submit, but it has not yet been sent to repository
-         */
-        @JsonProperty("ready-to-submit")
-        READY_TO_SUBMIT("ready-to-submit"),
-        /**
-         * PASS has sent files to the repository, waiting for response.
+         * PASS has sent a package to the target Repository and is waiting for an update on the status
          */
         @JsonProperty("submitted")
         SUBMITTED("submitted"),
-        /**
-         * The target repository has indicated that the files have been received
-         */
-        @JsonProperty("received")
-        RECEIVED("received"),
-        /**
-         * The target repository is processing the files.
-         */
-        @JsonProperty("in-progress")
-        IN_PROGRESS("in-progress"),
-        /**
-         * The target repository has accepted the files, and publication is pending if not already complete.
+         /**
+         * The target Repository has rejected the Deposit
          */
         @JsonProperty("accepted")
-        ACCEPTED("accepted");
-                
+        ACCEPTED("accepted"),
+        /**
+        * The target Repository has accepted the files into the repository. More steps may be performed by the Repository, but the 
+        * requirements of the Deposit have been satisfied
+        */
+        @JsonProperty("rejected")
+        REJECTED("rejected");
+
+        private static final Map<String, DepositStatus> map = new HashMap<>(values().length, 1);  
+        static {
+          for (DepositStatus d : values()) map.put(d.value, d);
+        }
+        
         private String value;
-        private Status(String value){
+        private DepositStatus(String value){
             this.value = value;
         }
         public String getValue() {
             return this.value;
         }
+        
+        public static DepositStatus of(String status) {
+            DepositStatus result = map.get(status);
+            if (result == null) {
+              throw new IllegalArgumentException("Invalid Deposit Status: " + status);
+            }
+            return result;
+        }
+        
     }
 
     
@@ -121,18 +113,18 @@ public class Deposit extends PassEntity {
     
     
     /**
-     * @return the status
+     * @return the deposit status
      */
-    public Status getStatus() {
-        return status;
+    public DepositStatus getDepositStatus() {
+        return depositStatus;
     }
 
     
     /**
-     * @param status the status to set
+     * @param deposit status the deposit status to set
      */
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setDepositStatus(DepositStatus depositStatus) {
+        this.depositStatus = depositStatus;
     }
 
     
@@ -150,72 +142,24 @@ public class Deposit extends PassEntity {
     public void setRepository(URI repository) {
         this.repository = repository;
     }
-
+    
     
     /**
-     * @return the assignedId
+     * @return the depositStatusRef
      */
-    public String getAssignedId() {
-        return assignedId;
-    }
-
-    
-    /**
-     * @param assignedId the assignedId to set
-     */
-    public void setAssignedId(String assignedId) {
-        this.assignedId = assignedId;
+    public String getDepositStatusRef() {
+        return depositStatusRef;
     }
 
     
     /**
-     * @return the accessUrl
+     * @param depositStatusRef the depositStatusRef to set
      */
-    public String getAccessUrl() {
-        return accessUrl;
+    public void setDepositStatusRef(String depositStatusRef) {
+        this.depositStatusRef = depositStatusRef;
     }
 
     
-    /**
-     * @param accessUrl the accessUrl to set
-     */
-    public void setAccessUrl(String accessUrl) {
-        this.accessUrl = accessUrl;
-    }
-
-    
-    /**
-     * @return the requested
-     */
-    public Boolean getRequested() {
-        return requested;
-    }
-
-    
-    /**
-     * @param requested the requested to set
-     */
-    public void setRequested(Boolean requested) {
-        this.requested = requested;
-    }
-
-
-    /**
-     * @return the userActionRequired
-     */
-    public Boolean getUserActionRequired() {
-        return userActionRequired;
-    }
-
-
-    /**
-     * @param userActionRequired the userActionRequired to set
-     */
-    public void setUserActionRequired(Boolean userActionRequired) {
-        this.userActionRequired = userActionRequired;
-    }
-
-
     /**
      * @return the submission
      */
@@ -230,6 +174,22 @@ public class Deposit extends PassEntity {
     public void setSubmission(URI submission) {
         this.submission = submission;
     }
+
+    
+    /**
+     * @return the repositoryCopy
+     */
+    public URI getRepositoryCopy() {
+        return repositoryCopy;
+    }
+
+
+    /**
+     * @param repositoryCopy the repositoryCopy to set
+     */
+    public void setRepositoryCopy(URI repositoryCopy) {
+        this.repositoryCopy = repositoryCopy;
+    }
     
     
     @Override
@@ -241,13 +201,11 @@ public class Deposit extends PassEntity {
         Deposit that = (Deposit) o;
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-        if (repository != null ? !repository.equals(that.repository) : that.repository != null) return false;
-        if (assignedId != null ? !assignedId.equals(that.assignedId) : that.assignedId != null) return false;
-        if (accessUrl != null ? !accessUrl.equals(that.accessUrl) : that.accessUrl != null) return false;
-        if (requested != null ? !requested.equals(that.requested) : that.requested != null) return false;
-        if (userActionRequired != null ? !userActionRequired.equals(that.userActionRequired) : that.userActionRequired != null) return false;
+        if (depositStatusRef != null ? !depositStatusRef.equals(that.depositStatusRef) : that.depositStatusRef != null) return false;
+        if (depositStatus != null ? !depositStatus.equals(that.depositStatus) : that.depositStatus != null) return false;
         if (submission != null ? !submission.equals(that.submission) : that.submission != null) return false;
+        if (repository != null ? !repository.equals(that.repository) : that.repository != null) return false;
+        if (repositoryCopy != null ? !repositoryCopy.equals(that.repositoryCopy) : that.repositoryCopy != null) return false;
         return true;
     }
     
@@ -256,13 +214,11 @@ public class Deposit extends PassEntity {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (repository != null ? repository.hashCode() : 0);
-        result = 31 * result + (assignedId != null ? assignedId.hashCode() : 0);
-        result = 31 * result + (accessUrl != null ? accessUrl.hashCode() : 0);
-        result = 31 * result + (requested != null ? requested.hashCode() : 0);
-        result = 31 * result + (userActionRequired != null ? userActionRequired.hashCode() : 0);
+        result = 31 * result + (depositStatusRef != null ? depositStatusRef.hashCode() : 0);
+        result = 31 * result + (depositStatus != null ? depositStatus.hashCode() : 0);
         result = 31 * result + (submission != null ? submission.hashCode() : 0);
+        result = 31 * result + (repository != null ? repository.hashCode() : 0);
+        result = 31 * result + (repositoryCopy != null ? repositoryCopy.hashCode() : 0);
         return result;
     }
     

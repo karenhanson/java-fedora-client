@@ -6,7 +6,7 @@
   <groupId>org.dataconservancy.pass</groupId>
   <artifactId>pass-client</artifactId>
   <packaging>pom</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1.0-SNAPSHOT</version>
   
   <name>PASS Client Tool</name>
   
@@ -15,9 +15,9 @@
     <module>pass-json-adapter</module>
     <module>pass-fedora-client</module>
     <module>pass-client-api</module>
-    <module>pass-model-nihms</module>
     <module>pass-client-util</module>
     <module>pass-client-integration</module>
+    <module>pass-test-data</module>
   </modules>
 
   <profiles>

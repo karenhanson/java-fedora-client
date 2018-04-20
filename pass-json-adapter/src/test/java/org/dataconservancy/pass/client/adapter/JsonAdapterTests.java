@@ -25,6 +25,9 @@ import org.junit.Test;
 
 import org.dataconservancy.pass.client.PassJsonAdapter;
 import org.dataconservancy.pass.model.Deposit;
+import org.dataconservancy.pass.model.Deposit.DepositStatus;
+import org.dataconservancy.pass.model.PassEntityType;
+import org.dataconservancy.pass.model.TestValues;
 import org.json.JSONObject;
 
 import static org.junit.Assert.assertEquals;
@@ -37,13 +40,6 @@ public class JsonAdapterTests {
 
     private final static String CONTEXT_PROPKEY = "pass.jsonld.context";
     private final static String CONTEXT= "http://testurl.org/context.jsonld";
-    
-    private static final String DEPOSIT_ID_1 = "https://example.org/fedora/deposits/1";
-    private static final String REPOSITORY_ID_1 = "https://example.org/fedora/repositories/1";
-    private static final Deposit.Status DEPOSIT_STATUS = Deposit.Status.IN_PREPARATION;
-    private static final String DEPOSIT_ASSIGNEDID = "PMC12345";
-    private static final String DEPOSIT_ACCESSURL = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/";
-    private static final Boolean DEPOSIT_REQUESTED = true;
     
     @Before
     public void startup(){
@@ -59,6 +55,7 @@ public class JsonAdapterTests {
      * Simple verification that JSON file can be converted to Deposit model
      * @throws Exception
      */
+    @Test
     public void testDepositJsonToModel() {
         String filepath = "/deposit.json";
         InputStream compactJsonLd = JsonAdapterTests.class.getResourceAsStream(filepath);
@@ -66,11 +63,9 @@ public class JsonAdapterTests {
         PassJsonAdapter adapter = new PassJsonAdapterBasic();
         Deposit deposit = (Deposit) adapter.toModel(compactJsonLd, Deposit.class);
 
-        assertEquals(DEPOSIT_ID_1, deposit.getId());
-        assertEquals(DEPOSIT_STATUS, deposit.getStatus());
-        assertEquals(DEPOSIT_ASSIGNEDID, deposit.getAssignedId());
-        assertEquals(DEPOSIT_ACCESSURL, deposit.getAccessUrl());
-        assertEquals(DEPOSIT_REQUESTED, deposit.getRequested());  
+        assertEquals(TestValues.DEPOSIT_ID_1, deposit.getId().toString());
+        assertEquals(TestValues.DEPOSIT_STATUS, deposit.getDepositStatus().getValue());
+        assertEquals(TestValues.DEPOSIT_STATUSREF, deposit.getDepositStatusRef());
         
     }
 
@@ -87,14 +82,14 @@ public class JsonAdapterTests {
         
         JSONObject root = new JSONObject(jsonDeposit);
 
-        assertEquals(root.getString("@id"),DEPOSIT_ID_1);
-        assertEquals(root.getString("@type"),"Deposit");
+        assertEquals(root.getString("@id"),TestValues.DEPOSIT_ID_1.toString());
+        assertEquals(root.getString("@type"),PassEntityType.DEPOSIT.getName());
         assertEquals(root.getString("@context"),CONTEXT);
-        assertEquals(root.getString("status"),DEPOSIT_STATUS.getValue());
-        assertEquals(root.getString("repository"),REPOSITORY_ID_1);
-        assertEquals(root.getString("assignedId"),DEPOSIT_ASSIGNEDID);
-        assertEquals(root.getString("accessUrl"),DEPOSIT_ACCESSURL);
-        assertEquals(root.getBoolean("requested"),DEPOSIT_REQUESTED);     
+        assertEquals(root.getString("depositStatus"),TestValues.DEPOSIT_STATUS);
+        assertEquals(root.getString("depositStatusRef"),TestValues.DEPOSIT_STATUSREF); 
+        assertEquals(root.getString("submission"),TestValues.SUBMISSION_ID_1); 
+        assertEquals(root.getString("repository"),TestValues.REPOSITORY_ID_1); 
+        assertEquals(root.getString("repositoryCopy"),TestValues.REPOSITORYCOPY_ID_1); 
     }
 
     
@@ -109,25 +104,23 @@ public class JsonAdapterTests {
 
         JSONObject root = new JSONObject(jsonDeposit);
 
-        assertEquals(root.getString("@id"),DEPOSIT_ID_1);
-        assertEquals(root.getString("@type"),"Deposit");
+        assertEquals(root.getString("@id"),TestValues.DEPOSIT_ID_1);
+        assertEquals(root.getString("@type"),PassEntityType.DEPOSIT.getName());
         assertEquals(root.has("@context"),false);
-        assertEquals(root.getString("status"),DEPOSIT_STATUS.getValue());
-        assertEquals(root.getString("repository"),REPOSITORY_ID_1);
-        assertEquals(root.getString("assignedId"),DEPOSIT_ASSIGNEDID);
-        assertEquals(root.getString("accessUrl"),DEPOSIT_ACCESSURL);
-        assertEquals(root.getBoolean("requested"),DEPOSIT_REQUESTED);  
+        assertEquals(root.getString("depositStatus"),TestValues.DEPOSIT_STATUS);
+        assertEquals(root.getString("submission"),TestValues.SUBMISSION_ID_1);
+        assertEquals(root.getString("repository"),TestValues.REPOSITORY_ID_1);
+        assertEquals(root.getString("repositoryCopy"),TestValues.REPOSITORYCOPY_ID_1);
     }
-    
-    
+        
     private Deposit createDeposit() throws Exception {
         Deposit deposit = new Deposit();
-        deposit.setId(new URI(DEPOSIT_ID_1));
-        deposit.setStatus(DEPOSIT_STATUS);
-        deposit.setRepository(new URI(REPOSITORY_ID_1));
-        deposit.setAssignedId(DEPOSIT_ASSIGNEDID);
-        deposit.setAccessUrl(DEPOSIT_ACCESSURL);
-        deposit.setRequested(DEPOSIT_REQUESTED);
+        deposit.setId(new URI(TestValues.DEPOSIT_ID_1));
+        deposit.setDepositStatusRef(TestValues.DEPOSIT_STATUSREF);
+        deposit.setDepositStatus(DepositStatus.of(TestValues.DEPOSIT_STATUS));
+        deposit.setSubmission(new URI(TestValues.SUBMISSION_ID_1));
+        deposit.setRepository(new URI(TestValues.REPOSITORY_ID_1));
+        deposit.setRepositoryCopy(new URI(TestValues.REPOSITORYCOPY_ID_1));
         return deposit;
     }
     

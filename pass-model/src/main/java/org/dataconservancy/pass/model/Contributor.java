@@ -15,6 +15,8 @@
  */
 package org.dataconservancy.pass.model;
 
+import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,35 +25,31 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * User model for users logging into PASS
+ * A Contributor is a person who contributed to a Publication. The contributor model captures the person 
+ * information as well as the roles they played in creating the publication (e.g. author).
  * @author Karen Hanson
  */
 
-public class User extends PassEntity {
+public class Contributor extends PassEntity {
 
     /** 
      * String type name, specifically used to set "@type" in JSON serialization
      */
     @JsonProperty("@type")
-    private String type = PassEntityType.USER.getName();
+    private String type = PassEntityType.CONTRIBUTOR.getName();
     
     /** 
-     * Unique login name used by user 
-     */
-    private String username;
-
-    /** 
-     * First name(s) of User 
+     * First name(s) of person 
      */
     private String firstName;
 
     /** 
-     * Middle name(s) of User 
+     * Middle name(s) of person 
      */
     private String middleName;
 
     /** 
-     * Last name(s) of User 
+     * Last name(s) of person 
      */
     private String lastName;
     
@@ -62,9 +60,14 @@ public class User extends PassEntity {
     private String displayName; 
     
     /** 
-     * Contact email for User
+     * Contact email for person 
      */
     private String email;
+    
+    /** 
+     * ORCID ID for person 
+     */
+    private String orcidId;
     
     /** 
      * Affiliation string for person. Where Person is embedded in Submission or Grant, 
@@ -73,34 +76,36 @@ public class User extends PassEntity {
     private String affiliation; 
     
     /** 
-     * ID assigned by User's institution (JHED-ID for JHU)
-     */
-    private String institutionalId;
-    
-    /** 
-     * A key used to look up the User in a local system. In the case of JHU, this is the ID 
-     * from the person's COEUS record, which is different from the JHED-ID.
-     */
-    private String localKey;
-    
-    /** 
-     * ORCID ID for User 
-     */
-    private String orcidId;
-    
-    /** 
-     * User's system roles in PASS
+     * One or more roles that this Contributor performed for the associated Publication
      */
     private List<Role> roles = new ArrayList<Role>();
+    
+    /**
+     * URI of the publication that this contributor is associated with 
+     */
+    private URI publication;
+    
+    /**
+     * URI of the user that represents the same person as this Contributor, where relevant
+     */
+    private URI user;
+    
 
     /** 
-     * list of possible user Roles 
+     * list of possible contributor Roles 
      */
     public enum Role {
-        @JsonProperty("admin")
-        ADMIN("admin"),
-        @JsonProperty("submitter")
-        SUBMITTER("submitter");
+        @JsonProperty("author")
+        AUTHOR("author"),
+        
+        @JsonProperty("first-author")
+        FIRST_AUTHOR("first-author"),
+        
+        @JsonProperty("last-author")
+        LAST_AUTHOR("last-author"),
+        
+        @JsonProperty("corresponding-author")
+        CORRESPONDING_AUTHOR("corresponding-author");
 
         private static final Map<String, Role> map = new HashMap<>(values().length, 1);  
         static {
@@ -125,28 +130,14 @@ public class User extends PassEntity {
             return result;
           }
     }
-
+    
+    
     
     @Override
     public String getType() {
         return type;
     }
-
     
-    /**
-     * @return the username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    
-    /**
-     * @param username the username to set
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
     
     /**
      * @return the firstName
@@ -245,38 +236,6 @@ public class User extends PassEntity {
 
     
     /**
-     * @return the institutionalId
-     */
-    public String getInstitutionalId() {
-        return institutionalId;
-    }
-
-    
-    /**
-     * @param institutionalId the institutionalId to set
-     */
-    public void setInstitutionalId(String institutionalId) {
-        this.institutionalId = institutionalId;
-    }
-
-    
-    /**
-     * @return the localKey
-     */
-    public String getLocalKey() {
-        return localKey;
-    }
-
-    
-    /**
-     * @param localKey the localKey to set
-     */
-    public void setLocalKey(String localKey) {
-        this.localKey = localKey;
-    }
-
-    
-    /**
      * @return the orcidId
      */
     public String getOrcidId() {
@@ -293,7 +252,7 @@ public class User extends PassEntity {
 
     
     /**
-     * @return the list of roles
+     * @return the list of roles 
      */
     public List<Role> getRoles() {
         return roles;
@@ -308,26 +267,57 @@ public class User extends PassEntity {
     }
 
     
+    /**
+     * @return the publication
+     */
+    public URI getPublication() {
+        return publication;
+    }
+
+    
+    /**
+     * @param publication the publication to set
+     */
+    public void setPublication(URI publication) {
+        this.publication = publication;
+    }
+
+    
+    /**
+     * @return the user
+     */
+    public URI getUser() {
+        return user;
+    }
+
+    
+    /**
+     * @param user the user to set
+     */
+    public void setUser(URI user) {
+        this.user = user;
+    }
+    
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        User that = (User) o;
+        Contributor that = (Contributor) o;
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
         if (middleName != null ? !middleName.equals(that.middleName) : that.middleName != null) return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
         if (displayName != null ? !displayName.equals(that.displayName) : that.displayName != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (affiliation != null ? !affiliation.equals(that.affiliation) : that.affiliation != null) return false;
-        if (institutionalId != null ? !institutionalId.equals(that.institutionalId) : that.institutionalId != null) return false;
-        if (localKey != null ? !localKey.equals(that.localKey) : that.localKey != null) return false;
         if (orcidId != null ? !orcidId.equals(that.orcidId) : that.orcidId != null) return false;
+        if (affiliation != null ? !affiliation.equals(that.affiliation) : that.affiliation != null) return false;
         if (roles != null ? !roles.equals(that.roles) : that.roles != null) return false;
+        if (publication != null ? !publication.equals(that.publication) : that.publication != null) return false;
+        if (user != null ? !user.equals(that.user) : that.user != null) return false;
         return true;
     }
 
@@ -336,19 +326,17 @@ public class User extends PassEntity {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (affiliation != null ? affiliation.hashCode() : 0);
-        result = 31 * result + (institutionalId != null ? institutionalId.hashCode() : 0);
-        result = 31 * result + (localKey != null ? localKey.hashCode() : 0);
         result = 31 * result + (orcidId != null ? orcidId.hashCode() : 0);
+        result = 31 * result + (affiliation != null ? affiliation.hashCode() : 0);
         result = 31 * result + (roles != null ? roles.hashCode() : 0);
+        result = 31 * result + (publication != null ? publication.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
     }
        
-    
 }

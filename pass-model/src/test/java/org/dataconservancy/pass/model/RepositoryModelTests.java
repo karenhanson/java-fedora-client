@@ -49,7 +49,9 @@ public class RepositoryModelTests {
         assertEquals(TestValues.REPOSITORY_ID_1, repository.getId().toString());
         assertEquals("Repository", repository.getType());
         assertEquals(TestValues.REPOSITORY_NAME, repository.getName());
-        assertEquals(TestValues.REPOSITORY_URL, repository.getUrl());
+        assertEquals(TestValues.REPOSITORY_DESCRIPTION, repository.getDescription());
+        assertEquals(TestValues.REPOSITORY_URL, repository.getUrl().toString());
+        assertEquals(TestValues.REPOSITORY_FORMSCHEMA, repository.getFormSchema());
     }
 
     /**
@@ -69,7 +71,8 @@ public class RepositoryModelTests {
         assertEquals(root.getString("@type"),"Repository");
         assertEquals(root.getString("name"),TestValues.REPOSITORY_NAME);
         assertEquals(root.getString("description"),TestValues.REPOSITORY_DESCRIPTION);
-        assertEquals(root.getString("url"),TestValues.REPOSITORY_URL);         
+        assertEquals(root.getString("url"),TestValues.REPOSITORY_URL);        
+        assertEquals(root.getString("formSchema"),TestValues.REPOSITORY_FORMSCHEMA);          
     }
     
     /**
@@ -99,7 +102,8 @@ public class RepositoryModelTests {
         repository.setId(new URI(TestValues.REPOSITORY_ID_1));
         repository.setName(TestValues.REPOSITORY_NAME);
         repository.setDescription(TestValues.REPOSITORY_DESCRIPTION);
-        repository.setUrl(TestValues.REPOSITORY_URL);
+        repository.setUrl(new URI(TestValues.REPOSITORY_URL));
+        repository.setFormSchema(TestValues.REPOSITORY_FORMSCHEMA);
         
         return repository;
     }

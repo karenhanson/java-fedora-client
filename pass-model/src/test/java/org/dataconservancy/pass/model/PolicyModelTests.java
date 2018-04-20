@@ -55,7 +55,9 @@ public class PolicyModelTests {
         assertEquals(TestValues.POLICY_DESCRIPTION, policy.getDescription());
         assertEquals(TestValues.REPOSITORY_ID_1, policy.getRepositories().get(0).toString());
         assertEquals(TestValues.REPOSITORY_ID_2, policy.getRepositories().get(1).toString());
-        assertEquals(TestValues.POLICY_ISDEFAULT, policy.getIsDefault());
+        assertEquals(TestValues.POLICY_URL, policy.getPolicyUrl().toString());
+        assertEquals(TestValues.FUNDER_ID_1, policy.getFunder().toString());
+        assertEquals(TestValues.INSTITUTION_ID_1, policy.getInstitution().toString());
     }
 
     /**
@@ -74,10 +76,12 @@ public class PolicyModelTests {
         assertEquals(root.getString("@id"),TestValues.POLICY_ID_1);
         assertEquals(root.getString("@type"),"Policy");
         assertEquals(root.getString("title"),TestValues.POLICY_TITLE);
+        assertEquals(root.getString("policyUrl"),TestValues.POLICY_URL);
         assertEquals(root.getString("description"),TestValues.POLICY_DESCRIPTION);
         assertEquals(root.getJSONArray("repositories").get(0),TestValues.REPOSITORY_ID_1);
         assertEquals(root.getJSONArray("repositories").get(1),TestValues.REPOSITORY_ID_2);
-        assertEquals(root.getBoolean("isDefault"),TestValues.POLICY_ISDEFAULT);         
+        assertEquals(root.getString("institution"),TestValues.INSTITUTION_ID_1);         
+        assertEquals(root.getString("funder"),TestValues.FUNDER_ID_1);         
     }
     
     /**
@@ -93,7 +97,7 @@ public class PolicyModelTests {
         Policy policy2 = createPolicy();
         
         assertEquals(policy1,policy2);
-        policy1.setIsDefault(!policy1.getIsDefault());
+        policy1.setPolicyUrl(new URI("https://somethingdifferent.test"));
         assertTrue(!policy1.equals(policy2));
         
         assertTrue(policy1.hashCode()!=policy2.hashCode());
@@ -107,13 +111,15 @@ public class PolicyModelTests {
         policy.setId(new URI(TestValues.POLICY_ID_1));
         policy.setTitle(TestValues.POLICY_TITLE);
         policy.setDescription(TestValues.POLICY_DESCRIPTION);
+        policy.setPolicyUrl(new URI(TestValues.POLICY_URL));
         
         List<URI> repositories = new ArrayList<URI>();
         repositories.add(new URI(TestValues.REPOSITORY_ID_1));
         repositories.add(new URI(TestValues.REPOSITORY_ID_2));
         policy.setRepositories(repositories);
 
-        policy.setIsDefault(TestValues.POLICY_ISDEFAULT);
+        policy.setInstitution(new URI(TestValues.INSTITUTION_ID_1));
+        policy.setFunder(new URI(TestValues.FUNDER_ID_1));
         
         return policy;
     }

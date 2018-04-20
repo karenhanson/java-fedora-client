@@ -7,14 +7,13 @@
     <artifactId>pass-client</artifactId>
     <version>0.1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>pass-client-api</artifactId>
-  <name>pass-client-api</name>
-  
+  <artifactId>pass-test-data</artifactId>
+  <name>PASS Test Data</name>
   <dependencies>
     <dependency>
-      <groupId>org.dataconservancy.pass</groupId>
-      <artifactId>pass-model</artifactId>
-      <version>${project.parent.version}</version>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

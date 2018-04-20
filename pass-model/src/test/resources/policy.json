@@ -1,8 +1,0 @@
-{
-	"@id": "https://example.org/fedora/policies/1",
-	"title": "Policy A",
-	"description": "You must submit to any OA repo",
-	"repositories": ["https://example.org/fedora/repositories/1","https://example.org/fedora/repositories/2"],
-	"isDefault": false
-}
-	

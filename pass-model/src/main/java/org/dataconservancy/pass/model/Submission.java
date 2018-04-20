@@ -16,8 +16,11 @@
 package org.dataconservancy.pass.model;
 
 import java.net.URI;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -39,67 +42,22 @@ public class Submission extends PassEntity {
      */
     @JsonProperty("@type")
     private String type = PassEntityType.SUBMISSION.getName();
+
+    /** 
+     * Stringified JSON representation of metadata captured by the relevant repository forms
+     */
+    private String metadata;
     
     /** 
-     * Status of Submission 
+     * Source of Submission record 
      */
-    private Status status;
-
-    /** 
-     * Title of work represented by Submission e.g. the title of the article 
-     */
-    private String title;
-
-    /** 
-     * Contact name for corresponding author
-     */
-    private String corrAuthorName;
-
-    /** 
-     * Contact email for corresponding author 
-     */
-    private String corrAuthorEmail;
+    private Source source;
     
     /** 
-     * Abstract for work represented by Submission 
+     * When true, this value signals that the Submission will no longer be edited by the User. 
+     * It indicates to Deposit services that it can generate Deposits for any Repositories that need one. 
      */
-    @JsonProperty("abstract")
-    private String submissionAbstract;
-
-    /** 
-     * DOI of item being submitted 
-     */
-    private String doi;
-
-    /** 
-     * URI of the journal the submission is part of (if article) 
-     */
-    private URI journal;
-
-    /** 
-     * Volume of journal that contains item (if article) 
-     */
-    private String volume;
-
-    /** 
-     * Issue of journal that contains item (if article) 
-     */
-    private String issue;
-
-    /** 
-     * List of places the submission will be deposited to 
-     */
-    private List<URI> deposits = new ArrayList<>();
-
-    /** 
-     * List of URIs for grants associated with the submission 
-     */
-    private List<URI> grants = new ArrayList<>();
-
-    /** 
-     * List of URIs of Workflows to track the status of submission process 
-     */
-    private List<URI> workflows = new ArrayList<>();
+    private Boolean submitted;
 
     /** 
      * Date the record was submitted by the User through PASS 
@@ -109,50 +67,74 @@ public class Submission extends PassEntity {
     private DateTime submittedDate;
     
     /** 
-     * Source of Submission record 
+     * Status of Submission 
      */
-    private Source source;
+    private AggregatedDepositStatus aggregatedDepositStatus;
+
+    /**
+     * URI of Publication associated with the Submission
+     */
+    private URI publication;
+    
+    /** 
+     * List of repositories that the submission will be deposited to 
+     */
+    private List<URI> repositories = new ArrayList<>();
+
+    /**
+     * URI of the User responsible for managing the Submission.
+     */
+    private URI user;
+
+    /** 
+     * List of URIs for grants associated with the submission 
+     */
+    private List<URI> grants = new ArrayList<>();
     
     
     /** 
-     * Possible statuses of a submission, this is dependent on information from the server and
+     * Possible aggregatedDepositStatus of a submission, this is dependent on information from the server and
      * is calculated using the status of associated Deposits
      */
-    public enum Status {
+    public enum AggregatedDepositStatus {
         /**
-         * The submission is not yet in compliance with applicable policies. 
-         * One or more required Deposits have not been initiated.
+         * No Deposits have been initiated for the Submission
          */
-        @JsonProperty("non-compliant-not-started")
-        NON_COMPLIANT_NOT_STARTED("non-compliant-not-started"),
+        @JsonProperty("not-started")
+        NOT_STARTED("not-started"),
         /**
-         * All required Deposits for the Submission have been initiated, 
-         * but at least one could not be completed and may require additional work by 
-         * the user before being classified as compliant
+         * One or more Deposits for the Submission have been initiated, and at least one 
+         * has not reached the status of "accepted"
          */
-        @JsonProperty("non-compliant-in-progress")
-        NON_COMPLIANT_IN_PROGRESS("non-compliant-in-progress"),
+        @JsonProperty("in-progress")
+        IN_PROGRESS("in-progress"),
         /**
-         * Submission is in compliance with all known applicable policies. 
-         * All of the required Deposits have been initiated, but at least one has 
-         * not yet reached the `Accepted` status.
+         * All related Deposits have a status of "accepted"
          */
-        @JsonProperty("compliant-in-progress")
-        COMPLIANT_IN_PROGRESS("compliant-in-progress"),
-        /**
-         * Submission is in compliance with all known applicable policies. 
-         * All related Deposits have a status of Accepted
-         */
-        @JsonProperty("compliant-complete")
-        COMPLIANT_COMPLETE("compliant-complete");
+        @JsonProperty("accepted")
+        ACCEPTED("accepted");
 
+        private static final Map<String, AggregatedDepositStatus> map = new HashMap<>(values().length, 1);  
+        static {
+          for (AggregatedDepositStatus s : values()) map.put(s.value, s);
+        }
+        
         private String value;
-        private Status(String value){
+        private AggregatedDepositStatus(String value){
             this.value = value;
         }
         public String getValue() {
             return this.value;
         }
+        
+        public static AggregatedDepositStatus of(String status) {
+            AggregatedDepositStatus result = map.get(status);
+            if (result == null) {
+              throw new IllegalArgumentException("Invalid Aggregated Deposit Status: " + status);
+            }
+            return result;
+          }
+        
     }
 
 
@@ -170,197 +152,53 @@ public class Submission extends PassEntity {
     public String getType() {
         return type;
     }
-        
-        
+
+    
     /**
-     * @return the status
-     */
-    public Status getStatus() {
-        return status;
+    * @return the metadata
+    */
+    public String getMetadata() {
+        return metadata;
     }
 
     
     /**
-     * @param status the status to set
+     * @param metadata the metadata to set
      */
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
     }
 
     
     /**
-     * @return the title
+     * @return the source
      */
-    public String getTitle() {
-        return title;
+    public Source getSource() {
+        return source;
     }
 
     
     /**
-     * @param title the title to set
+     * @param source the source to set
      */
-    public void setTitle(String title) {
-        this.title = title;
+    public void setSource(Source source) {
+        this.source = source;
     }
 
     
     /**
-     * @return corrAuthorName the corresponding author name
+     * @return the submitted
      */
-    public String getCorrAuthorName() {
-        return corrAuthorName;
+    public Boolean getSubmitted() {
+        return submitted;
     }
 
     
     /**
-     * @param the corresponding author name
+     * @param submitted the submitted to set
      */
-    public void setCorrAuthorName(String corrAuthorName) {
-        this.corrAuthorName = corrAuthorName;
-    }
-
-    
-    /**
-     * @return corrAuthorEmail the corresponding author email
-     */
-    public String getCorrAuthorEmail() {
-        return corrAuthorEmail;
-    }
-
-    
-    /**
-     * @param the corresponding author email
-     */
-    public void setCorrAuthorEmail(String corrAuthorEmail) {
-        this.corrAuthorEmail = corrAuthorEmail;
-    }
-
-    
-    /**
-     * @return the submissionAbstract
-     */
-    public String getSubmissionAbstract() {
-        return submissionAbstract;
-    }
-
-    
-    /**
-     * @param submissionAbstract the submissionAbstract to set
-     */
-    public void setSubmissionAbstract(String submissionAbstract) {
-        this.submissionAbstract = submissionAbstract;
-    }
-
-    
-    /**
-     * @return the doi
-     */
-    public String getDoi() {
-        return doi;
-    }
-
-    
-    /**
-     * @param doi the doi to set
-     */
-    public void setDoi(String doi) {
-        this.doi = doi;
-    }
-
-    
-    /**
-     * @return the URI of the Journal
-     */
-    public URI getJournal() {
-        return journal;
-    }
-
-    
-    /**
-     * @param journal the URI journal to set
-     */
-    public void setJournal(URI journal) {
-        this.journal = journal;
-    }
-
-    
-    /**
-     * @return the volume
-     */
-    public String getVolume() {
-        return volume;
-    }
-
-    
-    /**
-     * @param volume the volume to set
-     */
-    public void setVolume(String volume) {
-        this.volume = volume;
-    }
-
-    
-    /**
-     * @return the issue
-     */
-    public String getIssue() {
-        return issue;
-    }
-
-    
-    /**
-     * @param issue the issue to set
-     */
-    public void setIssue(String issue) {
-        this.issue = issue;
-    }
-
-    
-    /**
-     * @return the deposits
-     */
-    public List<URI> getDeposits() {
-        return deposits;
-    }
-
-    
-    /**
-     * @param deposits the deposits to set
-     */
-    public void setDeposits(List<URI> deposits) {
-        this.deposits = deposits;
-    }
-
-    
-    /**
-     * @return the URIs of grants associated with the submission
-     */
-    public List<URI> getGrants() {
-        return grants;
-    }
-
-    
-    /**
-     * @param grants List of URIs of grants to set
-     */
-    public void setGrants(List<URI> grants) {
-        this.grants = grants;
-    }
-
-    
-    /**
-     * @return the URIs of workflows associated with submission
-     */
-    public List<URI> getWorkflows() {
-        return workflows;
-    }
-
-    
-    /**
-     * @param workflows the list of workflow URIs to set
-     */
-    public void setWorkflows(List<URI> workflows) {
-        this.workflows = workflows;
+    public void setSubmitted(Boolean submitted) {
+        this.submitted = submitted;
     }
 
     
@@ -378,22 +216,87 @@ public class Submission extends PassEntity {
     public void setSubmittedDate(DateTime submittedDate) {
         this.submittedDate = submittedDate;
     }
+
     
     /**
-     * @return the source
+     * @return the aggregatedDepositStatus
      */
-    public Source getSource() {
-        return source;
+    public AggregatedDepositStatus getAggregatedDepositStatus() {
+        return aggregatedDepositStatus;
     }
 
-
-    /**
-     * @param source the source to set
-     */
-    public void setSource(Source source) {
-        this.source = source;
-    }    
     
+    /**
+     * @param aggregatedDepositStatus the aggregatedDepositStatus to set
+     */
+    public void setAggregatedDepositStatus(AggregatedDepositStatus aggregatedDepositStatus) {
+        this.aggregatedDepositStatus = aggregatedDepositStatus;
+    }
+
+    
+    /**
+     * @return the publication
+     */
+    public URI getPublication() {
+        return publication;
+    }
+
+    
+    /**
+     * @param publication the publication to set
+     */
+    public void setPublication(URI publication) {
+        this.publication = publication;
+    }
+
+    
+    /**
+     * @return the repositories
+     */
+    public List<URI> getRepositories() {
+        return repositories;
+    }
+
+    
+    /**
+     * @param repositories the repositories to set
+     */
+    public void setRepositories(List<URI> repositories) {
+        this.repositories = repositories;
+    }
+    
+    
+    /**
+     * @return the user
+     */
+    public URI getUser() {
+        return user;
+    }
+
+    
+    /**
+     * @param user the user to set
+     */
+    public void setUser(URI user) {
+        this.user = user;
+    }
+
+    
+    /**
+     * @return the grants
+     */
+    public List<URI> getGrants() {
+        return grants;
+    }
+
+    
+    /**
+     * @param grants the grants to set
+     */
+    public void setGrants(List<URI> grants) {
+        this.grants = grants;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -404,20 +307,15 @@ public class Submission extends PassEntity {
         Submission that = (Submission) o;
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (corrAuthorName != null ? !corrAuthorName.equals(that.corrAuthorName) : that.corrAuthorName != null) return false;
-        if (corrAuthorEmail != null ? !corrAuthorEmail.equals(that.corrAuthorEmail) : that.corrAuthorEmail != null) return false;
-        if (submissionAbstract != null ? !submissionAbstract.equals(that.submissionAbstract) : that.submissionAbstract != null) return false;
-        if (doi != null ? !doi.equals(that.doi) : that.doi != null) return false;
-        if (journal != null ? !journal.equals(that.journal) : that.journal != null) return false;
-        if (volume != null ? !volume.equals(that.volume) : that.volume != null) return false;
-        if (issue != null ? !issue.equals(that.issue) : that.issue != null) return false;
-        if (deposits != null ? !deposits.equals(that.deposits) : that.deposits != null) return false;
-        if (grants != null ? !grants.equals(that.grants) : that.grants != null) return false;
-        if (workflows != null ? !workflows.equals(that.workflows) : that.workflows != null) return false;
-        if (submittedDate != null ? !submittedDate.equals(that.submittedDate) : that.submittedDate != null) return false;
+        if (metadata != null ? !metadata.equals(that.metadata) : that.metadata != null) return false;
         if (source != null ? !source.equals(that.source) : that.source != null) return false;
+        if (submitted != null ? !submitted.equals(that.submitted) : that.submitted != null) return false;
+        if (submittedDate != null ? !submittedDate.equals(that.submittedDate) : that.submittedDate != null) return false;        
+        if (aggregatedDepositStatus != null ? !aggregatedDepositStatus.equals(that.aggregatedDepositStatus) : that.aggregatedDepositStatus != null) return false;
+        if (publication != null ? !publication.equals(that.publication) : that.publication != null) return false;
+        if (repositories != null ? !repositories.equals(that.repositories) : that.repositories != null) return false;
+        if (user != null ? !user.equals(that.user) : that.user != null) return false;
+        if (grants != null ? !grants.equals(that.grants) : that.grants != null) return false;
         return true;
     }
 
@@ -426,20 +324,15 @@ public class Submission extends PassEntity {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (corrAuthorName != null ? corrAuthorName.hashCode() : 0);
-        result = 31 * result + (corrAuthorEmail != null ? corrAuthorEmail.hashCode() : 0);
-        result = 31 * result + (submissionAbstract != null ? submissionAbstract.hashCode() : 0);
-        result = 31 * result + (doi != null ? doi.hashCode() : 0);
-        result = 31 * result + (journal != null ? journal.hashCode() : 0);
-        result = 31 * result + (volume != null ? volume.hashCode() : 0);
-        result = 31 * result + (issue != null ? issue.hashCode() : 0);
-        result = 31 * result + (deposits != null ? deposits.hashCode() : 0);
-        result = 31 * result + (grants != null ? grants.hashCode() : 0);
-        result = 31 * result + (workflows != null ? workflows.hashCode() : 0);
-        result = 31 * result + (submittedDate != null ? submittedDate.hashCode() : 0);
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
         result = 31 * result + (source != null ? source.hashCode() : 0);
+        result = 31 * result + (submitted != null ? submitted.hashCode() : 0);
+        result = 31 * result + (submittedDate != null ? submittedDate.hashCode() : 0);
+        result = 31 * result + (aggregatedDepositStatus != null ? aggregatedDepositStatus.hashCode() : 0);
+        result = 31 * result + (publication != null ? publication.hashCode() : 0);
+        result = 31 * result + (repositories != null ? repositories.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (grants != null ? grants.hashCode() : 0);
         return result;
     }
 

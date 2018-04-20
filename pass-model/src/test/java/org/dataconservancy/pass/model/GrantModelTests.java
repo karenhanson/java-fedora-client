@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
 
+import org.dataconservancy.pass.model.Grant.AwardStatus;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -56,19 +57,17 @@ public class GrantModelTests {
         assertEquals(TestValues.GRANT_ID_1, grant.getId().toString());
         assertEquals("Grant", grant.getType());
         assertEquals(TestValues.GRANT_AWARD_NUMBER, grant.getAwardNumber());
-        assertEquals(TestValues.GRANT_STATUS, grant.getAwardStatus());
-        assertEquals(TestValues.GRANT_LOCAL_AWARDID, grant.getLocalAwardId());
+        assertEquals(TestValues.GRANT_STATUS, grant.getAwardStatus().getValue());
+        assertEquals(TestValues.GRANT_LOCALKEY, grant.getLocalKey());
         assertEquals(TestValues.GRANT_PROJECT_NAME, grant.getProjectName());
         assertEquals(TestValues.FUNDER_ID_1, grant.getPrimaryFunder().toString());
         assertEquals(TestValues.FUNDER_ID_2, grant.getDirectFunder().toString());
-        assertEquals(TestValues.PERSON_ID_1, grant.getPi().toString());
-        assertEquals(TestValues.PERSON_ID_2, grant.getCoPis().get(0).toString());
-        assertEquals(TestValues.PERSON_ID_3, grant.getCoPis().get(1).toString());
+        assertEquals(TestValues.USER_ID_1, grant.getPi().toString());
+        assertEquals(TestValues.USER_ID_2, grant.getCoPis().get(0).toString());
+        assertEquals(TestValues.USER_ID_3, grant.getCoPis().get(1).toString());
         assertEquals(TestValues.GRANT_AWARD_DATE_STR, dateFormatter.print(grant.getAwardDate()));
         assertEquals(TestValues.GRANT_START_DATE_STR, dateFormatter.print(grant.getStartDate()));
         assertEquals(TestValues.GRANT_END_DATE_STR, dateFormatter.print(grant.getEndDate()));
-        assertEquals(TestValues.SUBMISSION_ID_1, grant.getSubmissions().get(0).toString());
-        assertEquals(TestValues.SUBMISSION_ID_2, grant.getSubmissions().get(1).toString());
         
     }
 
@@ -88,19 +87,17 @@ public class GrantModelTests {
         assertEquals(root.getString("@id"),TestValues.GRANT_ID_1);
         assertEquals(root.getString("@type"),"Grant");
         assertEquals(root.getString("awardNumber"),TestValues.GRANT_AWARD_NUMBER);
-        assertEquals(root.getString("awardStatus"),TestValues.GRANT_STATUS_STR);
-        assertEquals(root.getString("localAwardId"),TestValues.GRANT_LOCAL_AWARDID);
+        assertEquals(root.getString("awardStatus"),TestValues.GRANT_STATUS);
+        assertEquals(root.getString("localKey"),TestValues.GRANT_LOCALKEY);
         assertEquals(root.getString("projectName"),TestValues.GRANT_PROJECT_NAME);
         assertEquals(root.getString("primaryFunder"),TestValues.FUNDER_ID_1);
         assertEquals(root.getString("directFunder"),TestValues.FUNDER_ID_2);
-        assertEquals(root.getString("pi"),TestValues.PERSON_ID_1);
-        assertEquals(root.getJSONArray("coPis").get(0),TestValues.PERSON_ID_2);
-        assertEquals(root.getJSONArray("coPis").get(1),TestValues.PERSON_ID_3);
+        assertEquals(root.getString("pi"),TestValues.CONTRIBUTOR_ID_1);
+        assertEquals(root.getJSONArray("coPis").get(0),TestValues.USER_ID_2);
+        assertEquals(root.getJSONArray("coPis").get(1),TestValues.USER_ID_3);
         assertEquals(root.getString("awardDate").toString(),TestValues.GRANT_AWARD_DATE_STR);
         assertEquals(root.getString("startDate").toString(),TestValues.GRANT_START_DATE_STR);
         assertEquals(root.getString("endDate").toString(),TestValues.GRANT_END_DATE_STR);
-        assertEquals(root.getJSONArray("submissions").get(0),TestValues.SUBMISSION_ID_1);
-        assertEquals(root.getJSONArray("submissions").get(1),TestValues.SUBMISSION_ID_2);
     }
     
     /**
@@ -127,15 +124,15 @@ public class GrantModelTests {
         Grant grant = new Grant();
         grant.setId(new URI(TestValues.GRANT_ID_1));
         grant.setAwardNumber(TestValues.GRANT_AWARD_NUMBER);
-        grant.setAwardStatus(TestValues.GRANT_STATUS);
-        grant.setLocalAwardId(TestValues.GRANT_LOCAL_AWARDID);
+        grant.setAwardStatus(AwardStatus.of(TestValues.GRANT_STATUS));
+        grant.setLocalKey(TestValues.GRANT_LOCALKEY);
         grant.setProjectName(TestValues.GRANT_PROJECT_NAME);
         grant.setPrimaryFunder(new URI(TestValues.FUNDER_ID_1));
         grant.setDirectFunder(new URI(TestValues.FUNDER_ID_2));
-        grant.setPi(new URI(TestValues.PERSON_ID_1));
+        grant.setPi(new URI(TestValues.CONTRIBUTOR_ID_1));
         List<URI> coPis = new ArrayList<URI>();
-        coPis.add(new URI(TestValues.PERSON_ID_2));
-        coPis.add(new URI(TestValues.PERSON_ID_3));
+        coPis.add(new URI(TestValues.USER_ID_2));
+        coPis.add(new URI(TestValues.USER_ID_3));
         grant.setCoPis(coPis);
 
         DateTime dt = dateFormatter.parseDateTime(TestValues.GRANT_AWARD_DATE_STR);
@@ -144,10 +141,6 @@ public class GrantModelTests {
         grant.setStartDate(dt);
         dt = dateFormatter.parseDateTime(TestValues.GRANT_END_DATE_STR);
         grant.setEndDate(dt);
-        List<URI> submissions = new ArrayList<URI>();
-        submissions.add(new URI(TestValues.SUBMISSION_ID_1));
-        submissions.add(new URI(TestValues.SUBMISSION_ID_2));
-        grant.setSubmissions(submissions);
         
         return grant;
     }
