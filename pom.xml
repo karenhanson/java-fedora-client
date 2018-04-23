@@ -13,7 +13,7 @@
   <modules>
     <module>pass-model</module>
     <module>pass-json-adapter</module>
-    <module>pass-fedora-client</module>
+    <module>pass-data-client</module>
     <module>pass-client-api</module>
     <module>pass-client-util</module>
     <module>pass-client-integration</module>

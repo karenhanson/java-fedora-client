@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dataconservancy.pass.client.fedora;
+package org.dataconservancy.pass.client;
 
 import java.net.URI;
 
@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dataconservancy.pass.client.PassClient;
+import org.dataconservancy.pass.client.elasticsearch.IndexerPassClient;
+import org.dataconservancy.pass.client.fedora.FedoraPassCrudClient;
 import org.dataconservancy.pass.model.PassEntity;
 
 /**
@@ -28,7 +30,7 @@ import org.dataconservancy.pass.model.PassEntity;
  * service (Index client or CRUD client)
  * @author Karen Hanson
  */
-public class FedoraPassClient implements PassClient {
+public class PassClientDefault implements PassClient {
 
     /** 
      * Client that interacts with Fedora repo to carry out CRUD operations 
@@ -38,11 +40,11 @@ public class FedoraPassClient implements PassClient {
     /** 
      * Client that interacts with Index repo to do lookups and searches 
      */
-    private FedoraPassIndexClient indexClient;
+    private IndexerPassClient indexClient;
         
-    public FedoraPassClient() {
+    public PassClientDefault() {
         crudClient = new FedoraPassCrudClient();
-        indexClient = new FedoraPassIndexClient();
+        indexClient = new IndexerPassClient();
     }
     
     /**

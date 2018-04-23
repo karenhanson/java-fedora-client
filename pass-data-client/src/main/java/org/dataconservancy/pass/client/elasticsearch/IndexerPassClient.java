@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dataconservancy.pass.client.fedora;
+package org.dataconservancy.pass.client.elasticsearch;
 
 import java.io.IOException;
 
@@ -47,10 +47,10 @@ import org.slf4j.LoggerFactory;
  *
  * @author Karen Hanson
  */
-public class FedoraPassIndexClient {
+public class IndexerPassClient {
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(FedoraPassIndexClient.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IndexerPassClient.class);
     
     /**
      * Template for a search attribute e.g. AND fldname:"something"
@@ -68,7 +68,7 @@ public class FedoraPassIndexClient {
      */
     private HttpHost[] hosts;    
     
-    public FedoraPassIndexClient() {
+    public IndexerPassClient() {
         Set<URL> indexerUrls = IndexerConfig.getIndexerHostUrl();      
         hosts = new HttpHost[indexerUrls.size()];
         int count = 0;

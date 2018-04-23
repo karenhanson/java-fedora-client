@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dataconservancy.pass.client.fedora;
+package org.dataconservancy.pass.client.elasticsearch;
 
 import java.net.MalformedURLException;
 import java.net.URL;

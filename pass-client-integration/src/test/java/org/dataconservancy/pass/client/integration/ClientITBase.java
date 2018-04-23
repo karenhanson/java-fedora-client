@@ -28,7 +28,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.dataconservancy.pass.client.PassClient;
-import org.dataconservancy.pass.client.fedora.FedoraPassClient;
+import org.dataconservancy.pass.client.PassClientFactory;
 import org.dataconservancy.pass.model.Contributor;
 import org.dataconservancy.pass.model.PassEntity;
 
@@ -60,7 +60,7 @@ public abstract class ClientITBase {
                     .map(PojoClass::getClazz)
                     .map(cls -> (Class<? extends PassEntity>) cls).collect(Collectors.toList());
 
-    protected final PassClient client = new FedoraPassClient();
+    protected final PassClient client = PassClientFactory.getPassClient();
 
     private static final Random randomIndex = new Random();
 

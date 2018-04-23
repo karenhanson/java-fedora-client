@@ -19,9 +19,7 @@ package org.dataconservancy.pass.client.integration;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 import org.dataconservancy.pass.model.PassEntity;
-
 import org.junit.Test;
-import org.dataconservancy.pass.model.User;
 import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 /**

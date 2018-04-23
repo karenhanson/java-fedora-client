@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import org.dataconservancy.pass.client.PassClientDefault;
 import org.dataconservancy.pass.client.PassClient;
 import org.dataconservancy.pass.model.Grant;
 
@@ -36,14 +37,14 @@ public class FedoraPassIndexClientITs {
 
     @Test
     public void testIndexClient() { 
-        PassClient client = new FedoraPassClient();
+        PassClient client = new PassClientDefault();
         URI uri = client.findByAttribute(Grant.class, "awardNumber", "r01ey026617");
         assertTrue(uri!=null);
     }
 
     @Test
     public void testIndexClientMultipleResults() { 
-        PassClient client = new FedoraPassClient();
+        PassClient client = new PassClientDefault();
         Set<URI> uris = client.findAllByAttribute(Grant.class, "oapCompliance", "Yes");
         assertTrue(uris.size()>2);
     }
@@ -53,14 +54,14 @@ public class FedoraPassIndexClientITs {
         Map<String,Object> filters = new HashMap<String,Object>();
         filters.put("oapCompliance", "Yes");
         filters.put("endDate", "2020-08-10T00:00:00.000Z");        
-        PassClient client = new FedoraPassClient();
+        PassClient client = new PassClientDefault();
         Set<URI> uris = client.findAllByAttribute(Grant.class, "oapCompliance", "Yes");
         assertTrue(uris.size()>0);
     }
 
     @Test
     public void testIndexClientArrayFilter() { 
-        PassClient client = new FedoraPassClient();
+        PassClient client = new PassClientDefault();
         URI uri = client.findByAttribute(Grant.class, "submissions", "http://fcrepo:8080/fcrepo/rest/submissions/ba/3c/c7/d8/ba3cc7d8-6c37-40e3-b13a-359cc3bf2f77");
         assertTrue(uri!=null);
     }
