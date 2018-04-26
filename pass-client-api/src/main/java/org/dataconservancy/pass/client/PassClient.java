@@ -15,6 +15,7 @@
  */
 package org.dataconservancy.pass.client;
 
+import java.io.Closeable;
 import java.net.URI;
 
 import java.util.Map;
@@ -39,7 +40,7 @@ import org.dataconservancy.pass.model.PassEntity;
  *  Assuming "yes" for now
  */
 
-public interface PassClient {
+public interface PassClient extends Closeable {
 
     /**
      * Takes any PassEntity and persists it in the database, returns the URI if successful 

@@ -15,6 +15,7 @@
  */
 package org.dataconservancy.pass.client;
 
+import java.io.IOException;
 import java.net.URI;
 
 import java.util.Map;
@@ -102,6 +103,10 @@ public class PassClientDefault implements PassClient {
     @Override
     public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> valueAttributesMap) {
         return indexClient.findAllByAttributes(modelClass, valueAttributesMap);
+    }
+    
+    public void close() throws IOException {
+        indexClient.close();
     }
 
 }

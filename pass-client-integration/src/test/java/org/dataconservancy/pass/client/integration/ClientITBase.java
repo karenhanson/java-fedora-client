@@ -25,15 +25,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import org.dataconservancy.pass.client.PassClient;
 import org.dataconservancy.pass.client.PassClientFactory;
 import org.dataconservancy.pass.model.Contributor;
 import org.dataconservancy.pass.model.PassEntity;
+import org.dataconservancy.pass.model.User;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.dataconservancy.pass.model.User;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -148,13 +149,13 @@ public abstract class ClientITBase {
             if (method.getName().equals("setIssns") || method.getName().equals("setExternalIds")) {
                 list.add(UUID.randomUUID().toString());
             } else if (method.getName().equals("setRoles")) {
-                Object role = method.getDeclaringClass().newInstance();
+                final Object role = method.getDeclaringClass().newInstance();
                 if (role instanceof User) {
-                    User.Role[] values = User.Role.values();
-                    list.add(values[i]); 
+                    final User.Role[] values = User.Role.values();
+                    list.add(values[i]);
                 } else if (role instanceof Contributor) {
-                    Contributor.Role[] values = Contributor.Role.values();
-                    list.add(values[i]);      
+                    final Contributor.Role[] values = Contributor.Role.values();
+                    list.add(values[i]);
                 }
             } else {
                 list.add(URI.create("urn:uuid:" + UUID.randomUUID().toString()));
@@ -162,6 +163,47 @@ public abstract class ClientITBase {
         }
 
         return list;
+    }
+
+    /**
+     * Try invoking a runnable until it succeeds.
+     *
+     * @param times The number of times to run
+     * @param thingy The runnable.
+     */
+    void attempt(final int times, final Runnable thingy) {
+        attempt(times, () -> {
+            thingy.run();
+            return null;
+        });
+    }
+
+    /**
+     * Try invoking a callable until it succeeds.
+     *
+     * @param times Number of times to try
+     * @param it the thing to call.
+     * @return the result from the callable, when successful.
+     */
+    <T> T attempt(final int times, final Callable<T> it) {
+
+        Throwable caught = null;
+
+        for (int tries = 0; tries < times; tries++) {
+            try {
+                return it.call();
+            } catch (final Throwable e) {
+                caught = e;
+                try {
+                    Thread.sleep(1000);
+                    System.out.println(".");
+                } catch (final InterruptedException i) {
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
+            }
+        }
+        throw new RuntimeException("Failed executing task", caught);
     }
 
 }
