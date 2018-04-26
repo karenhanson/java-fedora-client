@@ -51,6 +51,9 @@ public abstract class ClientITBase {
         if (System.getProperty("pass.fedora.baseurl") == null) {
             System.setProperty("pass.fedora.baseurl", "http://localhost:8080/fcrepo/rest/");
         }
+        if (System.getProperty("pass.elasticsearch.url") == null) {
+            System.setProperty("pass.elasticsearch.url", "http://localhost:9200");
+        }
     }
 
     /** All PassEntity classes from pass-model */
