@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.dataconservancy.pass.client.integration;
 
+import java.io.IOException;
 import java.net.URI;
 
 import java.util.concurrent.TimeUnit;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import org.dataconservancy.pass.client.PassClient;
@@ -28,7 +31,6 @@ import org.dataconservancy.pass.model.Grant;
 import static org.junit.Assert.assertEquals;
 
 /**
- *
  * @author Karen Hanson
  */
 public class IndexClientIT extends ClientITBase {
@@ -41,19 +43,28 @@ public class IndexClientIT extends ClientITBase {
             System.setProperty("pass.elasticsearch.url", "http://localhost:9200");
         }
     }
-    
+
+    static PassClient client = PassClientFactory.getPassClient();
+
     @Test
-    public void testMixedCaseAwardNumber() throws InterruptedException {
-        PassClient client = PassClientFactory.getPassClient();
-        
+    public void testMixedCaseAwardNumber() throws Exception {
+
         Grant grant = random(Grant.class, 1);
         URI grantId = client.createResource(grant);
-        
-        TimeUnit.SECONDS.sleep(3);
-        URI foundGrantId1 = client.findByAttribute(Grant.class, "awardNumber", grant.getAwardNumber().toLowerCase());
-        assertEquals(grantId, foundGrantId1);
 
-        URI foundGrantId2 = client.findByAttribute(Grant.class, "awardNumber", grant.getAwardNumber().toUpperCase());
-        assertEquals(grantId, foundGrantId2);
+        attempt(3, () -> {
+            URI foundGrantId1 = client.findByAttribute(Grant.class, "awardNumber", grant.getAwardNumber().toLowerCase());
+            assertEquals(grantId, foundGrantId1);
+        });
+        
+        attempt(3, () -> {
+            URI foundGrantId2 = client.findByAttribute(Grant.class, "awardNumber", grant.getAwardNumber().toUpperCase());
+            assertEquals(grantId, foundGrantId2);
+        });
+    }
+
+    @AfterClass
+    public static void close() throws Exception {
+        client.close();
     }
 }

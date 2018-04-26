@@ -66,16 +66,21 @@ public class IndexerPassClient {
     /**
      * URL of indexer
      */
-    private HttpHost[] hosts;    
+    private final HttpHost[] hosts;
+    
+    private final RestHighLevelClient client;
     
     public IndexerPassClient() {
         Set<URL> indexerUrls = IndexerConfig.getIndexerHostUrl();      
         hosts = new HttpHost[indexerUrls.size()];
         int count = 0;
         for (URL url : indexerUrls) {
+            LOG.info("Connecting to index at {}", url);
             hosts[count] = new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
             count = count+1;
         }
+        
+        client = new RestHighLevelClient(RestClient.builder(hosts));
     }
     
     /**
@@ -181,7 +186,7 @@ public class IndexerPassClient {
         
         Iterator<SearchHit> hitsIt = null;
 
-        try (RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(hosts));) {
+        try {
             SearchRequest searchRequest = new SearchRequest(); 
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder(); 
             //(content:this OR name:this)
@@ -195,13 +200,15 @@ public class IndexerPassClient {
             SearchHits hits = searchResponse.getHits();
             hitsIt = hits.iterator();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         
         return hitsIt;
         
     }
     
+    public void close()  throws IOException {
+        client.close();
+    }  
     
 }
