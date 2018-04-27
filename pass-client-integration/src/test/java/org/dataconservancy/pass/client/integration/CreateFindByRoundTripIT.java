@@ -29,30 +29,37 @@ import java.util.Set;
 import org.junit.Test;
 
 import org.dataconservancy.pass.model.PassEntity;
-import org.joda.time.DateTime;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Creates PASS entities, and makes sure they can be roundtripped to the repository.
+ * Creates PASS entities, and makes sure they can be searched on by each field 
+ * in the indexer
  *
- * @author apb@jhu.edu
+ * @author Karen Hanson
  */
 
 public class CreateFindByRoundTripIT extends ClientITBase {
 
-    /* Roundtrip with all lists containing ONE entry.. an edge case */
+    /**
+    * Creates a resource and then checks that resource can be searched on in the indexer
+    * using each of its field in the model. All lists contain ONE entry
+    */
     @Test
-    public void roundTripWithSingleListsTest() {
-
+    public void indexerRoundTripTest() {
         PASS_TYPES.stream()
-                .map(cls -> random(cls, 1))
+                .map(cls -> random(cls, 2))
                 .forEach(this::roundTrip);
     }
 
+    /**
+     * Creates the object of the type provided, and then uses the getters for that Object
+     * to a findByAttribute call to the index for each field
+     * @param forDeposit
+     */
     @SuppressWarnings("rawtypes")
-    public void roundTrip(PassEntity forDeposit) {
+    private void roundTrip(PassEntity forDeposit) {
         final URI entityUri = client.createResource(forDeposit);   
         try {
             //check for record in indexer before proceeding to other tests
@@ -64,35 +71,19 @@ public class CreateFindByRoundTripIT extends ClientITBase {
             for (final PropertyDescriptor pd : Introspector.getBeanInfo(forDeposit.getClass(), PassEntity.class).getPropertyDescriptors()) {
                 Method m = pd.getReadMethod();
                 
-                if (!m.getName().equals("getType")) {
-                   
+                if (!m.getName().equals("getType")) {                   
                     final Class<?> type = m.getReturnType();
-                    Set<URI> uris = null;
                     System.out.println(String.format("Looking at %s with type %s", m.getName(), type));
+                    Object val = null;
                     
-                    if (String.class.isAssignableFrom(type)) {
-                        String val = (String) m.invoke(forDeposit);
-                        uris = client.findAllByAttribute(forDeposit.getClass(), fieldName(m.getName()), val);
-                    } else if (Enum.class.isAssignableFrom(type)) {
-                        Enum val = (Enum) m.invoke(forDeposit);
-                        uris = client.findAllByAttribute(forDeposit.getClass(), fieldName(m.getName()), val);
-                    } else if (URI.class.isAssignableFrom(type)) {
-                        URI val = (URI) m.invoke(forDeposit);
-                        uris = client.findAllByAttribute(forDeposit.getClass(), fieldName(m.getName()), val);
-                    } else if (DateTime.class.isAssignableFrom(type)) {
-                        DateTime val = (DateTime) m.invoke(forDeposit);
-                        uris = client.findAllByAttribute(forDeposit.getClass(), fieldName(m.getName()), val);
-                    } else if (List.class.isAssignableFrom(type)) {
-                        List val = (List) m.invoke(forDeposit);
-                        Object rowVal = val.get(0);
-                        uris = client.findAllByAttribute(forDeposit.getClass(), fieldName(m.getName()), rowVal);
-                    } else if (Boolean.class.isAssignableFrom(type)) {
-                        Boolean val = (Boolean) m.invoke(forDeposit);
-                        uris = client.findAllByAttribute(forDeposit.getClass(), fieldName(m.getName()), val);
+                    if (List.class.isAssignableFrom(type)) {
+                        List listval = (List) m.invoke(forDeposit);
+                        val = listval.get(0);
                     } else {
-                        throw new UnsupportedOperationException(type.getName());
-                    }
-                    
+                        val = m.invoke(forDeposit);
+                    } 
+
+                    Set<URI> uris = client.findAllByAttribute(forDeposit.getClass(), fieldName(m.getName()), val);
                     System.out.println(String.format("Comparing entity uri (%s) to found uri (%s) for method %s", entityUri, uris, m.getName()));
                     assertTrue(uris.contains(entityUri));
                 }
@@ -107,7 +98,11 @@ public class CreateFindByRoundTripIT extends ClientITBase {
         
     }
     
-    
+    /**
+     * Get json fieldname corresponding to GET
+     * @param methodname
+     * @return
+     */
     private String fieldName(String methodname) {                    
         if (methodname.equals("getPublicationAbstract")) { //the only exception, could not use keyword "abstract"
             return "abstract";
