@@ -72,6 +72,10 @@ public interface PassClient {
      * 
      * If >1 records are found, a RuntimeException will be thrown. If no records are found it will return null.
      * 
+     * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
+     * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
+     * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
+     * 
      * @param modelClass
      * @param attribute
      * @param value
@@ -89,6 +93,10 @@ public interface PassClient {
      *    
      * By default this will return a maximum of 3000 matching records, unless the pass.elasticsearch.limit
      * environment variable is set. If there are no matches, it will return an empty list.
+     * 
+     * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
+     * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
+     * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
      * 
      * @param modelClass
      * @param attribute
@@ -108,6 +116,10 @@ public interface PassClient {
      * The number of records will be limited by limit provided, and the offset will be applied to the default 
      * sorting. If there are no matches, it will return an empty list. This will override the limit env variable
      * 
+     * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
+     * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
+     * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
+     * 
      * @param modelClass
      * @param attribute
      * @param value
@@ -120,7 +132,8 @@ public interface PassClient {
     
     /**
      * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the attributes
-     * and values specified. For example, to find a Submission using a GrantId and DOI:
+     * and values specified. An "AND" operator will be used for searching multiple attributes. 
+     * For example, to find a Submission using a GrantId AND DOI:
      * 
      *    Map<String, Object> map = new HashMap<String, Object>();
      *    URI grantId = new URI("https://example.com/fedora/grants/3");
@@ -130,7 +143,11 @@ public interface PassClient {
      *    Set<URI> entityUris = findByAttribute(Submission.class, map);
      *    
      * By default this will return a maximum of 3000 matching records, unless the pass.elasticsearch.limit
-     * environment variable is set. If there are no matches, it will return an empty list.
+     * environment variable is set. If there are no matches, it will return an empty list.      
+     * 
+     * The Map "value" parameter will be converted to a String for the purpose of searching the index. The map's value cannot 
+     * be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
+     * For example, if searching on Submission.repositories, a single repository URI should be provided for matching.
      * 
      * @param modelClass
      * @param attribute
@@ -153,6 +170,10 @@ public interface PassClient {
      *    
      * The number of records will be limited by limit provided, and the offset will be applied to the default 
      * sorting. If there are no matches, it will return an empty list. This will override the limit env variable
+     * 
+     * The Map "value" parameter will be converted to a String for the purpose of searching the index. The map's value cannot 
+     * be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
+     * For example, if searching on Submission.repositories, a single repository URI should be provided for matching.
      * 
      * @param modelClass
      * @param attribute
