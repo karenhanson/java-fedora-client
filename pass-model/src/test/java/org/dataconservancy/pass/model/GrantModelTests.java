@@ -57,7 +57,7 @@ public class GrantModelTests {
         assertEquals(TestValues.GRANT_ID_1, grant.getId().toString());
         assertEquals("Grant", grant.getType());
         assertEquals(TestValues.GRANT_AWARD_NUMBER, grant.getAwardNumber());
-        assertEquals(TestValues.GRANT_STATUS, grant.getAwardStatus().getValue());
+        assertEquals(TestValues.GRANT_STATUS, grant.getAwardStatus().toString());
         assertEquals(TestValues.GRANT_LOCALKEY, grant.getLocalKey());
         assertEquals(TestValues.GRANT_PROJECT_NAME, grant.getProjectName());
         assertEquals(TestValues.FUNDER_ID_1, grant.getPrimaryFunder().toString());

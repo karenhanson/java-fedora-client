@@ -57,8 +57,8 @@ public class ContributorModelTests {
         assertEquals(TestValues.USER_AFFILIATION, contributor.getAffiliation());
         assertEquals(TestValues.PUBLICATION_ID_1, contributor.getPublication().toString());
         assertEquals(TestValues.USER_ID_1, contributor.getUser().toString());
-        assertEquals(TestValues.CONTRIBUTOR_ROLE_1, Contributor.Role.FIRST_AUTHOR.getValue());
-        assertEquals(TestValues.CONTRIBUTOR_ROLE_2, Contributor.Role.AUTHOR.getValue());       
+        assertEquals(TestValues.CONTRIBUTOR_ROLE_1, Contributor.Role.FIRST_AUTHOR.toString());
+        assertEquals(TestValues.CONTRIBUTOR_ROLE_2, Contributor.Role.AUTHOR.toString());       
         
     }
 

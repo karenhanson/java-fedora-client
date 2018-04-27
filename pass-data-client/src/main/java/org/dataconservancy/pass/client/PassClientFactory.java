@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dataconservancy.pass.client.fedora;
+package org.dataconservancy.pass.client;
+
 
 /**
  *
  * @author Karen Hanson
- * @version $Id$
  */
-public class FedoraPassCrudClientITs {
+public class PassClientFactory {
 
-    //TODO: write CRUD ITs when Fedora cargo available 
+    public static PassClient getPassClient() {
+        return new PassClientDefault();
+    }
     
 }

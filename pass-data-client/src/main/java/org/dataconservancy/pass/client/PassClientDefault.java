@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dataconservancy.pass.client.fedora;
+package org.dataconservancy.pass.client;
 
 import java.net.URI;
 
 import java.util.Map;
 import java.util.Set;
 
-import org.dataconservancy.pass.client.PassClient;
+import org.dataconservancy.pass.client.elasticsearch.ElasticsearchPassClient;
+import org.dataconservancy.pass.client.fedora.FedoraPassCrudClient;
 import org.dataconservancy.pass.model.PassEntity;
 
 /**
@@ -28,7 +29,7 @@ import org.dataconservancy.pass.model.PassEntity;
  * service (Index client or CRUD client)
  * @author Karen Hanson
  */
-public class FedoraPassClient implements PassClient {
+public class PassClientDefault implements PassClient {
 
     /** 
      * Client that interacts with Fedora repo to carry out CRUD operations 
@@ -38,11 +39,11 @@ public class FedoraPassClient implements PassClient {
     /** 
      * Client that interacts with Index repo to do lookups and searches 
      */
-    private FedoraPassIndexClient indexClient;
+    private ElasticsearchPassClient indexClient;
         
-    public FedoraPassClient() {
+    public PassClientDefault() {
         crudClient = new FedoraPassCrudClient();
-        indexClient = new FedoraPassIndexClient();
+        indexClient = new ElasticsearchPassClient();
     }
     
     /**
@@ -93,13 +94,28 @@ public class FedoraPassClient implements PassClient {
         return indexClient.findAllByAttribute(modelClass, attribute, value);
     }
 
-    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value, int limit, int offset) {
+        return indexClient.findAllByAttribute(modelClass, attribute, value, limit, offset);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> valueAttributesMap) {
         return indexClient.findAllByAttributes(modelClass, valueAttributesMap);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> valueAttributesMap, int limit, int offset) {
+        return indexClient.findAllByAttributes(modelClass, valueAttributesMap, limit, offset);
     }
 
 }

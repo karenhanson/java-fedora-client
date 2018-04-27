@@ -19,9 +19,7 @@ package org.dataconservancy.pass.client.integration;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 import org.dataconservancy.pass.model.PassEntity;
-
 import org.junit.Test;
-import org.dataconservancy.pass.model.User;
 import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 /**
@@ -30,7 +28,7 @@ import org.unitils.reflectionassert.ReflectionComparatorMode;
  * @author apb@jhu.edu
  */
 
-public class RoundTripIT extends ClientITBase {
+public class CreateReadResourceRoundTripIT extends ClientITBase {
 
     /* Roundtrip with all lists containing multiple values */
     @Test

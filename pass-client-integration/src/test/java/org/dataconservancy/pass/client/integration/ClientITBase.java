@@ -16,39 +16,48 @@
 
 package org.dataconservancy.pass.client.integration;
 
-import static com.openpojo.reflection.impl.PojoClassFactory.enumerateClassesByExtendingType;
-
 import java.lang.reflect.Method;
+
 import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-import org.dataconservancy.pass.client.PassClient;
-import org.dataconservancy.pass.client.fedora.FedoraPassClient;
-import org.dataconservancy.pass.model.Contributor;
-import org.dataconservancy.pass.model.PassEntity;
+import com.openpojo.reflection.PojoClass;
 
 import org.apache.commons.beanutils.BeanUtils;
+
+import org.dataconservancy.pass.client.PassClient;
+import org.dataconservancy.pass.client.PassClientFactory;
+import org.dataconservancy.pass.model.Contributor;
+import org.dataconservancy.pass.model.PassEntity;
 import org.dataconservancy.pass.model.User;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import com.openpojo.reflection.PojoClass;
+import static com.openpojo.reflection.impl.PojoClassFactory.enumerateClassesByExtendingType;
 
 /**
  * Base class for client ITs.
  *
  * @author apb@jhu.edu
+ * @author Karen Hanson
  */
 public abstract class ClientITBase {
 
+    protected static final int RETRIES = 10;
+    
     static {
         if (System.getProperty("pass.fedora.baseurl") == null) {
             System.setProperty("pass.fedora.baseurl", "http://localhost:8080/fcrepo/rest/");
+        }
+        if (System.getProperty("pass.elasticsearch.url") == null) {
+            System.setProperty("pass.elasticsearch.url", "http://localhost:9200/pass/");
         }
     }
 
@@ -60,7 +69,7 @@ public abstract class ClientITBase {
                     .map(PojoClass::getClazz)
                     .map(cls -> (Class<? extends PassEntity>) cls).collect(Collectors.toList());
 
-    protected final PassClient client = new FedoraPassClient();
+    protected final PassClient client = PassClientFactory.getPassClient();
 
     private static final Random randomIndex = new Random();
 
@@ -148,13 +157,13 @@ public abstract class ClientITBase {
             if (method.getName().equals("setIssns") || method.getName().equals("setExternalIds")) {
                 list.add(UUID.randomUUID().toString());
             } else if (method.getName().equals("setRoles")) {
-                Object role = method.getDeclaringClass().newInstance();
+                final Object role = method.getDeclaringClass().newInstance();
                 if (role instanceof User) {
-                    User.Role[] values = User.Role.values();
-                    list.add(values[i]); 
+                    final User.Role[] values = User.Role.values();
+                    list.add(values[i]);
                 } else if (role instanceof Contributor) {
-                    Contributor.Role[] values = Contributor.Role.values();
-                    list.add(values[i]);      
+                    final Contributor.Role[] values = Contributor.Role.values();
+                    list.add(values[i]);
                 }
             } else {
                 list.add(URI.create("urn:uuid:" + UUID.randomUUID().toString()));
@@ -162,6 +171,47 @@ public abstract class ClientITBase {
         }
 
         return list;
+    }
+
+    /**
+     * Try invoking a runnable until it succeeds.
+     *
+     * @param times The number of times to run
+     * @param thingy The runnable.
+     */
+    void attempt(final int times, final Runnable thingy) {
+        attempt(times, () -> {
+            thingy.run();
+            return null;
+        });
+    }
+
+    /**
+     * Try invoking a callable until it succeeds.
+     *
+     * @param times Number of times to try
+     * @param it the thing to call.
+     * @return the result from the callable, when successful.
+     */
+    <T> T attempt(final int times, final Callable<T> it) {
+
+        Throwable caught = null;
+
+        for (int tries = 0; tries < times; tries++) {
+            try {
+                return it.call();
+            } catch (final Throwable e) {
+                caught = e;
+                try {
+                    Thread.sleep(2000);
+                    System.out.println(".");
+                } catch (final InterruptedException i) {
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
+            }
+        }
+        throw new RuntimeException("Failed executing task", caught);
     }
 
 }

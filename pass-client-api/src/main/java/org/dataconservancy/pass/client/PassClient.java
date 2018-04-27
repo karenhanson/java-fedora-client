@@ -28,17 +28,6 @@ import org.dataconservancy.pass.model.PassEntity;
  * @author Karen Hanson
  */
 
-/* 
- *  TODO: lets see if this satisfies our use cases, if not we can add others as needed.
- *  For now we will assume that you can filter by IDs using these findByAttribute methods.
- *  For example, you can use findAllByAttribute to retrieve all Deposits with a specific Repository.id.
- *  We will need to revisit how one-to-many joins work here, for example, should you be able to say:
- *    
- *       Set<URI> entityUris = findByAttribute(Submission.class, "grants", grantUri);
- *       
- *  Assuming "yes" for now
- */
-
 public interface PassClient {
 
     /**
@@ -74,11 +63,18 @@ public interface PassClient {
     
     /**
      * Retrieves URI for a SINGLE RECORD by matching the entity type and filtering by the field
-     * specified using the value provided. For example, to find the Grant using the 
+     * specified using the value provided. 
+     * For example, to find the Grant using the 
      * awardNumber:
      * 
      *    String awardNum = "abcdef123";
      *    URI grantId = findByAttribute(Grant.class, "awardNumber", awardNum);
+     * 
+     * If >1 records are found, a RuntimeException will be thrown. If no records are found it will return null.
+     * 
+     * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
+     * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
+     * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
      * 
      * @param modelClass
      * @param attribute
@@ -89,11 +85,18 @@ public interface PassClient {
     
     
     /**
-     * Retrieves URIs for ALL MATCHING RECORDS by matching the entity type and filtering by the field
+     * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the field
      * specified using the value provided. For example, to find Deposits using a Repository.id:
      * 
      *    URI repositoryId = new URI("https://example.com/fedora/repositories/3");
      *    Set<URI> entityUris = findByAttribute(Deposit.class, "repository", repositoryId);
+     *    
+     * By default this will return a maximum of 3000 matching records, unless the pass.elasticsearch.limit
+     * environment variable is set. If there are no matches, it will return an empty list.
+     * 
+     * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
+     * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
+     * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
      * 
      * @param modelClass
      * @param attribute
@@ -104,7 +107,58 @@ public interface PassClient {
     
     
     /**
-     * Retrieves URIs for ALL MATCHING RECORDS by matching the entity type and filtering by the attributes
+     * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the field
+     * specified using the value provided.  For example, to find Deposits using a Repository.id:
+     * 
+     *    URI repositoryId = new URI("https://example.com/fedora/repositories/3");
+     *    Set<URI> entityUris = findByAttribute(Deposit.class, "repository", repositoryId);
+     *    
+     * The number of records will be limited by limit provided, and the offset will be applied to the default 
+     * sorting. If there are no matches, it will return an empty list. This will override the limit env variable
+     * 
+     * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
+     * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
+     * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
+     * 
+     * @param modelClass
+     * @param attribute
+     * @param value
+     * @param limit
+     * @param offset
+     * @return
+     */
+    public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value, int limit, int offset);
+    
+    
+    /**
+     * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the attributes
+     * and values specified. An "AND" operator will be used for searching multiple attributes. 
+     * For example, to find a Submission using a GrantId AND DOI:
+     * 
+     *    Map<String, Object> map = new HashMap<String, Object>();
+     *    URI grantId = new URI("https://example.com/fedora/grants/3");
+     *    String doi = "10.001/12345abc";
+     *    map.put("grants", grantId)
+     *    map.put("doi", doi);
+     *    Set<URI> entityUris = findByAttribute(Submission.class, map);
+     *    
+     * By default this will return a maximum of 3000 matching records, unless the pass.elasticsearch.limit
+     * environment variable is set. If there are no matches, it will return an empty list.      
+     * 
+     * The Map "value" parameter will be converted to a String for the purpose of searching the index. The map's value cannot 
+     * be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
+     * For example, if searching on Submission.repositories, a single repository URI should be provided for matching.
+     * 
+     * @param modelClass
+     * @param attribute
+     * @param value
+     * @return
+     */
+    public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> attributeValuesMap);
+    
+    
+    /**
+     * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the attributes
      * and values specified. For example, to find a Submission using a GrantId and DOI:
      * 
      *    Map<String, Object> map = new HashMap<String, Object>();
@@ -113,13 +167,22 @@ public interface PassClient {
      *    map.put("grants", grantId)
      *    map.put("doi", doi);
      *    Set<URI> entityUris = findByAttribute(Submission.class, map);
+     *    
+     * The number of records will be limited by limit provided, and the offset will be applied to the default 
+     * sorting. If there are no matches, it will return an empty list. This will override the limit env variable
+     * 
+     * The Map "value" parameter will be converted to a String for the purpose of searching the index. The map's value cannot 
+     * be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
+     * For example, if searching on Submission.repositories, a single repository URI should be provided for matching.
      * 
      * @param modelClass
      * @param attribute
      * @param value
+     * @param limit
+     * @param offset
      * @return
      */
-    public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> attributeValuesMap);
-       
+    public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> attributeValuesMap, int limit, int offset);
+
     
 }

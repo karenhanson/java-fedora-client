@@ -64,7 +64,7 @@ public class JsonAdapterTests {
         Deposit deposit = (Deposit) adapter.toModel(compactJsonLd, Deposit.class);
 
         assertEquals(TestValues.DEPOSIT_ID_1, deposit.getId().toString());
-        assertEquals(TestValues.DEPOSIT_STATUS, deposit.getDepositStatus().getValue());
+        assertEquals(TestValues.DEPOSIT_STATUS, deposit.getDepositStatus().toString());
         assertEquals(TestValues.DEPOSIT_STATUSREF, deposit.getDepositStatusRef());
         
     }

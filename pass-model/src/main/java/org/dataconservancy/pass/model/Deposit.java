@@ -91,9 +91,6 @@ public class Deposit extends PassEntity {
         private DepositStatus(String value){
             this.value = value;
         }
-        public String getValue() {
-            return this.value;
-        }
         
         public static DepositStatus of(String status) {
             DepositStatus result = map.get(status);
@@ -101,6 +98,11 @@ public class Deposit extends PassEntity {
               throw new IllegalArgumentException("Invalid Deposit Status: " + status);
             }
             return result;
+        }
+        
+        @Override
+        public String toString() {
+            return this.value;
         }
         
     }

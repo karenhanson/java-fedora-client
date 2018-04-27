@@ -6,14 +6,14 @@
   <groupId>org.dataconservancy.pass</groupId>
   <artifactId>pass-client</artifactId>
   <packaging>pom</packaging>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
   
   <name>PASS Client Tool</name>
   
   <modules>
     <module>pass-model</module>
     <module>pass-json-adapter</module>
-    <module>pass-fedora-client</module>
+    <module>pass-data-client</module>
     <module>pass-client-api</module>
     <module>pass-client-util</module>
     <module>pass-client-integration</module>
@@ -59,6 +59,7 @@
     <fcrepo-java-client.version>0.3.0</fcrepo-java-client.version>
     <logback.version>1.2.3</logback.version>
     <openpojo.version>0.8.10</openpojo.version>
+    <elasticsearch-client.version>6.2.3</elasticsearch-client.version>
     <slf4j.version>1.7.25</slf4j.version>
     <unitils.version>3.4.6</unitils.version>
   </properties>
@@ -193,6 +194,13 @@
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
       </dependency>
+      
+      <dependency>
+        <groupId>org.elasticsearch.client</groupId>
+        <artifactId>elasticsearch-rest-high-level-client</artifactId>
+        <version>${elasticsearch-client.version}</version>
+      </dependency>
+    
       
       <dependency>
         <groupId>org.unitils</groupId>
