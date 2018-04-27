@@ -16,10 +16,10 @@
 
 package org.dataconservancy.pass.client.integration;
 
-import static com.openpojo.reflection.impl.PojoClassFactory.enumerateClassesByExtendingType;
-
 import java.lang.reflect.Method;
+
 import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,17 +28,19 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
+import com.openpojo.reflection.PojoClass;
+
+import org.apache.commons.beanutils.BeanUtils;
+
 import org.dataconservancy.pass.client.PassClient;
 import org.dataconservancy.pass.client.PassClientFactory;
 import org.dataconservancy.pass.model.Contributor;
 import org.dataconservancy.pass.model.PassEntity;
 import org.dataconservancy.pass.model.User;
-
-import org.apache.commons.beanutils.BeanUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import com.openpojo.reflection.PojoClass;
+import static com.openpojo.reflection.impl.PojoClassFactory.enumerateClassesByExtendingType;
 
 /**
  * Base class for client ITs.
