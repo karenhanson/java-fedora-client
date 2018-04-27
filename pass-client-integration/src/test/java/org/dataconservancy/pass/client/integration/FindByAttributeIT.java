@@ -17,6 +17,9 @@ package org.dataconservancy.pass.client.integration;
 
 import java.net.URI;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -31,7 +34,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- *
+ * Tests for PassClient.findAllByAttribute
  * @author Karen Hanson
  */
 public class FindByAttributeIT extends ClientITBase {
@@ -183,6 +186,22 @@ public class FindByAttributeIT extends ClientITBase {
             client.findByAttribute(null, "fake", "fake");
         } catch (Exception ex) {
             assertTrue(ex.getMessage().contains("modelClass cannot be null"));
+            assertTrue(ex instanceof RuntimeException);
+            throw ex;
+        }
+        fail ("Test should have thrown exception");
+    }
+
+    /**
+     * Check findByAttribute rejects a value that is a collection
+     */
+    @Test(expected=IllegalArgumentException.class)
+    public void testValueParamAsCollection() {
+        try {
+            List<URI> coll = new ArrayList<URI>(); 
+            client.findByAttribute(Submission.class, "repositories", coll);
+        } catch (Exception ex) {
+            assertTrue(ex.getMessage().contains("cannot be a Collection"));
             assertTrue(ex instanceof RuntimeException);
             throw ex;
         }

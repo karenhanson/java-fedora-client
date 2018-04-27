@@ -17,12 +17,14 @@ package org.dataconservancy.pass.client.integration;
 
 import java.net.URI;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
 
 import org.dataconservancy.pass.model.File;
 import org.dataconservancy.pass.model.Grant;
+import org.dataconservancy.pass.model.Submission;
 import org.dataconservancy.pass.model.User;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +33,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * Tests for ElasticsearchPassClient.findAllByAttribute
+ * Tests for PassClient.findAllByAttribute
  * @author Karen Hanson
  */
 public class FindAllByAttributeIT extends ClientITBase {
@@ -132,7 +134,7 @@ public class FindAllByAttributeIT extends ClientITBase {
                 client.deleteResource(match);
             }
         }
-    }
+    }    
     
     /**
      * Ensures no match found returns empty Set instead of exception
@@ -154,6 +156,23 @@ public class FindAllByAttributeIT extends ClientITBase {
         } finally {
             client.deleteResource(grantId);
         }
+    }
+
+    
+    /**
+     * Check findAllByAttribute rejects a value that is a collection
+     */
+    @Test(expected=IllegalArgumentException.class)
+    public void testValueParamAsCollection() {
+        try {
+            Set<URI> coll = new HashSet<URI>(); 
+            client.findByAttribute(Submission.class, "repositories", coll);
+        } catch (Exception ex) {
+            assertTrue(ex.getMessage().contains("cannot be a Collection"));
+            assertTrue(ex instanceof RuntimeException);
+            throw ex;
+        }
+        fail ("Test should have thrown exception");
     }
     
 }

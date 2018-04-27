@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -84,10 +85,8 @@ public class ElasticsearchPassClient {
      * @see org.dataconservancy.pass.client.PassClient#findByAttribute(Class, String, Object, int, int)
      */
     public <T extends PassEntity> URI findByAttribute(Class<T> modelClass, String attribute, Object value) {
-        if (modelClass==null) {throw new IllegalArgumentException("modelClass cannot be null");}
-        if (modelClass==PassEntity.class) {throw new IllegalArgumentException("modelClass cannot be the abstract class 'PassEntity.class'");}
-        if (attribute==null || attribute.length()==0) {throw new IllegalArgumentException("attribute cannot be null or empty");}
-        if (value==null) {throw new IllegalArgumentException("Value cannot be null or empty");}
+        validateModelParam(modelClass);
+        validateAttribValParams(attribute, value);
                 
         String indexType = null;
         
@@ -122,12 +121,9 @@ public class ElasticsearchPassClient {
      * @see org.dataconservancy.pass.client.PassClient#findAllByAttribute(Class, String, Object, int, int)
      */
     public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value, int limit, int offset) {
-        if (modelClass==null) {throw new IllegalArgumentException("modelClass cannot be null");}
-        if (modelClass==PassEntity.class) {throw new IllegalArgumentException("modelClass cannot be the abstract class 'PassEntity.class'");}
-        if (attribute==null || attribute.length()==0) {throw new IllegalArgumentException("attribute cannot be null or empty");}
-        if (value==null) {throw new IllegalArgumentException("value cannot be null or empty");}
-        if (offset < 0) {throw new IllegalArgumentException("The offset value cannot be less than 0");}
-        if (limit < 0) {throw new IllegalArgumentException("The limit value cannot be less than 0");}
+        validateModelParam(modelClass);
+        validateAttribValParams(attribute, value);
+        validLimitOffsetParams(limit, offset);
                 
         String indexType = null;
         
@@ -155,12 +151,10 @@ public class ElasticsearchPassClient {
      * @see org.dataconservancy.pass.client.PassClient#findAllByAttributes(Class, Map<String, Object>, int, int)
      */
     public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> valueAttributesMap, int limit, int offset) {
-        if (modelClass==null) {throw new IllegalArgumentException("modelClass cannot be null");}
-        if (modelClass==PassEntity.class) {throw new IllegalArgumentException("modelClass cannot be the abstract class 'PassEntity.class'");}
-        if (valueAttributesMap==null || valueAttributesMap.size()==0) {throw new IllegalArgumentException("valueAttributesMap cannot be empty");}
-        if (offset < 0) {throw new IllegalArgumentException("The offset value cannot be less than 0");}
-        if (limit < 0) {throw new IllegalArgumentException("The limit value cannot be less than 0");}
-
+        validateModelParam(modelClass);
+        validateAttribMapParam(valueAttributesMap);
+        validLimitOffsetParams(limit, offset);
+        
         LOG.debug("Searching for {} using multiple filters", modelClass.getSimpleName());
         
         String indexType = null;
@@ -222,4 +216,28 @@ public class ElasticsearchPassClient {
         return passEntityUris;
         
     }
+    
+    private <T extends PassEntity> void validateAttribMapParam(Map<String,Object> valueAttributesMap) {
+        if (valueAttributesMap==null || valueAttributesMap.size()==0) {throw new IllegalArgumentException("valueAttributesMap cannot be empty");}
+        for (Entry<String,Object> entry : valueAttributesMap.entrySet()) {
+            validateAttribValParams(entry.getKey(), entry.getValue());
+        }
+    }
+    
+    private <T extends PassEntity> void validateModelParam(Class<T> modelClass) {
+        if (modelClass==null) {throw new IllegalArgumentException("modelClass cannot be null");}
+        if (modelClass==PassEntity.class) {throw new IllegalArgumentException("modelClass cannot be the abstract class 'PassEntity.class'");}
+    }
+    
+    private void validLimitOffsetParams(int limit, int offset) {
+        if (offset < 0) {throw new IllegalArgumentException("The offset value cannot be less than 0");}       
+        if (limit < 0) {throw new IllegalArgumentException("The limit value cannot be less than 0");}        
+    }
+    
+    private void validateAttribValParams(String attribute, Object value) {
+        if (attribute==null || attribute.length()==0) {throw new IllegalArgumentException("attribute cannot be null or empty");}
+        if (value instanceof Collection<?>) {throw new IllegalArgumentException("Value for attribute " + attribute + " cannot be a Collection");}
+        if (value==null) {throw new IllegalArgumentException("Value cannot be null or empty");}  
+    }
+    
 }

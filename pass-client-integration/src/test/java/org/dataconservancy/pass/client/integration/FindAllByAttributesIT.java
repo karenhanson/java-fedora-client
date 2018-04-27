@@ -17,7 +17,9 @@ package org.dataconservancy.pass.client.integration;
 
 import java.net.URI;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,6 +30,8 @@ import org.dataconservancy.pass.model.Deposit.DepositStatus;
 import org.dataconservancy.pass.model.Grant;
 import org.dataconservancy.pass.model.Grant.AwardStatus;
 import org.dataconservancy.pass.model.PassEntity;
+import org.dataconservancy.pass.model.Submission;
+import org.dataconservancy.pass.model.Submission.AggregatedDepositStatus;
 import org.dataconservancy.pass.model.User;
 
 import static org.junit.Assert.assertEquals;
@@ -238,6 +242,26 @@ public class FindAllByAttributesIT extends ClientITBase {
         }
         fail ("Test should have thrown exception");
     }
+
+    /**
+     * Check findAllByAttributes rejects a value that is a collection
+     */
+    @Test(expected=IllegalArgumentException.class)
+    public void testValueParamAsCollection() {
+        try {
+            Map<String,Object> map = new HashMap<String,Object>();
+            List<URI> coll = new ArrayList<URI>(); 
+            map.put("repositories", coll);
+            map.put("AggregatedDepositStatus", AggregatedDepositStatus.ACCEPTED);
+            client.findAllByAttributes(Submission.class, map);
+        } catch (Exception ex) {
+            assertTrue(ex.getMessage().contains("cannot be a Collection"));
+            assertTrue(ex instanceof RuntimeException);
+            throw ex;
+        }
+        fail ("Test should have thrown exception");
+    }
+    
     
     
 }
