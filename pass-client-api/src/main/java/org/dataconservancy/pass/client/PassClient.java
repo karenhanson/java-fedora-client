@@ -28,17 +28,6 @@ import org.dataconservancy.pass.model.PassEntity;
  * @author Karen Hanson
  */
 
-/* 
- *  TODO: lets see if this satisfies our use cases, if not we can add others as needed.
- *  For now we will assume that you can filter by IDs using these findByAttribute methods.
- *  For example, you can use findAllByAttribute to retrieve all Deposits with a specific Repository.id.
- *  We will need to revisit how one-to-many joins work here, for example, should you be able to say:
- *    
- *       Set<URI> entityUris = findByAttribute(Submission.class, "grants", grantUri);
- *       
- *  Assuming "yes" for now
- */
-
 public interface PassClient {
 
     /**

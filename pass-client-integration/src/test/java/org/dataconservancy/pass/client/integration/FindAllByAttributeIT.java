@@ -35,7 +35,7 @@ import static org.junit.Assert.fail;
  * @author Karen Hanson
  */
 public class FindAllByAttributeIT extends ClientITBase {
-    
+        
     /**
      * Ensures that index search can handle special characters including umlauts, double quotes, 
      * dashes, and ampersands
