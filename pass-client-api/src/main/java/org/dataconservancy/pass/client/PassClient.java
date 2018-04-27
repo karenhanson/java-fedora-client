@@ -91,7 +91,7 @@ public interface PassClient {
      *    URI repositoryId = new URI("https://example.com/fedora/repositories/3");
      *    Set<URI> entityUris = findByAttribute(Deposit.class, "repository", repositoryId);
      *    
-     * By default this will return a maximum of 3000 matching records, unless the pass.elasticsearch.limit
+     * By default this will return a maximum of 200 matching records, unless the pass.elasticsearch.limit
      * environment variable is set. If there are no matches, it will return an empty list.
      * 
      * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
@@ -142,7 +142,7 @@ public interface PassClient {
      *    map.put("doi", doi);
      *    Set<URI> entityUris = findByAttribute(Submission.class, map);
      *    
-     * By default this will return a maximum of 3000 matching records, unless the pass.elasticsearch.limit
+     * By default this will return a maximum of 200 matching records, unless the pass.elasticsearch.limit
      * environment variable is set. If there are no matches, it will return an empty list.      
      * 
      * The Map "value" parameter will be converted to a String for the purpose of searching the index. The map's value cannot 

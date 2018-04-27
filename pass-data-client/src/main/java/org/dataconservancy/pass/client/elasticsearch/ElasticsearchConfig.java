@@ -37,7 +37,7 @@ public class ElasticsearchConfig {
     private static final String DEFAULT_INDEXER_URL = "http://localhost:9200/pass";
     
     private static final String INDEXER_LIMIT_KEY = "pass.elasticsearch.limit";
-    private static final Integer DEFAULT_INDEXER_LIMIT = 3000;
+    private static final Integer DEFAULT_INDEXER_LIMIT = 200;
 
     
     /**
