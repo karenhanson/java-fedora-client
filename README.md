@@ -33,9 +33,9 @@ client.updateResource(grant);
 
 The findBy functions allow you to look up records by a specific field, for example, searching for Grant by `localAwardId` might look like this:
 ```
-String localAwardId = "AB123456";
+String awardNumber = "AB123456";
 PassClient client = PassClientFactory.getPassClient();
-URI grantUri = client.findByAttribute(Grant.class, "localAwardId", localAwardId);
+URI grantUri = client.findByAttribute(Grant.class, "awardNumber", awardNumber);
 ```
 The Java docs provide more information about this functionality.
 
