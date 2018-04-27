@@ -120,9 +120,6 @@ public class Grant extends PassEntity {
         private AwardStatus(String value){
             this.value = value;
         }
-        public String getValue() {
-            return this.value;
-        }
         
         public static AwardStatus of(String status) {
             AwardStatus result = map.get(status);
@@ -132,7 +129,10 @@ public class Grant extends PassEntity {
             return result;
         }
         
-        
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
 
     

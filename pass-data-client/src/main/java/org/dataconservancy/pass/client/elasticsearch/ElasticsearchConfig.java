@@ -29,16 +29,19 @@ import org.slf4j.LoggerFactory;
  * Holds information and methods required to configure Fedora.
  * @author Karen Hanson
  */
-public class IndexerConfig {
+public class ElasticsearchConfig {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IndexerConfig.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ElasticsearchConfig.class);
     
     private static final String INDEXER_URL_KEY = "pass.elasticsearch.url";
-    private static final String DEFAULT_INDEXER_URL = "http://localhost:9200";
+    private static final String DEFAULT_INDEXER_URL = "http://localhost:9200/pass";
+    
+    private static final String INDEXER_LIMIT_KEY = "pass.elasticsearch.limit";
+    private static final Integer DEFAULT_INDEXER_LIMIT = 3000;
 
     
     /**
-     * 
+     * Get indexer URL(s), defaults to DEFAULT_INDEXER_URL if one not set
      * @return
      */
     public static Set<URL> getIndexerHostUrl() {
@@ -56,6 +59,30 @@ public class IndexerConfig {
             throw new RuntimeException("Indexer host path contains invalid URL:" + sUrls);
         }
         return urls;
+    }
+
+    
+    /**
+     * Get indexer limit setting, defaults to DEFAULT_INDEXER_LIMIT if environment variable not set
+     * @return
+     */
+    public static Integer getIndexerLimit() {      
+        Integer limit = DEFAULT_INDEXER_LIMIT;
+        
+        try {
+            String sLimit = ConfigUtil.getSystemProperty(INDEXER_LIMIT_KEY, DEFAULT_INDEXER_LIMIT.toString());
+            limit = Integer.parseInt(sLimit);
+            if (limit < 0 ) {
+                limit = DEFAULT_INDEXER_LIMIT;
+                LOG.warn("Index record limit environment variable was a negative integer, using default limit of " + limit);                
+            }
+        } catch (Exception e) {
+            limit = DEFAULT_INDEXER_LIMIT;
+            LOG.warn("Limit environment variable could not be converted to an Integer, using default limit of " + limit, e);
+        }
+        
+        LOG.debug("Using indexer limit of: {}", limit);
+        return limit;
     }
 
     

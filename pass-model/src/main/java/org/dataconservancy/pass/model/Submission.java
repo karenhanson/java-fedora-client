@@ -120,11 +120,9 @@ public class Submission extends PassEntity {
         }
         
         private String value;
+        
         private AggregatedDepositStatus(String value){
             this.value = value;
-        }
-        public String getValue() {
-            return this.value;
         }
         
         public static AggregatedDepositStatus of(String status) {
@@ -134,6 +132,11 @@ public class Submission extends PassEntity {
             }
             return result;
           }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
         
     }
 
@@ -142,9 +145,20 @@ public class Submission extends PassEntity {
      * Source of the Submission, from a PASS user or imported from another source*/
     public enum Source {
         @JsonProperty("pass")
-        PASS,
+        PASS("pass"),
         @JsonProperty("other")
-        OTHER
+        OTHER("other");
+        
+        private String value;
+        
+        private Source(String value){
+            this.value = value;
+        }
+        
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
 
     

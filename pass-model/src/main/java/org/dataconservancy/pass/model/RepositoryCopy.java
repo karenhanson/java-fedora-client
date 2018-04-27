@@ -88,11 +88,9 @@ public class RepositoryCopy extends PassEntity {
         }
         
         private String value;
+        
         private CopyStatus(String value){
             this.value = value;
-        }
-        public String getValue() {
-            return this.value;
         }
         
         public static CopyStatus of(String status) {
@@ -101,7 +99,13 @@ public class RepositoryCopy extends PassEntity {
               throw new IllegalArgumentException("Invalid Copy Status: " + status);
             }
             return result;
-        }        
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+        
     }
 
     

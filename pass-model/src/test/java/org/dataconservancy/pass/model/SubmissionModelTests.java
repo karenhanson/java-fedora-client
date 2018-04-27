@@ -59,7 +59,7 @@ public class SubmissionModelTests {
         assertEquals("Submission", submission.getType());
         assertEquals(TestValues.SUBMISSION_METADATA, submission.getMetadata());
         assertEquals(TestValues.SUBMISSION_SUBMITTED, submission.getSubmitted());
-        assertEquals(TestValues.SUBMISSION_STATUS, submission.getAggregatedDepositStatus().getValue());
+        assertEquals(TestValues.SUBMISSION_STATUS, submission.getAggregatedDepositStatus().toString());
         assertEquals(TestValues.PUBLICATION_ID_1, submission.getPublication().toString());
         assertEquals(TestValues.USER_ID_1, submission.getUser().toString());
         assertEquals(TestValues.REPOSITORY_ID_1, submission.getRepositories().get(0).toString());

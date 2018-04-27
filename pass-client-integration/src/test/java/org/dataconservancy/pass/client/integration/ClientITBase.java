@@ -44,15 +44,18 @@ import com.openpojo.reflection.PojoClass;
  * Base class for client ITs.
  *
  * @author apb@jhu.edu
+ * @author Karen Hanson
  */
 public abstract class ClientITBase {
 
+    protected static final int RETRIES = 10;
+    
     static {
         if (System.getProperty("pass.fedora.baseurl") == null) {
             System.setProperty("pass.fedora.baseurl", "http://localhost:8080/fcrepo/rest/");
         }
         if (System.getProperty("pass.elasticsearch.url") == null) {
-            System.setProperty("pass.elasticsearch.url", "http://localhost:9200");
+            System.setProperty("pass.elasticsearch.url", "http://localhost:9200/pass/");
         }
     }
 
@@ -198,7 +201,7 @@ public abstract class ClientITBase {
             } catch (final Throwable e) {
                 caught = e;
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                     System.out.println(".");
                 } catch (final InterruptedException i) {
                     Thread.currentThread().interrupt();

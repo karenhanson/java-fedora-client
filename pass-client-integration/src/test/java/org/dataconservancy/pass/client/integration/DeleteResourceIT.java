@@ -39,7 +39,7 @@ import org.junit.Test;
  *
  * @author apb@jhu.edu
  */
-public class DeleteIT extends ClientITBase {
+public class DeleteResourceIT extends ClientITBase {
 
     CloseableHttpClient http = getHttpClient();
 

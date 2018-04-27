@@ -15,14 +15,12 @@
  */
 package org.dataconservancy.pass.client;
 
-import java.io.IOException;
 import java.net.URI;
 
 import java.util.Map;
 import java.util.Set;
 
-import org.dataconservancy.pass.client.PassClient;
-import org.dataconservancy.pass.client.elasticsearch.IndexerPassClient;
+import org.dataconservancy.pass.client.elasticsearch.ElasticsearchPassClient;
 import org.dataconservancy.pass.client.fedora.FedoraPassCrudClient;
 import org.dataconservancy.pass.model.PassEntity;
 
@@ -41,11 +39,11 @@ public class PassClientDefault implements PassClient {
     /** 
      * Client that interacts with Index repo to do lookups and searches 
      */
-    private IndexerPassClient indexClient;
+    private ElasticsearchPassClient indexClient;
         
     public PassClientDefault() {
         crudClient = new FedoraPassCrudClient();
-        indexClient = new IndexerPassClient();
+        indexClient = new ElasticsearchPassClient();
     }
     
     /**
@@ -96,7 +94,14 @@ public class PassClientDefault implements PassClient {
         return indexClient.findAllByAttribute(modelClass, attribute, value);
     }
 
-    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value, int limit, int offset) {
+        return indexClient.findAllByAttribute(modelClass, attribute, value, limit, offset);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -104,9 +109,13 @@ public class PassClientDefault implements PassClient {
     public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> valueAttributesMap) {
         return indexClient.findAllByAttributes(modelClass, valueAttributesMap);
     }
-    
-    public void close() throws IOException {
-        indexClient.close();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> valueAttributesMap, int limit, int offset) {
+        return indexClient.findAllByAttributes(modelClass, valueAttributesMap, limit, offset);
     }
 
 }

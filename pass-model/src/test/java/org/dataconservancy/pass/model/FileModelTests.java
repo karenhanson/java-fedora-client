@@ -52,7 +52,7 @@ public class FileModelTests {
         assertEquals(TestValues.FILE_NAME, file.getName());
         assertEquals(TestValues.FILE_URI, file.getUri().toString());
         assertEquals(TestValues.FILE_DESCRIPTION, file.getDescription());
-        assertEquals(TestValues.FILE_ROLE, file.getFileRole().getValue());
+        assertEquals(TestValues.FILE_ROLE, file.getFileRole().toString());
         assertEquals(TestValues.FILE_MIMETYPE, file.getMimeType());
         assertEquals(TestValues.SUBMISSION_ID_1, file.getSubmission().toString());
     }

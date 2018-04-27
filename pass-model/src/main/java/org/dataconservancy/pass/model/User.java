@@ -113,10 +113,6 @@ public class User extends PassEntity {
             this.value = value;
         }
         
-        public String getValue() {
-            return this.value;
-        }
-        
         public static Role of(String role) {
             Role result = map.get(role);
             if (result == null) {
@@ -124,6 +120,11 @@ public class User extends PassEntity {
             }
             return result;
           }
+        
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
 
     

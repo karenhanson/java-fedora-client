@@ -73,7 +73,7 @@ public class File extends PassEntity {
         @JsonProperty("manuscript")
         MANUSCRIPT("manuscript"),
         
-        @JsonProperty("first-author")
+        @JsonProperty("supplemental")
         SUPPLEMENTAL("supplemental");
 
         private static final Map<String, FileRole> map = new HashMap<>(values().length, 1);  
@@ -87,17 +87,18 @@ public class File extends PassEntity {
             this.value = value;
         }
         
-        public String getValue() {
-            return this.value;
-        }
-        
         public static FileRole of(String role) {
             FileRole result = map.get(role);
             if (result == null) {
               throw new IllegalArgumentException("Invalid File Role: " + role);
             }
             return result;
-          }
+        }
+        
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
     
     

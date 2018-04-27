@@ -34,7 +34,7 @@ import org.unitils.reflectionassert.ReflectionComparatorMode;
  *
  * @author apb@jhu.edu
  */
-public class UpdateIT extends ClientITBase {
+public class UpdateResourceIT extends ClientITBase {
 
     /* Create a random resource, and replace all its content */
     @Test

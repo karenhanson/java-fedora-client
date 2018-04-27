@@ -118,17 +118,18 @@ public class Contributor extends PassEntity {
             this.value = value;
         }
         
-        public String getValue() {
-            return this.value;
-        }
-        
         public static Role of(String role) {
             Role result = map.get(role);
             if (result == null) {
               throw new IllegalArgumentException("Invalid Role: " + role);
             }
             return result;
-          }
+        }
+        
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
     
     

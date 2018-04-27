@@ -53,8 +53,8 @@ public class UserModelTest {
         assertEquals(TestValues.USER_ID_1, user.getId().toString());
         assertEquals("User", user.getType());
         assertEquals(TestValues.USER_NAME, user.getUsername());
-        assertEquals(TestValues.USER_ROLE_1, user.getRoles().get(0).getValue());
-        assertEquals(TestValues.USER_ROLE_2, user.getRoles().get(1).getValue());
+        assertEquals(TestValues.USER_ROLE_1, user.getRoles().get(0).toString());
+        assertEquals(TestValues.USER_ROLE_2, user.getRoles().get(1).toString());
         assertEquals(TestValues.USER_FIRST_NAME, user.getFirstName());
         assertEquals(TestValues.USER_MIDDLE_NAME, user.getMiddleName());
         assertEquals(TestValues.USER_LAST_NAME, user.getLastName());
