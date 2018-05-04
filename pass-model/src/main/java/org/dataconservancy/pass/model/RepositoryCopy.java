@@ -77,10 +77,15 @@ public class RepositoryCopy extends PassEntity {
         @JsonProperty("in-progress")
         IN_PROGRESS("in-progress"),
         /**
+        * The target [Repository](Repository.md) has detected a problem that has caused the progress to stall.
+        */
+        @JsonProperty("stalled")
+        STALLED("stalled"),
+        /**
         * The target Repository has rejected the Deposit
         */
-       @JsonProperty("complete")
-       COMPLETE("complete");
+        @JsonProperty("complete")
+        COMPLETE("complete");
 
         private static final Map<String, CopyStatus> map = new HashMap<>(values().length, 1);  
         static {
