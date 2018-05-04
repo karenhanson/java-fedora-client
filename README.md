@@ -44,7 +44,7 @@ The Java docs provide more information about this functionality.
 * pass.fedora.user (default=admin)
 * pass.fedora.password (default=moo)
 * pass.elasticsearch.url (defaults = http://localhost:9200/pass)
-* pass.elasticsearch.limit (defaults = 3000) you can also override the default by using the findBy functions that accept a limit and offset value
+* pass.elasticsearch.limit (defaults = 200) you can also override the default by using the findBy functions that accept a limit and offset value
 
 ## Integration tests with Fedora and Elasticsearch
 
