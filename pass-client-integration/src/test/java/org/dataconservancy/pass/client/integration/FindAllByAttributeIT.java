@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.dataconservancy.pass.model.Deposit;
 import org.junit.Test;
 
 import org.dataconservancy.pass.model.File;
@@ -158,7 +159,28 @@ public class FindAllByAttributeIT extends ClientITBase {
         }
     }
 
-    
+    @Test
+    public void testFindDepositWithNoStatus() throws Exception {
+        Deposit deposit = random(Deposit.class, 1);
+        deposit.setDepositStatus(null);
+        URI expectedUri = client.createResource(deposit);
+
+        try {
+            attempt(20, () -> {
+                assertEquals(expectedUri.getPath(),
+                        client.findByAttribute(Deposit.class, "@id", expectedUri).getPath());
+            });
+
+            assertEquals(expectedUri.getPath(),
+                    client.findByAttribute(Deposit.class, "depositStatus", null).getPath());
+            Set<URI> deposits = client.findAllByAttribute(Deposit.class, "depositStatus", null);
+            assertEquals(1, deposits.size());
+            assertEquals(expectedUri.getPath(), deposits.iterator().next().getPath());
+        } finally {
+            client.deleteResource(expectedUri);
+        }
+    }
+
     /**
      * Check findAllByAttribute rejects a value that is a collection
      */

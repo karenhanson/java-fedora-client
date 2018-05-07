@@ -60,7 +60,15 @@ public class ElasticsearchPassClient {
      * Template for a query string e.g. (@type:Submission AND fldname:"something")
      * where the second %s could be one or more QS_ATTRIB_TEMPLATES
      */
-    private static final String QS_TEMPLATE = "(@type:%s %s)"; 
+    private static final String QS_TEMPLATE = "(@type:%s %s)";
+
+    private static final String EXISTS_TEMPLATE = "_exists_:%s";
+
+    private static final String NOT_EXISTS_TEMPLATE = "-" + EXISTS_TEMPLATE;
+
+    private static final String QS_ATTRIB_EXISTS_TEMPLATE = "AND " + EXISTS_TEMPLATE;
+
+    private static final String QS_ATTRIB_NOT_EXISTS_TEMPLATE = "AND " + NOT_EXISTS_TEMPLATE;
     
     private static final String ID_FIELDNAME = "@id";
 
@@ -86,15 +94,20 @@ public class ElasticsearchPassClient {
      */
     public <T extends PassEntity> URI findByAttribute(Class<T> modelClass, String attribute, Object value) {
         validateModelParam(modelClass);
-        validateAttribValParams(attribute, value);
+        validateAttribValParams(attribute, value, true);
                 
         String indexType = null;
         
         if (PassEntityType.getTypeByName(modelClass.getSimpleName())!=null) {
             indexType = PassEntityType.getTypeByName(modelClass.getSimpleName()).getName();
         }
-        
-        String attribs = String.format(QS_ATTRIB_TEMPLATE, attribute, value.toString());
+
+        String attribs = null;
+        if (value != null) {
+            attribs = String.format(QS_ATTRIB_TEMPLATE, attribute, value.toString());
+        } else {
+            attribs = String.format(QS_ATTRIB_NOT_EXISTS_TEMPLATE, attribute);
+        }
         String querystring = String.format(QS_TEMPLATE, indexType, attribs);
              
         Set<URI> passEntityUris = getIndexerResults(querystring, 2, 0); //get 2 so we can check only one result matched
@@ -122,7 +135,7 @@ public class ElasticsearchPassClient {
      */
     public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value, int limit, int offset) {
         validateModelParam(modelClass);
-        validateAttribValParams(attribute, value);
+        validateAttribValParams(attribute, value, true);
         validLimitOffsetParams(limit, offset);
                 
         String indexType = null;
@@ -130,8 +143,13 @@ public class ElasticsearchPassClient {
         if (PassEntityType.getTypeByName(modelClass.getSimpleName())!=null) {
             indexType = PassEntityType.getTypeByName(modelClass.getSimpleName()).getName();
         }
-        
-        String attribs = String.format(QS_ATTRIB_TEMPLATE, attribute, value.toString());
+
+        String attribs = null;
+        if (value != null) {
+            attribs = String.format(QS_ATTRIB_TEMPLATE, attribute, value.toString());
+        } else {
+            attribs = String.format(NOT_EXISTS_TEMPLATE, attribute);
+        }
         String querystring = String.format(QS_TEMPLATE, indexType, attribs);                
         Set<URI> passEntityUris = getIndexerResults(querystring, limit, offset);
         
@@ -165,7 +183,11 @@ public class ElasticsearchPassClient {
         
         StringBuilder attribs = new StringBuilder("");
         for(Entry<String,Object> attr : valueAttributesMap.entrySet()) {
-            attribs.append(String.format(QS_ATTRIB_TEMPLATE, attr.getKey(), attr.getValue().toString()));
+            if (attr.getValue() != null) {
+                attribs.append(String.format(QS_ATTRIB_TEMPLATE, attr.getKey(), attr.getValue().toString()));
+            } else {
+                attribs.append(String.format(QS_ATTRIB_NOT_EXISTS_TEMPLATE, attr.getKey()));
+            }
         }
         String querystring = String.format(QS_TEMPLATE, indexType, attribs);
                 
@@ -220,7 +242,7 @@ public class ElasticsearchPassClient {
     private <T extends PassEntity> void validateAttribMapParam(Map<String,Object> valueAttributesMap) {
         if (valueAttributesMap==null || valueAttributesMap.size()==0) {throw new IllegalArgumentException("valueAttributesMap cannot be empty");}
         for (Entry<String,Object> entry : valueAttributesMap.entrySet()) {
-            validateAttribValParams(entry.getKey(), entry.getValue());
+            validateAttribValParams(entry.getKey(), entry.getValue(), true);
         }
     }
     
@@ -234,10 +256,10 @@ public class ElasticsearchPassClient {
         if (limit < 0) {throw new IllegalArgumentException("The limit value cannot be less than 0");}        
     }
     
-    private void validateAttribValParams(String attribute, Object value) {
+    private void validateAttribValParams(String attribute, Object value, boolean allowNullValues) {
         if (attribute==null || attribute.length()==0) {throw new IllegalArgumentException("attribute cannot be null or empty");}
         if (value instanceof Collection<?>) {throw new IllegalArgumentException("Value for attribute " + attribute + " cannot be a Collection");}
-        if (value==null) {throw new IllegalArgumentException("Value cannot be null or empty");}  
+        if (value==null && !allowNullValues) {throw new IllegalArgumentException("Value cannot be null or empty");}
     }
     
 }

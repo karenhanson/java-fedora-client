@@ -106,6 +106,71 @@ public class FindAllByAttributesIT extends ClientITBase {
         }
         
     }
+
+    @Test
+    public void testFindSubmissionWithNoSource() throws Exception {
+        URI user = URI.create("http://example.com/user");
+        Submission submission1 = random(Submission.class, 1);
+        submission1.setSource(null);
+        submission1.setMetadata("foo");
+        submission1.setUser(user);
+        URI expectedUri1 = client.createResource(submission1);
+
+        Submission submission2 = random(Submission.class, 1);
+        submission2.setSource(null);
+        submission2.setMetadata("foo");
+        submission2.setUser(user);
+        URI expectedUri2 = client.createResource(submission2);
+
+        Submission submission3 = random(Submission.class, 1);
+        submission2.setSource(Submission.Source.OTHER);
+        submission2.setMetadata("foo");
+        submission2.setUser(user);
+        URI expectedUri3 = client.createResource(submission3);
+
+        Deposit deposit1 = random(Deposit.class, 1);
+        URI expectedUri4 = client.createResource(deposit1);
+
+        try {
+            attempt(30, () -> {
+                assertEquals(expectedUri1.getPath(),
+                        client.findByAttribute(Submission.class, "@id", expectedUri1).getPath());
+                assertEquals(expectedUri2.getPath(),
+                        client.findByAttribute(Submission.class, "@id", expectedUri2).getPath());
+                assertEquals(expectedUri3.getPath(),
+                        client.findByAttribute(Submission.class, "@id", expectedUri3).getPath());
+                assertEquals(expectedUri4.getPath(),
+                        client.findByAttribute(Deposit.class, "@id", expectedUri4).getPath());
+            });
+
+            Set<URI> uris = client.findAllByAttributes(Submission.class, new HashMap<String, Object>() {{
+                put("metadata", "foo");
+                put("source", null);
+                put("user", user);
+            }});
+
+            // Only the two Submissions with null sources should be found.  The other Submission has a non-null source,
+            // and the other resource is a Deposit.
+            assertEquals(2, uris.size());
+            assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri1.getPath())));
+            assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri2.getPath())));
+
+            uris = client.findAllByAttributes(Submission.class, new HashMap<String, Object>() {{
+                put("source", null);
+            }});
+
+            // Only two Submissions with null sources should be found. The other Submission has a non-null source, and
+            // the other resource is a Deposit.
+            assertEquals(2, uris.size());
+            assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri1.getPath())));
+            assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri2.getPath())));
+        } finally {
+            client.deleteResource(expectedUri1);
+            client.deleteResource(expectedUri2);
+            client.deleteResource(expectedUri3);
+            client.deleteResource(expectedUri4);
+        }
+    }
     
     /**
      * Adds 10 records, then retrieves them in chunks using limit and offet to verify they are working
