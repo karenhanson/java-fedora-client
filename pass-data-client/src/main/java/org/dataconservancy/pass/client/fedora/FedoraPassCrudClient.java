@@ -47,6 +47,7 @@ public class FedoraPassCrudClient {
     private static final Logger LOG = LoggerFactory.getLogger(FedoraPassCrudClient.class);
 
     private final static String JSONLD_CONTENTTYPE = "application/ld+json; charset=utf-8";
+    private final static String JSONLD_PATCH_CONTENTTYPE = "application/merge-patch+json; charset=utf-8";
     private final static String SERVER_MANAGED_OMITTYPE = "http://fedora.info/definitions/v4/repository#ServerManaged";
     private final static String COMPACTED_ACCEPTTYPE = "application/ld+json";
     
@@ -114,22 +115,18 @@ public class FedoraPassCrudClient {
     /**
      * @see org.dataconservancy.pass.client.PassClient#updateResource(PassEntity)
      */
-    public URI updateResource(PassEntity modelObj) {
-        URI updatedId = null;
-        
+    public void updateResource(PassEntity modelObj) {
         byte[] json = adapter.toJson(modelObj, true);
         InputStream jsonIS = new ByteArrayInputStream(json);
         
-        try (FcrepoResponse response = client.put(modelObj.getId())
-                .body(jsonIS, JSONLD_CONTENTTYPE)
-                .preferLenient()
-                .perform()) {
-            updatedId = response.getLocation();
-            LOG.info("Container update status and location: {}, {}", response.getStatusCode(), updatedId);
+        PatchBuilderExtension patchbuilder = new PatchBuilderExtension(modelObj.getId(), client);
+        try (FcrepoResponse response = patchbuilder
+                            .body(jsonIS, JSONLD_PATCH_CONTENTTYPE)
+                            .perform()) {
+            LOG.info("Container update status and location: {}, {}", response.getStatusCode(), modelObj.getId());
         } catch (IOException | FcrepoOperationFailedException e) {
             throw new RuntimeException("A problem occurred while attempting to update a Resource", e);
         }
-        return updatedId;
     }
 
     /**

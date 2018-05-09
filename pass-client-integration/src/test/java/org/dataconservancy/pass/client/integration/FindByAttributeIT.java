@@ -50,7 +50,7 @@ public class FindByAttributeIT extends ClientITBase {
     public void testMixedCaseAwardNumber() throws Exception {
 
         Grant grant = random(Grant.class, 1);
-        URI grantId = client.createResource(grant);
+        final URI grantId = client.createResource(grant);
 
         try {
             attempt(RETRIES, () -> { // check the record exists before continuing
@@ -122,7 +122,7 @@ public class FindByAttributeIT extends ClientITBase {
     @Test
     public void testNoMatchFound() {
         Grant grant = random(Grant.class, 1);
-        URI grantId = client.createResource(grant); //create something so it's not empty
+        final URI grantId = client.createResource(grant); //create something so it's not empty
         try {
             attempt(RETRIES, () -> {
                 final URI uri = client.findByAttribute(Grant.class, "@id", grantId);
@@ -144,7 +144,7 @@ public class FindByAttributeIT extends ClientITBase {
     @Test
     public void testMultiRowArraySearch() {
         Submission submission = random(Submission.class, 2); //create random submission where each list has 2 rows
-        URI submissionId = client.createResource(submission);
+        final URI submissionId = client.createResource(submission);
         try {
             attempt(RETRIES, () -> {
                 final URI uri = client.findByAttribute(Submission.class, "@id", submissionId);

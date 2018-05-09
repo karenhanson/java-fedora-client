@@ -118,7 +118,7 @@ public class FindAllByAttributeIT extends ClientITBase {
             
             final URI searchUri = uri;
             
-            attempt(20, () -> { //make sure last one is in the index
+            attempt(RETRIES, () -> { //make sure last one is in the index
                 final URI matchedUri = client.findByAttribute(File.class, "@id", searchUri);
                 assertEquals(searchUri, matchedUri);
             }); 
@@ -166,7 +166,7 @@ public class FindAllByAttributeIT extends ClientITBase {
         URI expectedUri = client.createResource(deposit);
 
         try {
-            attempt(20, () -> {
+            attempt(RETRIES, () -> {
                 assertEquals(expectedUri.getPath(),
                         client.findByAttribute(Deposit.class, "@id", expectedUri).getPath());
             });
@@ -177,7 +177,10 @@ public class FindAllByAttributeIT extends ClientITBase {
             assertEquals(1, deposits.size());
             assertEquals(expectedUri.getPath(), deposits.iterator().next().getPath());
         } finally {
-            client.deleteResource(expectedUri);
+            Set <URI> matches = client.findAllByAttribute(Deposit.class, "depositStatus", null);
+            for (URI match : matches) {
+                client.deleteResource(match);
+            }
         }
     }
 

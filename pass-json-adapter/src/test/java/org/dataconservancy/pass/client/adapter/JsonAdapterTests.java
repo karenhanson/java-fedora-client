@@ -31,6 +31,7 @@ import org.dataconservancy.pass.model.TestValues;
 import org.json.JSONObject;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -90,6 +91,36 @@ public class JsonAdapterTests {
         assertEquals(root.getString("submission"),TestValues.SUBMISSION_ID_1); 
         assertEquals(root.getString("repository"),TestValues.REPOSITORY_ID_1); 
         assertEquals(root.getString("repositoryCopy"),TestValues.REPOSITORYCOPY_ID_1); 
+    }
+
+
+    /**
+     * Verify that we can convert a model object to JSON with JSONLD context
+     * and that null values are included in the JSON
+     * @throws Exception
+     */
+    @Test
+    public void testDepositToJsonWithContextIncludeNulls() throws Exception {
+        
+        Deposit deposit = createDeposit();
+        deposit.setDepositStatusRef(null);
+        deposit.setRepositoryCopy(null);
+        
+        PassJsonAdapter adapter = new PassJsonAdapterBasic();
+        String jsonDeposit = new String(adapter.toJson(deposit, true));
+        
+        JSONObject root = new JSONObject(jsonDeposit);
+
+        assertEquals(root.getString("@id"),TestValues.DEPOSIT_ID_1.toString());
+        assertEquals(root.getString("@type"),PassEntityType.DEPOSIT.getName());
+        assertEquals(root.getString("@context"),CONTEXT);
+        assertEquals(root.getString("depositStatus"),TestValues.DEPOSIT_STATUS);
+        assertTrue(root.has("depositStatusRef")); 
+        assertEquals(root.get("depositStatusRef"),null); 
+        assertEquals(root.getString("submission"),TestValues.SUBMISSION_ID_1); 
+        assertEquals(root.getString("repository"),TestValues.REPOSITORY_ID_1);
+        assertTrue(root.has("repositoryCopy"));  
+        assertEquals(root.get("repositoryCopy"),null); 
     }
 
     

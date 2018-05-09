@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * a unique ID, type, and context
  * @author Karen Hanson
  */
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.ALWAYS)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class PassEntity {
     
@@ -34,12 +34,14 @@ public abstract class PassEntity {
      * Unique URI for the resource. This corresponds to the URI of this resource in the 
      * repository. This URI can be used to retrieve the resource from the repository 
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("@id")
     protected URI id;
     
     /** 
      * Optional context field, when present this can be used to convert the JSON to JSON-LD
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("@context")
     protected String context = null;
     

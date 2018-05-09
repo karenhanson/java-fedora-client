@@ -17,6 +17,7 @@
 package org.dataconservancy.pass.client.integration;
 
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
+import java.net.URI;
 
 import org.dataconservancy.pass.model.PassEntity;
 import org.junit.Test;
@@ -66,11 +67,15 @@ public class CreateReadResourceRoundTripIT extends ClientITBase {
     }
 
     void roundTrip(PassEntity asDeposited) {
-
-        final PassEntity retrieved = client.readResource(client.createResource(asDeposited), asDeposited.getClass());
-
-        assertReflectionEquals(normalized(asDeposited), normalized(retrieved),
-                ReflectionComparatorMode.LENIENT_ORDER);
-
+        final URI entityUri = client.createResource(asDeposited);   
+        try {
+            final PassEntity retrieved = client.readResource(entityUri, asDeposited.getClass());
+            assertReflectionEquals(normalized(asDeposited), normalized(retrieved),
+                                   ReflectionComparatorMode.LENIENT_ORDER);
+        } finally {
+            if (entityUri!=null) {
+                client.deleteResource(entityUri);
+            }
+        }
     }
 }

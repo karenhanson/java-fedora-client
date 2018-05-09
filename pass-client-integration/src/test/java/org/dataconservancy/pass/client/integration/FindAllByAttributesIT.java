@@ -206,7 +206,7 @@ public class FindAllByAttributesIT extends ClientITBase {
             matches = client.findAllByAttributes(Deposit.class, attribs, 4, 8);
             assertEquals(2, matches.size());
         } finally {
-            Set <URI> matches = client.findAllByAttributes(Deposit.class, attribs);
+            Set <URI> matches = client.findAllByAttributes(Deposit.class, attribs, 20, 0);
             for (URI match : matches) {
                 client.deleteResource(match);
             }
