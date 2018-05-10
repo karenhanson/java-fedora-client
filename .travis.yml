@@ -21,4 +21,16 @@ before_install:
 
 install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
-script: if [ "$TRAVIS_PULL_REQUEST" == "false" ] ; then mvn -s ./settings.xml deploy -Dexternal -DtrimStackTrace=false; else mvn verify -DtrimStackTrace=false; fi
+script: if [ "$TRAVIS_PULL_REQUEST" == "false" ] ; then mvn -s ./settings.xml deploy 
+  -Dexternal -DtrimStackTrace=false; else mvn verify -DtrimStackTrace=false 
+  -Ddocker.keepRunning; fi
+
+after_failure:
+  - docker images
+  - docker ps -a
+  - docker logs indexer
+  - docker logs fcrepo
+  - cd pass-client-integration && mvn docker:stop
+
+after_success:
+  - cd pass-client-integration && mvn docker:stop
