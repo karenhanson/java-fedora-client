@@ -1,5 +1,6 @@
 {
 	"@id": "https://example.org/fedora/journals/1",
+	"@type": "Journal",
 	"name": "Test Journal",
 	"issns": ["1234-5678","5678-1234"],
 	"publisher": "https://example.org/fedora/publishers/1",

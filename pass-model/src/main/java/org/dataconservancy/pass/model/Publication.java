@@ -27,12 +27,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Publication extends PassEntity {
 
     /** 
-     * String type name, specifically used to set "@type" in JSON serialization
-     */
-    @JsonProperty("@type")
-    private String type = PassEntityType.PUBLICATION.getName();
-
-    /** 
      * Title of publication 
      */
     private String title;
@@ -67,11 +61,6 @@ public class Publication extends PassEntity {
      * Issue of journal that contains the publication (if article) 
      */
     private String issue;
-    
-    @Override
-    public String getType() {
-        return type;
-    }
         
     /**
      * @return the title
@@ -193,7 +182,6 @@ public class Publication extends PassEntity {
 
         Publication that = (Publication) o;
 
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (publicationAbstract != null ? !publicationAbstract.equals(that.publicationAbstract) : that.publicationAbstract != null) return false;
         if (doi != null ? !doi.equals(that.doi) : that.doi != null) return false;
@@ -208,7 +196,6 @@ public class Publication extends PassEntity {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (publicationAbstract != null ? publicationAbstract.hashCode() : 0);
         result = 31 * result + (doi != null ? doi.hashCode() : 0);

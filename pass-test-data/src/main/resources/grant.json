@@ -1,5 +1,6 @@
 {
 	"@id": "https://example.org/fedora/grants/1",
+	"@type": "Grant",
 	"awardNumber": "RH1234CDE",
 	"awardStatus": "active",
 	"localKey": "ABC123",

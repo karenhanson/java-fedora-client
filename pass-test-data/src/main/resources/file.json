@@ -1,5 +1,6 @@
 {
 	"@id": "https://example.org/fedora/files/1",
+	"@type": "File",
 	"name": "article.pdf",
 	"uri": "https://someplace.dl/a/b/c/article.pdf",
 	"description": "The file is an article",

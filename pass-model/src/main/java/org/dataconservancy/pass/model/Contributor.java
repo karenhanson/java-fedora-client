@@ -31,12 +31,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 
 public class Contributor extends PassEntity {
-
-    /** 
-     * String type name, specifically used to set "@type" in JSON serialization
-     */
-    @JsonProperty("@type")
-    private String type = PassEntityType.CONTRIBUTOR.getName();
     
     /** 
      * First name(s) of person 
@@ -131,14 +125,6 @@ public class Contributor extends PassEntity {
             return this.value;
         }
     }
-    
-    
-    
-    @Override
-    public String getType() {
-        return type;
-    }
-    
     
     /**
      * @return the firstName
@@ -308,7 +294,6 @@ public class Contributor extends PassEntity {
 
         Contributor that = (Contributor) o;
 
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
         if (middleName != null ? !middleName.equals(that.middleName) : that.middleName != null) return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
@@ -326,7 +311,6 @@ public class Contributor extends PassEntity {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);

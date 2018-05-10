@@ -38,12 +38,6 @@ import org.joda.time.DateTime;
 public class Submission extends PassEntity {
 
     /** 
-     * String type name, specifically used to set "@type" in JSON serialization
-     */
-    @JsonProperty("@type")
-    private String type = PassEntityType.SUBMISSION.getName();
-
-    /** 
      * Stringified JSON representation of metadata captured by the relevant repository forms
      */
     private String metadata;
@@ -160,13 +154,6 @@ public class Submission extends PassEntity {
             return this.value;
         }
     }
-
-    
-    @Override
-    public String getType() {
-        return type;
-    }
-
     
     /**
     * @return the metadata
@@ -320,7 +307,6 @@ public class Submission extends PassEntity {
 
         Submission that = (Submission) o;
 
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (metadata != null ? !metadata.equals(that.metadata) : that.metadata != null) return false;
         if (source != null ? !source.equals(that.source) : that.source != null) return false;
         if (submitted != null ? !submitted.equals(that.submitted) : that.submitted != null) return false;
@@ -337,7 +323,6 @@ public class Submission extends PassEntity {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
         result = 31 * result + (source != null ? source.hashCode() : 0);
         result = 31 * result + (submitted != null ? submitted.hashCode() : 0);

@@ -55,7 +55,6 @@ public class GrantModelTests {
         Grant grant = objectMapper.readValue(json, Grant.class);
         
         assertEquals(TestValues.GRANT_ID_1, grant.getId().toString());
-        assertEquals("Grant", grant.getType());
         assertEquals(TestValues.GRANT_AWARD_NUMBER, grant.getAwardNumber());
         assertEquals(TestValues.GRANT_STATUS, grant.getAwardStatus().toString());
         assertEquals(TestValues.GRANT_LOCALKEY, grant.getLocalKey());

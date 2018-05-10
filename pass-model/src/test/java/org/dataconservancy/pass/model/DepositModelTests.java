@@ -48,7 +48,6 @@ public class DepositModelTests {
         Deposit deposit = objectMapper.readValue(json, Deposit.class);
         
         assertEquals(TestValues.DEPOSIT_ID_1, deposit.getId().toString());
-        assertEquals("Deposit", deposit.getType());
         assertEquals(DepositStatus.of(TestValues.DEPOSIT_STATUS), deposit.getDepositStatus());
         assertEquals(TestValues.DEPOSIT_STATUSREF, deposit.getDepositStatusRef());
         assertEquals(TestValues.SUBMISSION_ID_1, deposit.getSubmission().toString());

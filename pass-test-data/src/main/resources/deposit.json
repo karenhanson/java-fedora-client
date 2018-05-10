@@ -1,5 +1,6 @@
 {
 	"@id": "https://example.org/fedora/deposits/1",
+	"@type": "Deposit",
 	"depositStatus": "submitted",
 	"depositStatusRef": "http://depositstatusref.example/abc",
 	"submission": "https://example.org/fedora/submissions/1",

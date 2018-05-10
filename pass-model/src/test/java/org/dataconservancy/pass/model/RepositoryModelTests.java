@@ -47,7 +47,6 @@ public class RepositoryModelTests {
         Repository repository = objectMapper.readValue(json, Repository.class);
         
         assertEquals(TestValues.REPOSITORY_ID_1, repository.getId().toString());
-        assertEquals("Repository", repository.getType());
         assertEquals(TestValues.REPOSITORY_NAME, repository.getName());
         assertEquals(TestValues.REPOSITORY_DESCRIPTION, repository.getDescription());
         assertEquals(TestValues.REPOSITORY_URL, repository.getUrl().toString());

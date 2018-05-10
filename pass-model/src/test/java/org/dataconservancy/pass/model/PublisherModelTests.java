@@ -47,7 +47,6 @@ public class PublisherModelTests {
         Publisher publisher = objectMapper.readValue(json, Publisher.class);
         
         assertEquals(TestValues.PUBLISHER_ID_1, publisher.getId().toString());
-        assertEquals("Publisher", publisher.getType());
         assertEquals(TestValues.PUBLISHER_NAME, publisher.getName());
         assertEquals(TestValues.PUBLISHER_PMCPARTICIPATION, publisher.getPmcParticipation().name());
     }

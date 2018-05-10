@@ -1,5 +1,6 @@
 {
 	"@id": "https://example.org/fedora/policies/1",
+	"@type": "Policy",
 	"title": "Policy A",
 	"description": "You must submit to any OA repo",
 	"policyUrl": "https://somefunder.org/policy",

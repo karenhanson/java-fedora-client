@@ -1,5 +1,6 @@
 {
 	"@id": "https://example.org/fedora/funders/1",
+	"@type": "Funder",
 	"name": "Funder A",
 	"url": "https://nih.gov",
 	"policy": "https://example.org/fedora/policies/1",

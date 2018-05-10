@@ -50,7 +50,7 @@ import static com.openpojo.reflection.impl.PojoClassFactory.enumerateClassesByEx
  */
 public abstract class ClientITBase {
 
-    protected static final int RETRIES = 10;
+    protected static final int RETRIES = 60;
     
     static {
         if (System.getProperty("pass.fedora.baseurl") == null) {

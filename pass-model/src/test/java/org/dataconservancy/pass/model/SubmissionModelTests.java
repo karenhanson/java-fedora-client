@@ -56,7 +56,6 @@ public class SubmissionModelTests {
         Submission submission = objectMapper.readValue(json, Submission.class);
         
         assertEquals(TestValues.SUBMISSION_ID_1, submission.getId().toString());
-        assertEquals("Submission", submission.getType());
         assertEquals(TestValues.SUBMISSION_METADATA, submission.getMetadata());
         assertEquals(TestValues.SUBMISSION_SUBMITTED, submission.getSubmitted());
         assertEquals(TestValues.SUBMISSION_STATUS, submission.getAggregatedDepositStatus().toString());

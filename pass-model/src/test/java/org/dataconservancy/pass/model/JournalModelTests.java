@@ -50,7 +50,6 @@ public class JournalModelTests {
         Journal journal = objectMapper.readValue(json, Journal.class);
         
         assertEquals(TestValues.JOURNAL_ID_1, journal.getId().toString());
-        assertEquals("Journal", journal.getType());
         assertEquals(TestValues.JOURNAL_NAME, journal.getName());
         assertEquals(TestValues.JOURNAL_ISSN_1, journal.getIssns().get(0));
         assertEquals(TestValues.JOURNAL_ISSN_2, journal.getIssns().get(1));

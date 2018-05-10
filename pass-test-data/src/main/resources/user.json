@@ -1,5 +1,6 @@
 {
 	"@id": "https://example.org/fedora/users/1",
+	"@type": "User",
 	"username": "am12345",
 	"firstName": "June",
 	"middleName": "Marie",

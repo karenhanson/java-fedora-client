@@ -51,7 +51,6 @@ public class TestUserModel extends PassEntity {
     private String email;
     
     
-    @Override
     public String getType() {
         return type;
     }

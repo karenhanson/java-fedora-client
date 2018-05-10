@@ -23,8 +23,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dataconservancy.pass.client.PassJsonAdapter;
 import org.dataconservancy.pass.client.adapter.PassJsonAdapterBasic;
 import org.dataconservancy.pass.model.PassEntity;
@@ -50,6 +57,7 @@ public class FedoraPassCrudClient {
     private final static String JSONLD_PATCH_CONTENTTYPE = "application/merge-patch+json; charset=utf-8";
     private final static String SERVER_MANAGED_OMITTYPE = "http://fedora.info/definitions/v4/repository#ServerManaged";
     private final static String COMPACTED_ACCEPTTYPE = "application/ld+json";
+    private final static String INCOMING_INCLUDETYPE = "http://fedora.info/definitions/v4/repository#InboundReferences";
     
     /** 
      * The Fedora client tool 
@@ -93,7 +101,7 @@ public class FedoraPassCrudClient {
         URI newId = null;
         
         try {            
-            container = new URI(FedoraConfig.getContainer(modelObj.getType()));
+            container = new URI(FedoraConfig.getContainer(modelObj.getClass().getSimpleName()));
         } catch (URISyntaxException e) {
             throw new RuntimeException("Container name could not be converted to a URI", e);
         }
@@ -166,5 +174,58 @@ public class FedoraPassCrudClient {
         }        
     }
 
+    /**
+     * @see org.dataconservancy.pass.client.PassClient#getIncoming(URI)
+     */
+    public Map<String, Collection<URI>> getIncoming(URI passEntityUri) {
+        List<URI> include = Collections.singletonList(URI.create(INCOMING_INCLUDETYPE));
+        List<URI> omits = Collections.singletonList(URI.create(SERVER_MANAGED_OMITTYPE));
+
+        try (FcrepoResponse response = new GetBuilder(passEntityUri, client)
+                .accept(COMPACTED_ACCEPTTYPE)
+                .preferRepresentation(include, omits)
+                .perform()) {
+
+            LOG.info("Resource read status: {}", response.getStatusCode());
+
+            JsonNode raw = new ObjectMapper().readTree(response.getBody());
+            JsonNode graph = raw.withArray("@graph");
+
+            if (graph == null || graph.size() < 1) {
+                return Collections.emptyMap();
+            }
+
+            Map<String, Collection<URI>> result = new ConcurrentHashMap<>();
+
+            graph.elements().forEachRemaining((node) -> {
+                if (!node.has("@id")) {
+                    return;
+                }
+
+                URI incomingLink = URI.create(node.get("@id").asText());
+
+                // Filter out any nodes in the graph that refer to the requested PASS entity
+                // Remaining nodes in the graph are incoming links
+                if (passEntityUri.toString().equals(incomingLink.toString())) {
+                    return;
+                }
+
+                node.fieldNames().forEachRemaining(field -> {
+                    if ("@id".equals(field)) {
+                        return;
+                    }
+
+                    Collection<URI> uris = result.getOrDefault(field, new HashSet<>());
+                    uris.add(incomingLink);
+                    result.putIfAbsent(field, uris);
+                });
+            });
+
+            return result;
+
+        } catch (IOException | FcrepoOperationFailedException e) {
+            throw new RuntimeException("A problem occurred while attempting to read a Resource", e);
+        }
+    }
     
 }

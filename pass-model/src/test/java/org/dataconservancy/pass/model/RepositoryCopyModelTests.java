@@ -51,7 +51,6 @@ public class RepositoryCopyModelTests {
         RepositoryCopy repositoryCopy = objectMapper.readValue(json, RepositoryCopy.class);
         
         assertEquals(TestValues.REPOSITORYCOPY_ID_1, repositoryCopy.getId().toString());
-        assertEquals("RepositoryCopy", repositoryCopy.getType());
         assertEquals(CopyStatus.of(TestValues.REPOSITORYCOPY_STATUS), repositoryCopy.getCopyStatus());
         assertEquals(TestValues.REPOSITORYCOPY_EXTERNALID_1, repositoryCopy.getExternalIds().get(0));
         assertEquals(TestValues.REPOSITORYCOPY_EXTERNALID_2, repositoryCopy.getExternalIds().get(1));

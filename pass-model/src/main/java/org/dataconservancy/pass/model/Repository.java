@@ -17,20 +17,12 @@ package org.dataconservancy.pass.model;
 
 import java.net.URI;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Describes a Repository. A Repository is the target of a Deposit.
  * @author Karen Hanson
  */
 
 public class Repository extends PassEntity {
-
-    /** 
-     * String type name, specifically used to set "@type" in JSON serialization
-     */
-    @JsonProperty("@type")
-    private String type = PassEntityType.REPOSITORY.getName();
     
     /** 
      * Name of repository e.g. "PubMed Central" 
@@ -51,13 +43,6 @@ public class Repository extends PassEntity {
      * Stringified JSON representing a form template to be loaded by the front-end when this Repository is selected
      */
     private String formSchema;
-
-
-    
-    @Override
-    public String getType() {
-        return type;
-    }
 
     
     /**
@@ -132,7 +117,6 @@ public class Repository extends PassEntity {
 
         Repository that = (Repository) o;
 
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
@@ -144,7 +128,6 @@ public class Repository extends PassEntity {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);

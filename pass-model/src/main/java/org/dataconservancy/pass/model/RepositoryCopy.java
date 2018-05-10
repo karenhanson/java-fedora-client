@@ -30,12 +30,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 
 public class RepositoryCopy extends PassEntity {
-
-    /** 
-     * String type name, specifically used to set "@type" in JSON serialization
-     */
-    @JsonProperty("@type")
-    private String type = PassEntityType.REPOSITORY_COPY.getName();
     
     /** 
      * IDs assigned by the repository 
@@ -112,13 +106,6 @@ public class RepositoryCopy extends PassEntity {
         }
         
     }
-
-    
-    @Override
-    public String getType() {
-        return type;
-    }
-
     
     /**
      * @return the externalIds
@@ -208,7 +195,6 @@ public class RepositoryCopy extends PassEntity {
 
         RepositoryCopy that = (RepositoryCopy) o;
 
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (externalIds != null ? !externalIds.equals(that.externalIds) : that.externalIds != null) return false;
         if (copyStatus != null ? !copyStatus.equals(that.copyStatus) : that.copyStatus != null) return false;
         if (accessUrl != null ? !accessUrl.equals(that.accessUrl) : that.accessUrl != null) return false;
@@ -221,7 +207,6 @@ public class RepositoryCopy extends PassEntity {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (externalIds != null ? externalIds.hashCode() : 0);
         result = 31 * result + (copyStatus != null ? copyStatus.hashCode() : 0);
         result = 31 * result + (accessUrl != null ? accessUrl.hashCode() : 0);

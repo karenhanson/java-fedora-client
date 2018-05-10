@@ -28,12 +28,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 
 public class User extends PassEntity {
-
-    /** 
-     * String type name, specifically used to set "@type" in JSON serialization
-     */
-    @JsonProperty("@type")
-    private String type = PassEntityType.USER.getName();
     
     /** 
      * Unique login name used by user 
@@ -126,13 +120,6 @@ public class User extends PassEntity {
             return this.value;
         }
     }
-
-    
-    @Override
-    public String getType() {
-        return type;
-    }
-
     
     /**
      * @return the username
@@ -317,7 +304,6 @@ public class User extends PassEntity {
 
         User that = (User) o;
 
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
         if (middleName != null ? !middleName.equals(that.middleName) : that.middleName != null) return false;
@@ -336,7 +322,6 @@ public class User extends PassEntity {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (middleName != null ? middleName.hashCode() : 0);

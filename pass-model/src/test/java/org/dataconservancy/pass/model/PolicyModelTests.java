@@ -50,7 +50,6 @@ public class PolicyModelTests {
         Policy policy = objectMapper.readValue(json, Policy.class);
         
         assertEquals(TestValues.POLICY_ID_1, policy.getId().toString());
-        assertEquals("Policy", policy.getType());
         assertEquals(TestValues.POLICY_TITLE, policy.getTitle());
         assertEquals(TestValues.POLICY_DESCRIPTION, policy.getDescription());
         assertEquals(TestValues.REPOSITORY_ID_1, policy.getRepositories().get(0).toString());

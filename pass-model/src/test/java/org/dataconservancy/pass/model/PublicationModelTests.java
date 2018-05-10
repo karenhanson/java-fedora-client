@@ -48,7 +48,6 @@ public class PublicationModelTests {
         Publication publication = objectMapper.readValue(json, Publication.class);
         
         assertEquals(TestValues.PUBLICATION_ID_1, publication.getId().toString());
-        assertEquals("Publication", publication.getType());
         assertEquals(TestValues.PUBLICATION_TITLE, publication.getTitle());
         assertEquals(TestValues.PUBLICATION_ABSTRACT, publication.getPublicationAbstract());
         assertEquals(TestValues.PUBLICATION_DOI, publication.getDoi());

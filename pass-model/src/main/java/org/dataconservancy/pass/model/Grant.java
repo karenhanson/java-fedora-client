@@ -36,12 +36,6 @@ import org.joda.time.DateTime;
  */
 
 public class Grant extends PassEntity {
-
-    /** 
-     * String type name, specifically used to set "@type" in JSON serialization
-     */
-    @JsonProperty("@type")
-    private String type = PassEntityType.GRANT.getName();
     
     /** 
      * Award number from funder 
@@ -134,13 +128,6 @@ public class Grant extends PassEntity {
             return this.value;
         }
     }
-
-    
-    @Override
-    public String getType() {
-        return type;
-    }
-
     
     /**
      * @return the awardNumber
@@ -325,7 +312,6 @@ public class Grant extends PassEntity {
 
         Grant that = (Grant) o;
 
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (awardNumber != null ? !awardNumber.equals(that.awardNumber) : that.awardNumber != null) return false;
         if (awardStatus != null ? !awardStatus.equals(that.awardStatus) : that.awardStatus != null) return false;
         if (localKey != null ? !localKey.equals(that.localKey) : that.localKey != null) return false;
@@ -345,7 +331,6 @@ public class Grant extends PassEntity {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (awardNumber != null ? awardNumber.hashCode() : 0);
         result = 31 * result + (awardStatus != null ? awardStatus.hashCode() : 0);
         result = 31 * result + (localKey != null ? localKey.hashCode() : 0);

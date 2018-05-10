@@ -17,6 +17,7 @@ package org.dataconservancy.pass.client;
 
 import java.net.URI;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -183,6 +184,18 @@ public interface PassClient {
      * @return
      */
     public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> attributeValuesMap, int limit, int offset);
+
+    /**
+     * Retrieve inbound links to the repository resource identified by {@code passEntity}.
+     * <p>
+     * Keys in the returned map will be the predicate, and values will be the incoming URIs that reference the
+     * {@code passEntity}.
+     * </p>
+     *
+     * @param passEntity the URI of a repository resource
+     * @return a {@code Map} keyed by predicate, may be empty but never {@code null}
+     */
+    public Map<String, Collection<URI>> getIncoming(URI passEntity);
 
     
 }

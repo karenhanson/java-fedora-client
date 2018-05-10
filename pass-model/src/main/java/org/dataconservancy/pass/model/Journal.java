@@ -19,20 +19,12 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Describes a Journal and the path of it's participation in PubMedCentral
  * @author Karen Hanson
  */
 
 public class Journal extends PassEntity {
-
-    /** 
-     * String type name, specifically used to set "@type" in JSON serialization
-     */
-    @JsonProperty("@type")
-    private String type = PassEntityType.JOURNAL.getName();
     
     /** 
      * Name of journal 
@@ -59,13 +51,6 @@ public class Journal extends PassEntity {
      * published article to PMC. If so, whether it requires additional processing fee.  
      */
     private PmcParticipation pmcParticipation;
-
-    
-    @Override
-    public String getType() {
-        return type;
-    }
-    
     
     /**
      * @return the name
@@ -154,7 +139,6 @@ public class Journal extends PassEntity {
 
         Journal that = (Journal) o;
 
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (issns != null ? !issns.equals(that.issns) : that.issns != null) return false;
         if (publisher != null ? !publisher.equals(that.publisher) : that.publisher != null) return false;
@@ -167,7 +151,6 @@ public class Journal extends PassEntity {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (issns != null ? issns.hashCode() : 0);
         result = 31 * result + (publisher != null ? publisher.hashCode() : 0);

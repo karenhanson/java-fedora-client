@@ -47,7 +47,6 @@ public class FunderModelTests {
         Funder funder = objectMapper.readValue(json, Funder.class);
         
         assertEquals(TestValues.FUNDER_ID_1, funder.getId().toString());
-        assertEquals("Funder", funder.getType());
         assertEquals(TestValues.FUNDER_NAME, funder.getName());
         assertEquals(TestValues.FUNDER_URL, funder.getUrl().toString());
         assertEquals(TestValues.POLICY_ID_1, funder.getPolicy().toString());

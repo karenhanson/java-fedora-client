@@ -17,6 +17,7 @@ package org.dataconservancy.pass.client;
 
 import java.net.URI;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -76,6 +77,11 @@ public class PassClientDefault implements PassClient {
     @Override
     public <T extends PassEntity> T readResource(URI uri, Class<T> modelClass) {
         return crudClient.readResource(uri, modelClass);
+    }
+
+    @Override
+    public Map<String, Collection<URI>> getIncoming(URI passEntity) {
+        return crudClient.getIncoming(passEntity);
     }
 
     /**

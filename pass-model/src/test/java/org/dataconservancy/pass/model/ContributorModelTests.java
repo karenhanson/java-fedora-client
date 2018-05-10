@@ -47,7 +47,6 @@ public class ContributorModelTests {
         Contributor contributor = objectMapper.readValue(json, Contributor.class);
         
         assertEquals(TestValues.CONTRIBUTOR_ID_1, contributor.getId().toString());
-        assertEquals("Contributor", contributor.getType());
         assertEquals(TestValues.USER_FIRST_NAME, contributor.getFirstName());
         assertEquals(TestValues.USER_MIDDLE_NAME, contributor.getMiddleName());
         assertEquals(TestValues.USER_LAST_NAME, contributor.getLastName());

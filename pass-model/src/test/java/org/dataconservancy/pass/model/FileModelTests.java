@@ -48,7 +48,6 @@ public class FileModelTests {
         File file = objectMapper.readValue(json, File.class);
         
         assertEquals(TestValues.FILE_ID_1, file.getId().toString());
-        assertEquals("File", file.getType());
         assertEquals(TestValues.FILE_NAME, file.getName());
         assertEquals(TestValues.FILE_URI, file.getUri().toString());
         assertEquals(TestValues.FILE_DESCRIPTION, file.getDescription());
