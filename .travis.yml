@@ -30,6 +30,7 @@ after_failure:
   - docker ps -a
   - docker logs indexer
   - docker logs fcrepo
+  - docker logs elasticsearch
   - cd pass-client-integration && mvn docker:stop
 
 after_success:
