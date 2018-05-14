@@ -67,6 +67,7 @@ public class CreateFindByRoundTripIT extends ClientITBase {
                 URI uri = client.findByAttribute(forDeposit.getClass(), "@id", entityUri);   
                 assertEquals(entityUri, uri);
             });
+            createdUris.put(entityUri, forDeposit.getClass());
 
             for (final PropertyDescriptor pd : Introspector.getBeanInfo(forDeposit.getClass(), PassEntity.class).getPropertyDescriptors()) {
                 Method m = pd.getReadMethod();
@@ -90,10 +91,6 @@ public class CreateFindByRoundTripIT extends ClientITBase {
             } 
         } catch (Exception ex) {
             throw new RuntimeException("Round trip check of indexer failed", ex);
-        } finally {
-            if (entityUri!=null) {
-                client.deleteResource(entityUri);
-            }
         }
         
     }

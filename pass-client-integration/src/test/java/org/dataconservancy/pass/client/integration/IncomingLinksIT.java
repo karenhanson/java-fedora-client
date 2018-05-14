@@ -19,7 +19,6 @@ import org.dataconservancy.pass.client.PassClient;
 import org.dataconservancy.pass.model.Deposit;
 import org.dataconservancy.pass.model.File;
 import org.dataconservancy.pass.model.Submission;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -64,37 +63,34 @@ public class IncomingLinksIT extends ClientITBase {
         submission = new Submission();
         submission.setSource(Submission.Source.PASS);
         submission = client.readResource(client.createResource(submission), Submission.class);
+        createdUris.put(submission.getId(), Submission.class);
 
         submissionNoIncoming = new Submission();
         submissionNoIncoming.setSource(Submission.Source.PASS);
         submissionNoIncoming = client.readResource(client.createResource(submissionNoIncoming), Submission.class);
+        createdUris.put(submissionNoIncoming.getId(), Submission.class);
 
         // Add a File that references the Submission
         file = new File();
         file.setName("FileReferencingSubmission");
         file.setSubmission(submission.getId());
         file = client.readResource(client.createResource(file), File.class);
+        createdUris.put(file.getId(), File.class);
 
         // Add two Deposits that reference the Submission
         depositOne = new Deposit();
         depositOne.setDepositStatusRef("http://reference/to/deposit/status/1");
         depositOne.setSubmission(submission.getId());
         depositOne = client.readResource(client.createResource(depositOne), Deposit.class);
+        createdUris.put(depositOne.getId(), Deposit.class);
 
         depositTwo = new Deposit();
         depositTwo.setDepositStatusRef("http://reference/to/deposit/status/2");
         depositTwo.setSubmission(submission.getId());
         depositTwo = client.readResource(client.createResource(depositTwo), Deposit.class);
+        
+        createdUris.put(depositTwo.getId(), Deposit.class);
 
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        client.deleteResource(submission.getId());
-        client.deleteResource(submissionNoIncoming.getId());
-        client.deleteResource(file.getId());
-        client.deleteResource(depositOne.getId());
-        client.deleteResource(depositTwo.getId());
     }
 
     /**

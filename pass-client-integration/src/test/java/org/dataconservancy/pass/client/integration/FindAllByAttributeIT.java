@@ -51,52 +51,40 @@ public class FindAllByAttributeIT extends ClientITBase {
         user.setDisplayName("Mary \"The Shark\" Schäfer");
         user.setAffiliation("Lamar & Schäfer Laboratory, Nürnberg");
         URI userId1 = client.createResource(user);
+        createdUris.put(userId1, User.class);  
         URI userId2 = client.createResource(user);
-        try {
-            //make sure records are in the indexer before continuing
-            attempt(RETRIES, () -> {
-                final URI uri = client.findByAttribute(User.class, "@id", userId1);
-                assertEquals(userId1, uri);
-            });        
-            attempt(RETRIES, () -> {
-                final URI uri = client.findByAttribute(User.class, "@id", userId2);
-                assertEquals(userId2, uri);
-            });        
-            
-    
-            Set<URI> uris = client.findAllByAttribute(User.class, "firstName", user.getFirstName());
-            assertEquals(2, uris.size());
-            assertTrue(uris.contains(userId1));
-            assertTrue(uris.contains(userId2));
-    
-            uris = client.findAllByAttribute(User.class, "lastName", user.getLastName());
-            assertEquals(2, uris.size());
-            assertTrue(uris.contains(userId1));
-            assertTrue(uris.contains(userId2));
-            
-            uris = client.findAllByAttribute(User.class, "displayName", user.getDisplayName());
-            assertEquals(2, uris.size());
-            assertTrue(uris.contains(userId1));
-            assertTrue(uris.contains(userId2));
-            
-            uris = client.findAllByAttribute(User.class, "affiliation", user.getAffiliation());
-            assertEquals(2, uris.size());
-            assertTrue(uris.contains(userId1));
-            assertTrue(uris.contains(userId2));
-            
-        } finally {
-            //need to log fail if this doesn't work as it could mess up re-testing if data isn't cleaned out
-            try {
-                if (userId1 != null) {
-                    client.deleteResource(userId1);
-                }
-                if (userId2 != null) {
-                    client.deleteResource(userId2);
-                }
-            } catch (Exception ex) {
-                fail("Could not clean up from FindAllByAttributeIT.testSpecialCharacterSearch(), this may cause errors if test is rerun on the same dbs");
-            }
-        }
+        createdUris.put(userId2, User.class);  
+
+        //make sure records are in the indexer before continuing
+        attempt(RETRIES, () -> {
+            final URI uri = client.findByAttribute(User.class, "@id", userId1);
+            assertEquals(userId1, uri);
+        });      
+        attempt(RETRIES, () -> {
+            final URI uri = client.findByAttribute(User.class, "@id", userId2);
+            assertEquals(userId2, uri);
+        });        
+        
+
+        Set<URI> uris = client.findAllByAttribute(User.class, "firstName", user.getFirstName());
+        assertEquals(2, uris.size());
+        assertTrue(uris.contains(userId1));
+        assertTrue(uris.contains(userId2));
+
+        uris = client.findAllByAttribute(User.class, "lastName", user.getLastName());
+        assertEquals(2, uris.size());
+        assertTrue(uris.contains(userId1));
+        assertTrue(uris.contains(userId2));
+        
+        uris = client.findAllByAttribute(User.class, "displayName", user.getDisplayName());
+        assertEquals(2, uris.size());
+        assertTrue(uris.contains(userId1));
+        assertTrue(uris.contains(userId2));
+        
+        uris = client.findAllByAttribute(User.class, "affiliation", user.getAffiliation());
+        assertEquals(2, uris.size());
+        assertTrue(uris.contains(userId1));
+        assertTrue(uris.contains(userId2));
         
     }
     
@@ -108,33 +96,29 @@ public class FindAllByAttributeIT extends ClientITBase {
     public void testLimitAndOffset() throws Exception {
         String descrip = "short fake description";
         String descripFld = "description";
-        try {
-            URI uri = null;
-            for(int i = 0; i < 10; i++){
-                File file = random(File.class, 2);
-                file.setDescription(descrip);
-                uri = client.createResource(file);
-            }
-            
-            final URI searchUri = uri;
-            
-            attempt(RETRIES, () -> { //make sure last one is in the index
-                final URI matchedUri = client.findByAttribute(File.class, "@id", searchUri);
-                assertEquals(searchUri, matchedUri);
-            }); 
-    
-            Set<URI> matches = client.findAllByAttribute(File.class, descripFld, descrip, 4, 0);
-            assertEquals(4, matches.size());
-            matches = client.findAllByAttribute(File.class, descripFld, descrip, 4, 0);
-            assertEquals(4, matches.size());
-            matches = client.findAllByAttribute(File.class, descripFld, descrip, 2, 0);
-            assertEquals(2, matches.size());       
-        } finally {
-            Set <URI> matches = client.findAllByAttribute(File.class, descripFld, descrip);
-            for (URI match : matches) {
-                client.deleteResource(match);
-            }
+
+        URI uri = null;
+        for(int i = 0; i < 10; i++){
+            File file = random(File.class, 2);
+            file.setDescription(descrip);
+            uri = client.createResource(file);
+            createdUris.put(uri, File.class);  
         }
+        
+        final URI searchUri = uri;
+        
+        attempt(RETRIES, () -> { //make sure last one is in the index
+            final URI matchedUri = client.findByAttribute(File.class, "@id", searchUri);
+            assertEquals(searchUri, matchedUri);
+        }); 
+
+        Set<URI> matches = client.findAllByAttribute(File.class, descripFld, descrip, 4, 0);
+        assertEquals(4, matches.size());
+        matches = client.findAllByAttribute(File.class, descripFld, descrip, 4, 0);
+        assertEquals(4, matches.size());
+        matches = client.findAllByAttribute(File.class, descripFld, descrip, 2, 0);
+        assertEquals(2, matches.size());   
+            
     }    
     
     /**
@@ -144,19 +128,16 @@ public class FindAllByAttributeIT extends ClientITBase {
     public void testNoMatchFound() {
         Grant grant = random(Grant.class, 1);
         URI grantId = client.createResource(grant); //create something so it's not empty index
+        createdUris.put(grantId, Grant.class);  
         
-        try {
-            attempt(RETRIES, () -> {
-                final URI uri = client.findByAttribute(Grant.class, "@id", grantId);
-                assertEquals(grantId, uri);
-            });        
-            
-            Set<URI> matchedIds = client.findAllByAttribute(Grant.class, "awardNumber", "no match");
-            assertNotNull(matchedIds);
-            assertEquals(0, matchedIds.size());
-        } finally {
-            client.deleteResource(grantId);
-        }
+        attempt(RETRIES, () -> {
+            final URI uri = client.findByAttribute(Grant.class, "@id", grantId);
+            assertEquals(grantId, uri);
+        });        
+        
+        Set<URI> matchedIds = client.findAllByAttribute(Grant.class, "awardNumber", "no match");
+        assertNotNull(matchedIds);
+        assertEquals(0, matchedIds.size());
     }
 
     @Test
@@ -164,24 +145,19 @@ public class FindAllByAttributeIT extends ClientITBase {
         Deposit deposit = random(Deposit.class, 1);
         deposit.setDepositStatus(null);
         URI expectedUri = client.createResource(deposit);
+        createdUris.put(expectedUri, Deposit.class);  
 
-        try {
-            attempt(RETRIES, () -> {
-                assertEquals(expectedUri.getPath(),
-                        client.findByAttribute(Deposit.class, "@id", expectedUri).getPath());
-            });
-
+        attempt(RETRIES, () -> {
             assertEquals(expectedUri.getPath(),
-                    client.findByAttribute(Deposit.class, "depositStatus", null).getPath());
-            Set<URI> deposits = client.findAllByAttribute(Deposit.class, "depositStatus", null);
-            assertEquals(1, deposits.size());
-            assertEquals(expectedUri.getPath(), deposits.iterator().next().getPath());
-        } finally {
-            Set <URI> matches = client.findAllByAttribute(Deposit.class, "depositStatus", null);
-            for (URI match : matches) {
-                client.deleteResource(match);
-            }
-        }
+                    client.findByAttribute(Deposit.class, "@id", expectedUri).getPath());
+        });
+
+        assertEquals(expectedUri.getPath(),
+                client.findByAttribute(Deposit.class, "depositStatus", null).getPath());
+        Set<URI> deposits = client.findAllByAttribute(Deposit.class, "depositStatus", null);
+        assertEquals(1, deposits.size());
+        assertEquals(expectedUri.getPath(), deposits.iterator().next().getPath());
+
     }
 
     /**

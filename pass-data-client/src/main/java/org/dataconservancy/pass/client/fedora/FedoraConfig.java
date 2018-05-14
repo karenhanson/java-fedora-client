@@ -35,7 +35,7 @@ public class FedoraConfig {
     private static final String DEFAULT_PASSWORD = "moo";
     
     private static final String BASEURL_KEY = "pass.fedora.baseurl";
-    private static final String DEFAULT_BASE_URL = "http://localhost:8080/fcrepo/rest";
+    private static final String DEFAULT_BASE_URL = "http://localhost:8080/fcrepo/rest/";
 
     
     /**
@@ -43,6 +43,9 @@ public class FedoraConfig {
      */
     public static String getBaseUrl() {
         String baseUrl = ConfigUtil.getSystemProperty(BASEURL_KEY, DEFAULT_BASE_URL);
+        if (!baseUrl.endsWith("/")) {
+            baseUrl = baseUrl + "/";
+        }
         LOG.debug("Using baseUrl: {}", baseUrl);
         return baseUrl;
     }

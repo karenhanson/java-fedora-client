@@ -16,21 +16,23 @@
 
 package org.dataconservancy.pass.client.integration;
 
-import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
-
 import java.lang.reflect.Method;
+
 import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dataconservancy.pass.model.PassEntity;
-
 import org.apache.commons.beanutils.BeanUtils;
+
 import org.junit.Test;
+
+import org.dataconservancy.pass.model.PassEntity;
 import org.dataconservancy.pass.model.User;
 import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 import static org.junit.Assert.assertEquals;
+import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 /**
  * Tests client update functionality
  *
@@ -72,32 +74,33 @@ public class UpdateResourceIT extends ClientITBase {
     public void patchUpdateWithDifferentModelsTest() {        
         //create a complete user
         User user = random(User.class, 1);
-        URI userId = client.createResource(user);
+        final URI userId = client.createResource(user);
+        createdUris.put(userId, User.class);
+
+        //adding a pause for indexer to catchup
+        attempt(RETRIES, () -> {
+            final URI foundUri = client.findByAttribute(User.class, "@id", userId);
+            assertEquals(userId, foundUri);
+        });
         
-        try {
-            //update using an incomplete user
-            TestUserModel incompleteUser = new TestUserModel();
-            incompleteUser.setId(userId);
-            incompleteUser.setDisplayName("Ms Tester");
-            incompleteUser.setEmail("mtester@blahblahetc.test");
-            incompleteUser.setUsername(null);
-            client.updateResource(incompleteUser);
-            
-            //verify user still has original fields and has new field values incorporated including the null username
-            User updatedUser = client.readResource(userId, User.class);
-            assertEquals(userId, updatedUser.getId());
-            assertEquals(user.getAffiliation(), updatedUser.getAffiliation());
-            assertEquals(user.getFirstName(), updatedUser.getFirstName());
-            assertEquals(user.getLastName(), updatedUser.getLastName());
-            assertEquals(incompleteUser.getDisplayName(), updatedUser.getDisplayName());
-            assertEquals(incompleteUser.getEmail(), updatedUser.getEmail());
-            assertEquals(null, updatedUser.getUsername());
-        } finally {
-            client.deleteResource(userId);
-        }
-    }
-    
-    
+        //update using an incomplete user
+        org.dataconservancy.pass.client.integration.User incompleteUser = new org.dataconservancy.pass.client.integration.User();
+        incompleteUser.setId(userId);
+        incompleteUser.setDisplayName("Ms Tester");
+        incompleteUser.setEmail("mtester@blahblahetc.test");
+        incompleteUser.setUsername(null);
+        client.updateResource(incompleteUser);
+        
+        //verify user still has original fields and has new field values incorporated including the null username
+        User updatedUser = client.readResource(userId, User.class);
+        assertEquals(userId, updatedUser.getId());
+        assertEquals(user.getAffiliation(), updatedUser.getAffiliation());
+        assertEquals(user.getFirstName(), updatedUser.getFirstName());
+        assertEquals(user.getLastName(), updatedUser.getLastName());
+        assertEquals(incompleteUser.getDisplayName(), updatedUser.getDisplayName());
+        assertEquals(incompleteUser.getEmail(), updatedUser.getEmail());
+        assertEquals(null, updatedUser.getUsername());
+    }    
 
     PassEntity removeRelationships(PassEntity resource) {
         try {
@@ -118,6 +121,7 @@ public class UpdateResourceIT extends ClientITBase {
 
     void createAndUpdate(PassEntity toDeposit, PassEntity updatedContent) {
         final URI passEntityUri = client.createResource(toDeposit);
+        createdUris.put(passEntityUri, toDeposit.getClass());
 
         try {
             final PassEntity intermediate = client.readResource(passEntityUri, toDeposit.getClass());
@@ -129,9 +133,6 @@ public class UpdateResourceIT extends ClientITBase {
                                    ReflectionComparatorMode.LENIENT_ORDER);
         } catch (final Exception e) {
             throw new RuntimeException(e);
-        } finally { 
-            client.deleteResource(passEntityUri);
-        }
-
+        } 
     }
 }

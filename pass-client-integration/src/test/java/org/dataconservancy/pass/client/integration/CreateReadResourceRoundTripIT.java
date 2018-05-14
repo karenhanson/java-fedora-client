@@ -68,14 +68,9 @@ public class CreateReadResourceRoundTripIT extends ClientITBase {
 
     void roundTrip(PassEntity asDeposited) {
         final URI entityUri = client.createResource(asDeposited);   
-        try {
-            final PassEntity retrieved = client.readResource(entityUri, asDeposited.getClass());
-            assertReflectionEquals(normalized(asDeposited), normalized(retrieved),
-                                   ReflectionComparatorMode.LENIENT_ORDER);
-        } finally {
-            if (entityUri!=null) {
-                client.deleteResource(entityUri);
-            }
-        }
+        final PassEntity retrieved = client.readResource(entityUri, asDeposited.getClass());
+        assertReflectionEquals(normalized(asDeposited), normalized(retrieved),
+                               ReflectionComparatorMode.LENIENT_ORDER);
+        createdUris.put(entityUri, asDeposited.getClass());
     }
 }

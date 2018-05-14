@@ -22,7 +22,9 @@ import java.net.URI;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -31,6 +33,8 @@ import java.util.stream.Collectors;
 import com.openpojo.reflection.PojoClass;
 
 import org.apache.commons.beanutils.BeanUtils;
+
+import org.junit.After;
 
 import org.dataconservancy.pass.client.PassClient;
 import org.dataconservancy.pass.client.PassClientFactory;
@@ -42,6 +46,9 @@ import org.joda.time.DateTimeZone;
 
 import static com.openpojo.reflection.impl.PojoClassFactory.enumerateClassesByExtendingType;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 /**
  * Base class for client ITs.
  *
@@ -50,7 +57,9 @@ import static com.openpojo.reflection.impl.PojoClassFactory.enumerateClassesByEx
  */
 public abstract class ClientITBase {
 
-    protected static final int RETRIES = 60;
+    protected Map<URI, Class<? extends PassEntity>> createdUris = new HashMap<URI, Class<? extends PassEntity>>();
+    
+    protected static final int RETRIES = 12;
     
     static {
         if (System.getProperty("pass.fedora.baseurl") == null) {
@@ -72,7 +81,33 @@ public abstract class ClientITBase {
     protected final PassClient client = PassClientFactory.getPassClient();
 
     private static final Random randomIndex = new Random();
-
+    
+    /**
+     * Deletes resources listed in createdUris map, then waits for confirmation from indexer that they are processed
+     * @throws InterruptedException
+     */
+    @After
+    public void cleanUpResources() throws Exception {
+        //need to log fail if this doesn't work as it could mess up re-testing if data isn't cleaned out
+        try {
+            if (createdUris.size()>0) {
+                URI uriCheck = null;
+                for (URI uri:createdUris.keySet()) {
+                  client.deleteResource(uri);
+                  uriCheck = uri;
+                }          
+                final URI finalUriCheck = uriCheck;
+                attempt(RETRIES, () -> {
+                    final URI uri = client.findByAttribute(createdUris.get(finalUriCheck), "@id", finalUriCheck);
+                    assertEquals(null, uri);
+                });
+                createdUris.clear();
+            }
+        } catch (Exception ex) {
+            fail("Could not clean up from test, this may interfere with results of other tests");
+        }
+    }
+    
     /**
      * Normalize the context and ID so entities created locally can be compared with entities from the repository.
      *
@@ -147,6 +182,7 @@ public abstract class ClientITBase {
             throw new RuntimeException(e);
         }
     }
+    
 
     /* We can't infer types of lists due to erasure. so we cheat here. */
     @SuppressWarnings("unchecked")
@@ -203,8 +239,8 @@ public abstract class ClientITBase {
             } catch (final Throwable e) {
                 caught = e;
                 try {
-                    Thread.sleep(2000);
-                    System.out.println(".");
+                    Thread.sleep(3000);
+                    System.out.println("... waiting for index to update");
                 } catch (final InterruptedException i) {
                     Thread.currentThread().interrupt();
                     return null;

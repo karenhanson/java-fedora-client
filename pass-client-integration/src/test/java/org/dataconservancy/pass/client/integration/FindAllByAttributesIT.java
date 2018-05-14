@@ -57,53 +57,38 @@ public class FindAllByAttributesIT extends ClientITBase {
         user.setDisplayName("Mary \"The Shark\" Schäfer");
         user.setAffiliation("Lamar & Schäfer Laboratory, Nürnberg");
         URI userId1 = client.createResource(user);
+        createdUris.put(userId1, User.class);  
         URI userId2 = client.createResource(user);
+        createdUris.put(userId2, User.class);
         
         //thow in another record that should not match
         URI userId3 = client.createResource(random(User.class, 1));
+        createdUris.put(userId3, User.class);
         
-        try {
-            //make sure records are in the indexer before continuing
-            attempt(RETRIES, () -> {
-                final URI uri = client.findByAttribute(User.class, "@id", userId1);
-                assertEquals(userId1, uri);
-            });        
-            attempt(RETRIES, () -> {
-                final URI uri = client.findByAttribute(User.class, "@id", userId2);
-                assertEquals(userId2, uri);
-            });           
-            attempt(RETRIES, () -> {
-                final URI uri = client.findByAttribute(User.class, "@id", userId3);
-                assertEquals(userId3, uri);
-            });    
-            
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("firstName", user.getFirstName());
-            map.put("lastName", user.getLastName());
-            map.put("displayName", user.getDisplayName());
-            map.put("affiliation", user.getAffiliation());
-                        
-            Set<URI> uris = client.findAllByAttributes(User.class, map);
-            assertEquals(2, uris.size());
-            assertTrue(uris.contains(userId1));
-            assertTrue(uris.contains(userId2));
-            
-        } finally {
-            //need to log fail if this doesn't work as it could mess up re-testing if data isn't cleaned out
-            try {
-                if (userId1 != null) {
-                    client.deleteResource(userId1);
-                }
-                if (userId2 != null) {
-                    client.deleteResource(userId2);
-                }
-                if (userId3 != null) {
-                    client.deleteResource(userId3);
-                }
-            } catch (Exception ex) {
-                fail("Could not clean up from FindAllByAttributeIT.testSpecialCharacterSearch(), this may cause errors if test is rerun on the same dbs");
-            }
-        }
+        //make sure records are in the indexer before continuing
+        attempt(RETRIES, () -> {
+            final URI uri = client.findByAttribute(User.class, "@id", userId1);
+            assertEquals(userId1, uri);
+        });        
+        attempt(RETRIES, () -> {
+            final URI uri = client.findByAttribute(User.class, "@id", userId2);
+            assertEquals(userId2, uri);
+        });           
+        attempt(RETRIES, () -> {
+            final URI uri = client.findByAttribute(User.class, "@id", userId3);
+            assertEquals(userId3, uri);
+        });    
+        
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("firstName", user.getFirstName());
+        map.put("lastName", user.getLastName());
+        map.put("displayName", user.getDisplayName());
+        map.put("affiliation", user.getAffiliation());
+                    
+        Set<URI> uris = client.findAllByAttributes(User.class, map);
+        assertEquals(2, uris.size());
+        assertTrue(uris.contains(userId1));
+        assertTrue(uris.contains(userId2));
         
     }
 
@@ -115,61 +100,58 @@ public class FindAllByAttributesIT extends ClientITBase {
         submission1.setMetadata("foo");
         submission1.setUser(user);
         URI expectedUri1 = client.createResource(submission1);
+        createdUris.put(expectedUri1, Submission.class);
 
         Submission submission2 = random(Submission.class, 1);
         submission2.setSource(null);
         submission2.setMetadata("foo");
         submission2.setUser(user);
         URI expectedUri2 = client.createResource(submission2);
+        createdUris.put(expectedUri2, Submission.class);
 
         Submission submission3 = random(Submission.class, 1);
         submission2.setSource(Submission.Source.OTHER);
         submission2.setMetadata("foo");
         submission2.setUser(user);
         URI expectedUri3 = client.createResource(submission3);
+        createdUris.put(expectedUri3, User.class);
 
         Deposit deposit1 = random(Deposit.class, 1);
         URI expectedUri4 = client.createResource(deposit1);
+        createdUris.put(expectedUri4, Deposit.class);
 
-        try {
-            attempt(30, () -> {
-                assertEquals(expectedUri1.getPath(),
-                        client.findByAttribute(Submission.class, "@id", expectedUri1).getPath());
-                assertEquals(expectedUri2.getPath(),
-                        client.findByAttribute(Submission.class, "@id", expectedUri2).getPath());
-                assertEquals(expectedUri3.getPath(),
-                        client.findByAttribute(Submission.class, "@id", expectedUri3).getPath());
-                assertEquals(expectedUri4.getPath(),
-                        client.findByAttribute(Deposit.class, "@id", expectedUri4).getPath());
-            });
+        attempt(30, () -> {
+            assertEquals(expectedUri1.getPath(),
+                    client.findByAttribute(Submission.class, "@id", expectedUri1).getPath());
+            assertEquals(expectedUri2.getPath(),
+                    client.findByAttribute(Submission.class, "@id", expectedUri2).getPath());
+            assertEquals(expectedUri3.getPath(),
+                    client.findByAttribute(Submission.class, "@id", expectedUri3).getPath());
+            assertEquals(expectedUri4.getPath(),
+                    client.findByAttribute(Deposit.class, "@id", expectedUri4).getPath());
+        });
 
-            Set<URI> uris = client.findAllByAttributes(Submission.class, new HashMap<String, Object>() {{
-                put("metadata", "foo");
-                put("source", null);
-                put("user", user);
-            }});
+        Set<URI> uris = client.findAllByAttributes(Submission.class, new HashMap<String, Object>() {{
+            put("metadata", "foo");
+            put("source", null);
+            put("user", user);
+        }});
 
-            // Only the two Submissions with null sources should be found.  The other Submission has a non-null source,
-            // and the other resource is a Deposit.
-            assertEquals(2, uris.size());
-            assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri1.getPath())));
-            assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri2.getPath())));
+        // Only the two Submissions with null sources should be found.  The other Submission has a non-null source,
+        // and the other resource is a Deposit.
+        assertEquals(2, uris.size());
+        assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri1.getPath())));
+        assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri2.getPath())));
 
-            uris = client.findAllByAttributes(Submission.class, new HashMap<String, Object>() {{
-                put("source", null);
-            }});
+        uris = client.findAllByAttributes(Submission.class, new HashMap<String, Object>() {{
+            put("source", null);
+        }});
 
-            // Only two Submissions with null sources should be found. The other Submission has a non-null source, and
-            // the other resource is a Deposit.
-            assertEquals(2, uris.size());
-            assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri1.getPath())));
-            assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri2.getPath())));
-        } finally {
-            client.deleteResource(expectedUri1);
-            client.deleteResource(expectedUri2);
-            client.deleteResource(expectedUri3);
-            client.deleteResource(expectedUri4);
-        }
+        // Only two Submissions with null sources should be found. The other Submission has a non-null source, and
+        // the other resource is a Deposit.
+        assertEquals(2, uris.size());
+        assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri1.getPath())));
+        assertTrue(uris.stream().anyMatch(uri -> uri.getPath().equals(expectedUri2.getPath())));
     }
     
     /**
@@ -185,32 +167,27 @@ public class FindAllByAttributesIT extends ClientITBase {
         attribs.put("repository", repoUri);
         
         URI uri = null;
-        try {
-            for(int i = 0; i < 10; i++){
-                Deposit deposit = random(Deposit.class, 2);
-                deposit.setDepositStatus(DepositStatus.ACCEPTED);
-                deposit.setRepository(repoUri);
-                uri = client.createResource(deposit);
-            }
-            
-            final URI searchUri = uri;
-            
-            attempt(RETRIES, () -> { //make sure last one is in the index
-                final URI matchedUri = client.findByAttribute(Deposit.class, "@id", searchUri);
-                assertEquals(searchUri, matchedUri);
-            }); 
-            Set<URI> matches = client.findAllByAttributes(Deposit.class, attribs, 4, 0);
-            assertEquals(4, matches.size());
-            matches = client.findAllByAttributes(Deposit.class, attribs, 4, 4);
-            assertEquals(4, matches.size());
-            matches = client.findAllByAttributes(Deposit.class, attribs, 4, 8);
-            assertEquals(2, matches.size());
-        } finally {
-            Set <URI> matches = client.findAllByAttributes(Deposit.class, attribs, 20, 0);
-            for (URI match : matches) {
-                client.deleteResource(match);
-            }
+        for(int i = 0; i < 10; i++){
+            Deposit deposit = random(Deposit.class, 2);
+            deposit.setDepositStatus(DepositStatus.ACCEPTED);
+            deposit.setRepository(repoUri);
+            uri = client.createResource(deposit);
+            createdUris.put(uri, Deposit.class);
         }
+        
+        final URI searchUri = uri;
+        
+        attempt(RETRIES, () -> { //make sure last one is in the index
+            final URI matchedUri = client.findByAttribute(Deposit.class, "@id", searchUri);
+            assertEquals(searchUri, matchedUri);
+        }); 
+        Set<URI> matches = client.findAllByAttributes(Deposit.class, attribs, 4, 0);
+        assertEquals(4, matches.size());
+        matches = client.findAllByAttributes(Deposit.class, attribs, 4, 4);
+        assertEquals(4, matches.size());
+        matches = client.findAllByAttributes(Deposit.class, attribs, 4, 8);
+        assertEquals(2, matches.size());
+
     }
     
     
@@ -222,23 +199,19 @@ public class FindAllByAttributesIT extends ClientITBase {
     public void testNoMatchFound() {
         Grant grant = random(Grant.class, 1);
         URI grantId = client.createResource(grant); //create something so it's not empty index
+        createdUris.put(grantId, Grant.class);
         
-        try {
-            attempt(RETRIES, () -> {
-                URI uri = client.findByAttribute(Grant.class, "@id", grantId);
-                assertEquals(grantId, uri);
-            });        
-                    
-            Map<String,Object> flds = new HashMap<String,Object>();
-            flds.put("awardNumber", "no match");
-            flds.put("awardStatus", AwardStatus.PRE_AWARD.toString());
-            Set<URI> matchedIds = client.findAllByAttributes(Grant.class, flds);
-            assertNotNull(matchedIds);
-            assertEquals(0, matchedIds.size());
-
-        } finally {
-            client.deleteResource(grantId);
-        }
+        attempt(RETRIES, () -> {
+            URI uri = client.findByAttribute(Grant.class, "@id", grantId);
+            assertEquals(grantId, uri);
+        });        
+                
+        Map<String,Object> flds = new HashMap<String,Object>();
+        flds.put("awardNumber", "no match");
+        flds.put("awardStatus", AwardStatus.PRE_AWARD.toString());
+        Set<URI> matchedIds = client.findAllByAttributes(Grant.class, flds);
+        assertNotNull(matchedIds);
+        assertEquals(0, matchedIds.size());
             
     }
 

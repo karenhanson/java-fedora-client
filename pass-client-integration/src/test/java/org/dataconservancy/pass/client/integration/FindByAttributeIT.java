@@ -51,25 +51,22 @@ public class FindByAttributeIT extends ClientITBase {
 
         Grant grant = random(Grant.class, 1);
         final URI grantId = client.createResource(grant);
+        createdUris.put(grantId, Grant.class);
 
-        try {
-            attempt(RETRIES, () -> { // check the record exists before continuing
-                final URI uri = client.findByAttribute(Grant.class, "@id", grantId);
-                assertEquals(grantId, uri);
-            });
-    
-            URI foundGrantId1 = client.findByAttribute(Grant.class, "awardNumber", grant.getAwardNumber());
-            assertEquals(grantId, foundGrantId1);
-    
-            URI foundGrantId2 = client.findByAttribute(Grant.class, "awardNumber", grant.getAwardNumber().toLowerCase());
-            assertEquals(grantId, foundGrantId2);
-            
-            URI foundGrantId3 = client.findByAttribute(Grant.class, "awardNumber", grant.getAwardNumber().toUpperCase());
-            assertEquals(grantId, foundGrantId3);
-        } finally {
-            client.deleteResource(grantId);
-        }
+        attempt(RETRIES, () -> { // check the record exists before continuing
+            final URI uri = client.findByAttribute(Grant.class, "@id", grantId);
+            assertEquals(grantId, uri);
+        });
 
+        URI foundGrantId1 = client.findByAttribute(Grant.class, "awardNumber", grant.getAwardNumber());
+        assertEquals(grantId, foundGrantId1);
+
+        URI foundGrantId2 = client.findByAttribute(Grant.class, "awardNumber", grant.getAwardNumber().toLowerCase());
+        assertEquals(grantId, foundGrantId2);
+        
+        URI foundGrantId3 = client.findByAttribute(Grant.class, "awardNumber", grant.getAwardNumber().toUpperCase());
+        assertEquals(grantId, foundGrantId3);
+        
     }
     
     /**
@@ -85,34 +82,24 @@ public class FindByAttributeIT extends ClientITBase {
         user.setDisplayName("Mary \"The Shark\" Schäfer");
         user.setAffiliation("Lamar & Schäfer Laboratory, Nürnberg");
         URI userId = client.createResource(user);
-        try {
-            attempt(RETRIES, () -> { // check the record exists
-                final URI uri = client.findByAttribute(User.class, "@id", userId);
-                assertEquals(userId, uri);
-            });        
-            
-            URI uri1 = client.findByAttribute(User.class, "firstName", user.getFirstName());
-            assertEquals(userId, uri1);
-    
-            URI uri2 = client.findByAttribute(User.class, "lastName", user.getLastName());
-            assertEquals(userId, uri2);
-            
-            URI uri3 = client.findByAttribute(User.class, "displayName", user.getDisplayName());
-            assertEquals(userId, uri3);
-    
-            URI uri4 = client.findByAttribute(User.class, "affiliation", user.getAffiliation());
-            assertEquals(userId, uri4);
-            
-        } finally {
-            //need to log fail if this doesn't work as it could mess up re-testing if data isn't cleaned out
-            try {
-                if (userId != null) {
-                    client.deleteResource(userId);
-                }
-            } catch (Exception ex) {
-                fail("Could not clean up from FindByAttributeIT.testSpecialCharacterSearch(), this may cause errors if test is rerun on the same dbs");
-            }
-        }
+        createdUris.put(userId, User.class);
+        
+        attempt(RETRIES, () -> { // check the record exists
+            final URI uri = client.findByAttribute(User.class, "@id", userId);
+            assertEquals(userId, uri);
+        });        
+        
+        URI uri1 = client.findByAttribute(User.class, "firstName", user.getFirstName());
+        assertEquals(userId, uri1);
+
+        URI uri2 = client.findByAttribute(User.class, "lastName", user.getLastName());
+        assertEquals(userId, uri2);
+        
+        URI uri3 = client.findByAttribute(User.class, "displayName", user.getDisplayName());
+        assertEquals(userId, uri3);
+
+        URI uri4 = client.findByAttribute(User.class, "affiliation", user.getAffiliation());
+        assertEquals(userId, uri4);
         
     }
     
@@ -123,18 +110,16 @@ public class FindByAttributeIT extends ClientITBase {
     public void testNoMatchFound() {
         Grant grant = random(Grant.class, 1);
         final URI grantId = client.createResource(grant); //create something so it's not empty
-        try {
-            attempt(RETRIES, () -> {
-                final URI uri = client.findByAttribute(Grant.class, "@id", grantId);
-                assertEquals(grantId, uri);
-            }); 
-            
-            URI matchedId = client.findByAttribute(Grant.class, "awardNumber", "no match");
-            assertEquals(null, matchedId);
-            
-        } finally {
-            client.deleteResource(grantId);
-        }
+        createdUris.put(grantId, Grant.class);
+        
+        attempt(RETRIES, () -> {
+            final URI uri = client.findByAttribute(Grant.class, "@id", grantId);
+            assertEquals(grantId, uri);
+        }); 
+        
+        URI matchedId = client.findByAttribute(Grant.class, "awardNumber", "no match");
+        assertEquals(null, matchedId);
+        
     }
     
     /**
@@ -145,21 +130,19 @@ public class FindByAttributeIT extends ClientITBase {
     public void testMultiRowArraySearch() {
         Submission submission = random(Submission.class, 2); //create random submission where each list has 2 rows
         final URI submissionId = client.createResource(submission);
-        try {
-            attempt(RETRIES, () -> {
-                final URI uri = client.findByAttribute(Submission.class, "@id", submissionId);
-                assertEquals(submissionId, uri);
-            }); 
-            
-            URI foundId1 = client.findByAttribute(Submission.class, "repositories", submission.getRepositories().get(0));
-            URI foundId2 = client.findByAttribute(Submission.class, "repositories", submission.getRepositories().get(1));
-            
-            assertEquals(submissionId, foundId1);
-            assertEquals(submissionId, foundId2);
-            
-        } finally {
-            client.deleteResource(submissionId);
-        }
+        createdUris.put(submissionId, Submission.class);
+
+        attempt(RETRIES, () -> {
+            final URI uri = client.findByAttribute(Submission.class, "@id", submissionId);
+            assertEquals(submissionId, uri);
+        }); 
+        
+        URI foundId1 = client.findByAttribute(Submission.class, "repositories", submission.getRepositories().get(0));
+        URI foundId2 = client.findByAttribute(Submission.class, "repositories", submission.getRepositories().get(1));
+        
+        assertEquals(submissionId, foundId1);
+        assertEquals(submissionId, foundId2);
+
     }
     
     /**

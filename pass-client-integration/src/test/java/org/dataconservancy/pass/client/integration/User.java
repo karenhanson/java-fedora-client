@@ -26,7 +26,7 @@ import org.dataconservancy.pass.model.PassEntityType;
  * 
  * @author Karen Hanson
  */
-public class TestUserModel extends PassEntity {
+public class User extends PassEntity {
 
     /** 
      * This will pretend it is a "User" object for testing.
@@ -110,7 +110,7 @@ public class TestUserModel extends PassEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        TestUserModel that = (TestUserModel) o;
+        User that = (User) o;
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
