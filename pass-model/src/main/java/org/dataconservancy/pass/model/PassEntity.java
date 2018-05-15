@@ -17,6 +17,7 @@ package org.dataconservancy.pass.model;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -39,6 +40,15 @@ public abstract class PassEntity {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("@id")
     protected URI id;
+
+    /** 
+     * Version tag can be a version number or string of characters used to identify the object version
+     * This could, for example, be an HTTP ETag. Its main purpose is for comparison during updates to 
+     * ensure you do not overwrite someone else's changes. Should not be part of the JSON output
+     */
+    @JsonIgnore
+    protected String versionTag;
+    
     
     /** 
      * Optional context field, when present this can be used to convert the JSON to JSON-LD
@@ -81,6 +91,24 @@ public abstract class PassEntity {
         this.context = context;
     }
     
+    
+    /**
+     * @return the versionTag
+     */
+    public String getVersionTag() {
+        return versionTag;
+    }
+
+
+    
+    /**
+     * @param versionTag the versionTag to set
+     */
+    public void setVersionTag(String versionTag) {
+        this.versionTag = versionTag;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

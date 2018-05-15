@@ -32,6 +32,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.apache.http.HttpStatus;
+
 import org.dataconservancy.pass.client.PassJsonAdapter;
 import org.dataconservancy.pass.client.adapter.PassJsonAdapterBasic;
 import org.dataconservancy.pass.model.PassEntity;
@@ -58,6 +61,7 @@ public class FedoraPassCrudClient {
     private final static String SERVER_MANAGED_OMITTYPE = "http://fedora.info/definitions/v4/repository#ServerManaged";
     private final static String COMPACTED_ACCEPTTYPE = "application/ld+json";
     private final static String INCOMING_INCLUDETYPE = "http://fedora.info/definitions/v4/repository#InboundReferences";
+    private final static String ETAG_HEADER = "ETag";
     
     /** 
      * The Fedora client tool 
@@ -130,9 +134,17 @@ public class FedoraPassCrudClient {
         PatchBuilderExtension patchbuilder = new PatchBuilderExtension(modelObj.getId(), client);
         try (FcrepoResponse response = patchbuilder
                             .body(jsonIS, JSONLD_PATCH_CONTENTTYPE)
+                            .ifMatch(modelObj.getVersionTag())
                             .perform()) {
+
             LOG.info("Container update status and location: {}, {}", response.getStatusCode(), modelObj.getId());
-        } catch (IOException | FcrepoOperationFailedException e) {
+        } catch (FcrepoOperationFailedException e) {
+            if (e.getStatusCode()==HttpStatus.SC_PRECONDITION_FAILED) {
+                throw new UpdateConflictException("Failed to update. The data may have changed since the object was last retrieved.", e);
+            } else {
+                throw new RuntimeException("A problem occurred while attempting to update a Resource", e);
+            }
+        } catch (IOException e) {
             throw new RuntimeException("A problem occurred while attempting to update a Resource", e);
         }
     }
@@ -166,8 +178,9 @@ public class FedoraPassCrudClient {
                 .perform()) {
 
           LOG.info("Resource read status: {}", response.getStatusCode());
-          
-          return adapter.toModel(response.getBody(), modelClass);
+          T model = adapter.toModel(response.getBody(), modelClass);
+          model.setVersionTag(response.getHeaderValue(ETAG_HEADER));
+          return model;
           
         } catch (IOException | FcrepoOperationFailedException e) {
             throw new RuntimeException("A problem occurred while attempting to read a Resource", e);

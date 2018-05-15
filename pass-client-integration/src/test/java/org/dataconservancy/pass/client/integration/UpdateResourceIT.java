@@ -27,6 +27,8 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import org.junit.Test;
 
+import org.dataconservancy.pass.client.fedora.UpdateConflictException;
+import org.dataconservancy.pass.model.Grant;
 import org.dataconservancy.pass.model.PassEntity;
 import org.dataconservancy.pass.model.User;
 import org.unitils.reflectionassert.ReflectionComparatorMode;
@@ -102,6 +104,27 @@ public class UpdateResourceIT extends ClientITBase {
         assertEquals(null, updatedUser.getUsername());
     }    
 
+    /**
+     * Checks that if you try to update a resource that was updated elsewhere between your read/write
+     * a UpdateConflictException is thrown when you try to update
+     */
+    @Test(expected=UpdateConflictException.class)
+    public void testEtagError() {
+        Grant grant = random(Grant.class, 2);
+        URI grantId = client.createResource(grant);
+        createdUris.put(grantId, Grant.class);
+        
+        Grant grantCopy1 = client.readResource(grantId, Grant.class);
+        Grant grantCopy2 = client.readResource(grantId, Grant.class);
+        
+        grantCopy1.setLocalKey("123456");
+        client.updateResource(grantCopy1);
+        
+        grantCopy2.setLocalKey("abcdefg");
+        client.updateResource(grantCopy2);
+    }
+    
+    
     PassEntity removeRelationships(PassEntity resource) {
         try {
             final PassEntity entity = resource.getClass().newInstance();

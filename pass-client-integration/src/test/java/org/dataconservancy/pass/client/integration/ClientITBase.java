@@ -119,6 +119,7 @@ public abstract class ClientITBase {
             final PassEntity cloned = (PassEntity) BeanUtils.cloneBean(e);
             cloned.setContext("");
             cloned.setId(URI.create(""));
+            cloned.setVersionTag("");
             return cloned;
         } catch (final Exception x) {
             throw new RuntimeException(x);
@@ -154,7 +155,7 @@ public abstract class ClientITBase {
             final T entity = obj.newInstance();
 
             for (final Method m : obj.getMethods()) {
-                if (m.getName().startsWith("set") && !m.getName().equals("setId")) {
+                if (m.getName().startsWith("set") && !m.getName().equals("setId") && !m.getName().equals("setVersionTag")) {
                     final Class<?> type = m.getParameterTypes()[0];
 
                     if (String.class.isAssignableFrom(type)) {
