@@ -43,7 +43,8 @@ public interface PassClient {
     /**
      * Takes any PassEntity, and updates the record matching the ID field.  
      * Note that if you attempt to update an object that was updated between the readResource and the
-     * updateResource, an `UpdateConflictException` will be thrown.
+     * updateResource, an `UpdateConflictException` will be thrown. This comparison is based on 
+     * the value in PassEntity.versionTag. Setting versionTag to null will ignore conflicts and do the update.
      * @param modelObj
      * @return
      */

@@ -62,6 +62,7 @@ public class FedoraPassCrudClient {
     private final static String COMPACTED_ACCEPTTYPE = "application/ld+json";
     private final static String INCOMING_INCLUDETYPE = "http://fedora.info/definitions/v4/repository#InboundReferences";
     private final static String ETAG_HEADER = "ETag";
+    private final static String ETAG_WEAK_PREFIX = "W/";
     
     /** 
      * The Fedora client tool 
@@ -179,7 +180,14 @@ public class FedoraPassCrudClient {
 
           LOG.info("Resource read status: {}", response.getStatusCode());
           T model = adapter.toModel(response.getBody(), modelClass);
-          model.setVersionTag(response.getHeaderValue(ETAG_HEADER));
+          
+          //remove the etag prefix, not needed for version comparison
+          String etag = response.getHeaderValue(ETAG_HEADER);
+          if (etag!=null && etag.contains(ETAG_WEAK_PREFIX)) {
+              etag = etag.replace(ETAG_WEAK_PREFIX, "");
+          }
+          model.setVersionTag(etag);
+          
           return model;
           
         } catch (IOException | FcrepoOperationFailedException e) {

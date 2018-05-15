@@ -34,6 +34,7 @@ import org.dataconservancy.pass.model.User;
 import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 /**
  * Tests client update functionality
@@ -117,8 +118,13 @@ public class UpdateResourceIT extends ClientITBase {
         Grant grantCopy1 = client.readResource(grantId, Grant.class);
         Grant grantCopy2 = client.readResource(grantId, Grant.class);
         
-        grantCopy1.setLocalKey("123456");
-        client.updateResource(grantCopy1);
+        try {
+            grantCopy1.setLocalKey("123456");
+            client.updateResource(grantCopy1);
+        } catch (Exception ex){
+            //should not fail here!
+            fail(ex.getMessage());
+        }
         
         grantCopy2.setLocalKey("abcdefg");
         client.updateResource(grantCopy2);
@@ -148,8 +154,10 @@ public class UpdateResourceIT extends ClientITBase {
 
         try {
             final PassEntity intermediate = client.readResource(passEntityUri, toDeposit.getClass());
+            String versionTag = intermediate.getVersionTag();
             BeanUtils.copyProperties(intermediate, updatedContent);
             intermediate.setId(passEntityUri);
+            intermediate.setVersionTag(versionTag);
             client.updateResource(intermediate);
             final PassEntity asUpdated = client.readResource(passEntityUri, intermediate.getClass());
             assertReflectionEquals(normalized(updatedContent), normalized(asUpdated),
