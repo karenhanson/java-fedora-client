@@ -39,7 +39,11 @@ URI grantUri = client.findByAttribute(Grant.class, "awardNumber", awardNumber);
 ```
 The Java docs provide more information about this functionality.
 
-### Environment variables
+### Configuration
+Configuration may be provided via system properties, or environment variables.  System properties are case-sensitive and separated by periods, as per Java conventions.
+Environment variables should be uppercase and separated by underscores, as per OS conventions.  For example, the fedora user may be provided by 
+a system property `-Dpass.fedora.user=myUser` or as an environment variable `PASS_FEDORA_USER=myUser`.  System properties override environment variables. 
+
 * pass.fedora.baseurl (default=http://localhost:8080/fcrepo/rest)
 * pass.fedora.user (default=admin)
 * pass.fedora.password (default=moo)

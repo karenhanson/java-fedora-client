@@ -10,16 +10,6 @@
   <artifactId>pass-client-util</artifactId>
 
   <dependencies>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.dataconservancy.pass</groupId>
-      <artifactId>pass-model</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
     
     <dependency>
       <groupId>junit</groupId>
@@ -28,9 +18,11 @@
     </dependency>
     
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
+      <groupId>com.github.stefanbirkner</groupId>
+      <artifactId>system-rules</artifactId>
+      <version>1.17.2</version>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 </project>
