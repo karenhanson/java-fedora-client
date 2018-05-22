@@ -15,6 +15,7 @@
  */
 package org.dataconservancy.pass.client;
 
+import java.io.InputStream;
 import java.net.URI;
 
 import java.util.Collection;
@@ -200,5 +201,48 @@ public interface PassClient {
      */
     public Map<String, Collection<URI>> getIncoming(URI passEntity);
 
-    
+    /**
+     * {@code POST}s the {@code content} to {@code entityUri}.
+     * <p>
+     * The {@code entityUri} must already exist.
+     * </p>
+     *
+     * @param entityUri a URI identifying an existing resource in the repository
+     * @param content the content to {@code POST} to the resource
+     * @return the {@code URI} used to retrieve the uploaded content
+     */
+    public URI upload(URI entityUri, InputStream content);
+
+    /**
+     * {@code POST}s the supplied {@code content} to the supplied {@code entityUri}.  Optional parameters may be
+     * supplied by the caller, and used by the implementation to, <em>e.g.</em>, supply checksums, suggest a "name" for
+     * the uploaded content.
+     * <p>
+     * The {@code entityUri} must already exist.
+     * </p>
+     * <p>
+     * Supported parameters include:
+     * </p>
+     * <dl>
+     *     <dt>content-type</dt>
+     *     <dd>the mime type of the {@code content} to be {@code POST}ed; added as a {@code Content-Type} header</dd>
+     *     <dt>slug</dt>
+     *     <dd>suggested name of the resource in the repository; added as a {@code Slug} header</dd>
+     *     <dt>sha256</dt>
+     *     <dd>hexadecimal encoded SHA-256 checksum of {@code content}; added as {@code Digest} header</dd>
+     *     <dt>sha1</dt>
+     *     <dd>hexadecimal encoded SHA-1 checksum of {@code content}; added as {@code Digest} header</dd>
+     *     <dt>md5</dt>
+     *     <dd>hexadecimal encoded MD5 checksum of {@code content}; added as {@code Digest} header</dd>
+     *     <dt>filename</dt>
+     *     <dd>name for {@code content}; added to a {@code Content-Disposition} header</dd>
+     * </dl>
+     *
+     * @param entityUri an existing entity in the repository
+     * @param content the content to {@code POST} to the entity
+     * @param params optional parameters to the {@code POST}, <em>i.e.</em> HTTP header values
+     * @return the {@code URI} used to retrieve the uploaded content
+     */
+    public URI upload(URI entityUri, InputStream content, Map<String, ?> params);
+
 }

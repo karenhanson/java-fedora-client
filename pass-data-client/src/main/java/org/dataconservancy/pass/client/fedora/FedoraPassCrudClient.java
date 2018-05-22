@@ -35,9 +35,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.http.HttpStatus;
 
+import org.dataconservancy.pass.client.PassClientDefault;
 import org.dataconservancy.pass.client.PassJsonAdapter;
 import org.dataconservancy.pass.client.adapter.PassJsonAdapterBasic;
 import org.dataconservancy.pass.model.PassEntity;
+import org.fcrepo.client.PostBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -246,6 +248,52 @@ public class FedoraPassCrudClient {
 
         } catch (IOException | FcrepoOperationFailedException e) {
             throw new RuntimeException("A problem occurred while attempting to read a Resource", e);
+        }
+    }
+
+    /**
+     * @see PassClientDefault#upload(URI, InputStream, Map)
+     *
+     * @throws RuntimeException if building the request to the repository fails, or if performing the request fails
+     */
+    public URI upload(URI passEntityUri, InputStream content, Map<String, ?> params) {
+        PostBuilder builder = new PostBuilder(passEntityUri, client);
+
+        if (params.containsKey("content-type")) {
+            builder.body(content, (String) params.get("content-type"));
+        } else {
+            builder.body(content);
+        }
+
+        if (params.containsKey("slug")) {
+            builder.slug((String)params.get("slug"));
+        }
+
+        if (params.containsKey("sha256")) {
+            builder.digestSha256((String) params.get("sha256"));
+        }
+
+        if (params.containsKey("md5")) {
+            builder.digestMd5((String) params.get("md5"));
+        }
+
+        if (params.containsKey("sha1")) {
+            builder.digestSha1((String) params.get("sha1"));
+        }
+
+        if (params.containsKey("filename")) {
+            try {
+                builder.filename((String) params.get("filename"));
+            } catch (FcrepoOperationFailedException e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
+        }
+
+        try (FcrepoResponse response = builder.perform()) {
+            return response.getLocation();
+        } catch (Exception e) {
+            throw new RuntimeException("An problem occurred while POSTing binary content to Resource " +
+                    passEntityUri + ": " + e.getMessage(), e);
         }
     }
     

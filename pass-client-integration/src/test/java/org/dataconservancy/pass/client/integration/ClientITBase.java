@@ -32,8 +32,12 @@ import java.util.stream.Collectors;
 
 import com.openpojo.reflection.PojoClass;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.apache.commons.beanutils.BeanUtils;
 
+import org.dataconservancy.pass.client.fedora.FedoraConfig;
 import org.junit.After;
 
 import org.dataconservancy.pass.client.PassClient;
@@ -43,9 +47,13 @@ import org.dataconservancy.pass.model.PassEntity;
 import org.dataconservancy.pass.model.User;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.junit.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.openpojo.reflection.impl.PojoClassFactory.enumerateClassesByExtendingType;
 
+import static java.util.Base64.getEncoder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -56,6 +64,8 @@ import static org.junit.Assert.fail;
  * @author Karen Hanson
  */
 public abstract class ClientITBase {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ClientITBase.class);
 
     protected Map<URI, Class<? extends PassEntity>> createdUris = new HashMap<URI, Class<? extends PassEntity>>();
     
@@ -81,7 +91,38 @@ public abstract class ClientITBase {
     protected final PassClient client = PassClientFactory.getPassClient();
 
     private static final Random randomIndex = new Random();
-    
+
+    protected OkHttpClient okHttp;
+
+    /**
+     * Set up an {@code OkHttp} client, which can be used to perform HTTP calls (vs the Fedora client, which abstracts
+     * a lot of HTTP away).
+     */
+    @Before
+    public void okHttpSetup() {
+        okHttp = new OkHttpClient();
+
+        if (FedoraConfig.getUserName() != null) {
+            OkHttpClient.Builder okBuilder = okHttp.newBuilder().addInterceptor(chain -> {
+                Request request = chain.request();
+                Request.Builder reqBuilder = request.newBuilder();
+                byte[] bytes = String.format("%s:%s",
+                        FedoraConfig.getUserName(), FedoraConfig.getPassword()).getBytes();
+                return chain.proceed(reqBuilder
+                        .addHeader("Authorization",
+                                "Basic " + getEncoder().encodeToString(bytes)).build());
+            });
+
+            okHttp = okBuilder.build();
+        }
+
+        if (LOG.isDebugEnabled()) {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+            okHttp = okHttp.newBuilder().addInterceptor(loggingInterceptor).build();
+        }
+    }
+
     /**
      * Deletes resources listed in createdUris map, then waits for confirmation from indexer that they are processed
      * @throws InterruptedException

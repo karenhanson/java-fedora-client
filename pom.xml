@@ -62,6 +62,7 @@
     <elasticsearch-client.version>6.2.3</elasticsearch-client.version>
     <slf4j.version>1.7.25</slf4j.version>
     <unitils.version>3.4.6</unitils.version>
+    <okhttp.version>3.10.0</okhttp.version>
   </properties>
 
 
@@ -220,6 +221,18 @@
        <artifactId>openpojo</artifactId>
        <version>${openpojo.version}</version>
        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp</artifactId>
+        <version>${okhttp.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>logging-interceptor</artifactId>
+        <version>${okhttp.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -15,9 +15,11 @@
  */
 package org.dataconservancy.pass.client;
 
+import java.io.InputStream;
 import java.net.URI;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -82,6 +84,19 @@ public class PassClientDefault implements PassClient {
     @Override
     public Map<String, Collection<URI>> getIncoming(URI passEntity) {
         return crudClient.getIncoming(passEntity);
+    }
+
+    @Override
+    public URI upload(URI entityUri, InputStream content) {
+        return upload(entityUri, content, Collections.emptyMap());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI upload(URI entityUri, InputStream content, Map<String, ?> params) {
+        return crudClient.upload(entityUri, content, params);
     }
 
     /**
