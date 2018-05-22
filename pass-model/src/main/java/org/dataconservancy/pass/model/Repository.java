@@ -17,6 +17,11 @@ package org.dataconservancy.pass.model;
 
 import java.net.URI;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Describes a Repository. A Repository is the target of a Deposit.
  * @author Karen Hanson
@@ -44,6 +49,56 @@ public class Repository extends PassEntity {
      */
     private String formSchema;
 
+    /** 
+     * Type of integration PASS has with the Repository
+     */
+    private IntegrationType integrationType;
+    
+
+    /**
+     * Possible deposit statuses. Note that some repositories may not go through every status.
+     */
+    public enum IntegrationType {
+        /**
+         * PASS can make Deposits to this Repository, and will received updates about its status
+         */
+        @JsonProperty("full")
+        FULL("full"),
+         /**
+         * PASS can make Deposits to this Repository but will not automatically receive updates about its status
+         */
+        @JsonProperty("one-way")
+        ONE_WAY("one-way"),
+        /**
+        * A deposit cannot automatically be made to this Repository from PASS, only a web link can be created.
+        */
+        @JsonProperty("web-link")
+        WEB_LINK("web-link");
+
+        private static final Map<String, IntegrationType> map = new HashMap<>(values().length, 1);  
+        static {
+          for (IntegrationType d : values()) map.put(d.value, d);
+        }
+        
+        private String value;
+        private IntegrationType(String value){
+            this.value = value;
+        }
+        
+        public static IntegrationType of(String integrationType) {
+            IntegrationType result = map.get(integrationType);
+            if (result == null) {
+              throw new IllegalArgumentException("Invalid Integration Type: " + integrationType);
+            }
+            return result;
+        }
+        
+        @Override
+        public String toString() {
+            return this.value;
+        }
+        
+    }
     
     /**
      * @return the name
@@ -109,6 +164,22 @@ public class Repository extends PassEntity {
     }
 
 
+    /**
+     * @return the integrationType
+     */
+    public IntegrationType getIntegrationType() {
+        return integrationType;
+    }
+
+
+    /**
+     * @param integrationType the integrationType to set
+     */
+    public void setIntegrationType(IntegrationType integrationType) {
+        this.integrationType = integrationType;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,6 +192,7 @@ public class Repository extends PassEntity {
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
         if (formSchema != null ? !formSchema.equals(that.formSchema) : that.formSchema != null) return false;
+        if (integrationType != null ? !integrationType.equals(that.integrationType) : that.integrationType != null) return false;
         return true;
     }
 
@@ -132,6 +204,7 @@ public class Repository extends PassEntity {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (formSchema != null ? formSchema.hashCode() : 0);
+        result = 31 * result + (integrationType != null ? integrationType.hashCode() : 0);
         return result;
     }
     

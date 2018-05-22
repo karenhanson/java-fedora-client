@@ -94,6 +94,7 @@ public class TestValues {
     public static final String REPOSITORY_URL = "https://repo-example.org/";
     //TODO: verify format of formSchema field
     public static final String REPOSITORY_FORMSCHEMA = "{\"customFieldName\": \"String\"}";
+    public static final String REPOSITORY_INTEGRATION_TYPE = "web-link";
     
     public static final String REPOSITORYCOPY_STATUS = "accepted";
     public static final String REPOSITORYCOPY_EXTERNALID_1 = "PMC12345";
