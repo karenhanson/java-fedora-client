@@ -5,7 +5,6 @@
 	"description": "You must submit to any OA repo",
 	"policyUrl": "https://somefunder.org/policy",
 	"repositories": ["https://example.org/fedora/repositories/1","https://example.org/fedora/repositories/2"],
-	"institution": "https://example.org/fedora/institutions/1",
-	"funder": "https://example.org/fedora/funders/1"
+	"institution": "https://example.org/fedora/institutions/1"
 }
 	
