@@ -15,7 +15,6 @@
  */
 package org.dataconservancy.pass.client.fedora;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -33,6 +32,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
+
 import org.apache.http.HttpStatus;
 
 import org.dataconservancy.pass.client.PassClientDefault;
@@ -48,6 +55,9 @@ import org.fcrepo.client.FcrepoClient;
 import org.fcrepo.client.FcrepoOperationFailedException;
 import org.fcrepo.client.FcrepoResponse;
 import org.fcrepo.client.GetBuilder;
+
+import static java.lang.String.format;
+import static java.util.Base64.getEncoder;
 
 /**
  * Fedora CRUD client does basic work of creating, retrieving, updating, and deleting
@@ -70,22 +80,30 @@ public class FedoraPassCrudClient {
      * The Fedora client tool 
      */
     private FcrepoClient client;
-    
+
+    /**
+     * OkHttp client, for when using HTTP is desired
+     */
+    private OkHttpClient okHttpClient;
+
     /**
      * A JSON adapter for PASS 
      */
     private PassJsonAdapter adapter;
 
+    /**
+     * Instantiates default implementations of the underlying Fedora client, JSON adapter, and OkHttpClient.
+     */
     public FedoraPassCrudClient() {
-        client = FcrepoClient.client()
+        this(FcrepoClient.client()
                 .credentials(FedoraConfig.getUserName(), FedoraConfig.getPassword())
                 .throwExceptionOnFailure()
-                .build();
-        adapter = new PassJsonAdapterBasic();
+                .build(),
+             new PassJsonAdapterBasic());
     }
 
     /** 
-     * Support passing in of Fedora client and adapter
+     * Support passing in of Fedora client and adapter.  Instantiates a default OkHttpClient.
      * @param client
      * @param adapter
      */
@@ -96,60 +114,76 @@ public class FedoraPassCrudClient {
         if (adapter == null) {
             throw new IllegalArgumentException("adapter parameter cannot be null");
         }
-        this.client = client;   
+        this.client = client;
         this.adapter = adapter;
+
+        OkHttpClient.Builder okBuilder = new OkHttpClient.Builder();
+
+        // N.B. this presumes that this OkHttp client will _only_ communicate with the Fedora repository, otherwise
+        // authorization credentials will be leaked.
+        if (FedoraConfig.getUserName() != null) {
+            okBuilder.addInterceptor((requestChain) -> {
+                Request request = requestChain.request();
+                Request.Builder reqBuilder = request.newBuilder();
+                byte[] bytes = format("%s:%s",
+                        FedoraConfig.getUserName(), FedoraConfig.getPassword()).getBytes();
+                return requestChain.proceed(reqBuilder.addHeader("Authorization",
+                        "Basic " + getEncoder().encodeToString(bytes)).build());
+            });
+        }
+
+        if (LOG.isDebugEnabled()) {
+            Interceptor loggingInterceptor = new HttpLoggingInterceptor(LOG::debug);
+            okBuilder.addInterceptor(loggingInterceptor);
+        }
+
+        this.okHttpClient = okBuilder.build();
     }
-    
+
+    /**
+     * Support passing in of Fedora client, JSON adapter, and OkHttpClient
+     * @param client
+     * @param adapter
+     * @param okHttpClient
+     */
+    public FedoraPassCrudClient(FcrepoClient client, PassJsonAdapter adapter, OkHttpClient okHttpClient) {
+        if (client == null) {
+            throw new IllegalArgumentException("client parameter cannot be null");
+        }
+        if (adapter == null) {
+            throw new IllegalArgumentException("adapter parameter cannot be null");
+        }
+        if (client == null) {
+            throw new IllegalArgumentException("okhttpclient parameter cannot be null");
+        }
+        this.client = client;
+        this.adapter = adapter;
+        this.okHttpClient = okHttpClient;
+    }
+
     /**
      * @see org.dataconservancy.pass.client.PassClient#createResource(PassEntity)
      */
     public URI createResource(PassEntity modelObj) {
-        URI container = null;
-        URI newId = null;
-        
-        try {            
-            container = new URI(FedoraConfig.getContainer(modelObj.getClass().getSimpleName()));
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Container name could not be converted to a URI", e);
-        }
-        
-        byte[] json = adapter.toJson(modelObj, true);
-        InputStream jsonIS = new ByteArrayInputStream(json);
-                
-        try (FcrepoResponse response = client.post(container)
-                .body(jsonIS, JSONLD_CONTENTTYPE)
-                .perform()) {
-            newId = response.getLocation();
-            LOG.info("Container creation status and location: {}, {}", response.getStatusCode(), newId);
-        } catch (FcrepoOperationFailedException | IOException e) {
-            throw new RuntimeException("A problem occurred while attempting to create a new Resource", e);
-        } 
-        return newId;
+        return createInternal(modelObj, true).getId();
+    }
+
+    /**
+     * @see org.dataconservancy.pass.client.PassClient#createResource(PassEntity)
+     */
+    public <T extends PassEntity> T createAndReadResource(T modelObj, Class<T> modelClass) {
+        return createInternal(modelObj, true);
     }
 
     /**
      * @see org.dataconservancy.pass.client.PassClient#updateResource(PassEntity)
      */
     public void updateResource(PassEntity modelObj) {
-        byte[] json = adapter.toJson(modelObj, true);
-        InputStream jsonIS = new ByteArrayInputStream(json);
-        
-        PatchBuilderExtension patchbuilder = new PatchBuilderExtension(modelObj.getId(), client);
-        try (FcrepoResponse response = patchbuilder
-                            .body(jsonIS, JSONLD_PATCH_CONTENTTYPE)
-                            .ifMatch(modelObj.getVersionTag())
-                            .perform()) {
+        updateInternal(modelObj, true, false);
+    }
 
-            LOG.info("Container update status and location: {}, {}", response.getStatusCode(), modelObj.getId());
-        } catch (FcrepoOperationFailedException e) {
-            if (e.getStatusCode()==HttpStatus.SC_PRECONDITION_FAILED) {
-                throw new UpdateConflictException("Failed to update. The data may have changed since the object was last retrieved.", e);
-            } else {
-                throw new RuntimeException("A problem occurred while attempting to update a Resource", e);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("A problem occurred while attempting to update a Resource", e);
-        }
+    public <T extends PassEntity> T updateAndReadResource(T modelObj, Class<T> modelClass) {
+        return updateInternal(modelObj, true, true);
     }
 
     /**
@@ -296,5 +330,77 @@ public class FedoraPassCrudClient {
                     passEntityUri + ": " + e.getMessage(), e);
         }
     }
-    
+
+    private <T extends PassEntity> T createInternal(T modelObj, boolean includeContext) {
+        byte[] json = adapter.toJson(modelObj, true);
+        RequestBody body = RequestBody.create(MediaType.parse(JSONLD_CONTENTTYPE), json);
+
+        URI container = null;
+        try {
+            container = new URI(FedoraConfig.getContainer(modelObj.getClass().getSimpleName()));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Container name could not be converted to a URI", e);
+        }
+
+        Request.Builder reqBuilder = new Request.Builder()
+                .url(container.toString())
+                .post(body)
+                .addHeader("Accept", COMPACTED_ACCEPTTYPE)
+                .addHeader("Prefer", "return=representation; omits=\"" + SERVER_MANAGED_OMITTYPE + "\"");
+
+        try (Response res = okHttpClient.newCall(reqBuilder.build()).execute()) {
+            handleNon2xx(modelObj, res);
+
+            PassEntity entity = adapter.toModel(res.body().byteStream(), modelObj.getClass());
+            LOG.info("Container creation status and location: {}, {}", res.code(), entity.getId());
+
+            return (T) entity;
+        } catch (Exception e) {
+            throw new RuntimeException("A problem occurred while attempting to create a Resource: " +
+                    e.getMessage(), e);
+        }
+    }
+
+    private <T extends PassEntity> T updateInternal(T modelObj, boolean includeContext, boolean performRead) {
+        byte[] json = adapter.toJson(modelObj, true);
+        RequestBody body = RequestBody.create(MediaType.parse(JSONLD_PATCH_CONTENTTYPE), json);
+
+        Request.Builder reqBuilder = new Request.Builder()
+                .url(modelObj.getId().toString())
+                .patch(body)
+                .addHeader("Accept", COMPACTED_ACCEPTTYPE);
+
+        if (modelObj.getVersionTag() != null) {
+            reqBuilder.addHeader("If-Match", modelObj.getVersionTag());
+        } else {
+            LOG.warn("Executing PATCH without 'If-Match' header: a {}, id '{}' has a null 'version tag'",
+                    modelObj.getClass().getName(), modelObj.getId());
+        }
+
+        try (Response res = okHttpClient.newCall(reqBuilder.build()).execute()) {
+            if (res.code() == HttpStatus.SC_PRECONDITION_FAILED) {
+                String msg = format("Failed to update %s - the data may have changed since %s was last retrieved.",
+                        modelObj.getId(), modelObj.getId());
+                throw new UpdateConflictException(msg);
+            }
+            handleNon2xx(modelObj, res);
+        } catch (UpdateConflictException e) {
+            throw e;
+        } catch (Exception e) {
+            String msg = format("A problem occurred while attempting to update Resource %s: %s ",
+                    modelObj.getId(), e.getMessage());
+            throw new RuntimeException(msg, e);
+        }
+
+        return performRead ? readResource(modelObj.getId(), (Class<T>) modelObj.getClass()) : null;
+    }
+
+    private static <T extends PassEntity> void handleNon2xx(T modelObj, Response res) throws IOException {
+        if (res.code() < 200 || res.code() > 299) {
+            String msg = format("Failed to update %s - unexpected status code %s: %s",
+                    modelObj.getId(), res.code(), res.body().string());
+            throw new RuntimeException(msg);
+        }
+    }
+
 }

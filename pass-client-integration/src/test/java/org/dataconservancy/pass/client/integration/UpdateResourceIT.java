@@ -28,12 +28,14 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.junit.Test;
 
 import org.dataconservancy.pass.client.fedora.UpdateConflictException;
+import org.dataconservancy.pass.model.Deposit;
 import org.dataconservancy.pass.model.Grant;
 import org.dataconservancy.pass.model.PassEntity;
 import org.dataconservancy.pass.model.User;
 import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 /**
@@ -129,8 +131,36 @@ public class UpdateResourceIT extends ClientITBase {
         grantCopy2.setLocalKey("abcdefg");
         client.updateResource(grantCopy2);
     }
-    
-    
+
+    /**
+     * Documenting behavior: simply writing the same object back to the repository results in a different etag.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testUpdateWithNoChanges() throws Exception {
+        Deposit deposit = client.readResource(client.createResource(random(Deposit.class, 1)), Deposit.class);
+        Deposit updated = client.updateAndReadResource(deposit, Deposit.class);
+
+        assertNotEquals(deposit.getVersionTag(), updated.getVersionTag());
+        assertEquals(deposit.getId().toString(), updated.getId().toString());
+    }
+
+    @Test
+    public void testUpdateWithChange() throws Exception {
+        Deposit deposit = client.readResource(client.createResource(random(Deposit.class, 1)), Deposit.class);
+
+        String expectedStatusRef = "http://example.org/status/1";
+        deposit.setDepositStatusRef(expectedStatusRef);
+
+        Deposit updated = client.updateAndReadResource(deposit, Deposit.class);
+
+        // Doesn't really matter, it changes anyway
+        assertNotEquals(deposit.getVersionTag(), updated.getVersionTag());
+        assertEquals(expectedStatusRef, updated.getDepositStatusRef());
+        assertEquals(deposit.getId().toString(), updated.getId().toString());
+    }
+
     PassEntity removeRelationships(PassEntity resource) {
         try {
             final PassEntity entity = resource.getClass().newInstance();
