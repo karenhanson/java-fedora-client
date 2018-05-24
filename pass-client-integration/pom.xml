@@ -63,7 +63,7 @@
           <images>
             <image>
               <alias>fcrepo</alias>
-              <name>oapass/fcrepo:4.7.5-2.0-SNAPSHOT-6</name>
+              <name>oapass/fcrepo:4.7.5-2.1-SNAPSHOT</name>
               <run>
                 <hostname>fcrepo</hostname>
                 <namingStrategy>alias</namingStrategy>
@@ -100,7 +100,7 @@
             </image>
             <image>
               <alias>indexer</alias>
-              <name>oapass/indexer:0.0.6-2.0-SNAPSHOT</name>
+              <name>oapass/indexer:0.0.8-2.1-SNAPSHOT</name>
               <run>
                 <namingStrategy>alias</namingStrategy>
                 <env>
