@@ -55,7 +55,6 @@ public class PolicyModelTests {
         assertEquals(TestValues.REPOSITORY_ID_1, policy.getRepositories().get(0).toString());
         assertEquals(TestValues.REPOSITORY_ID_2, policy.getRepositories().get(1).toString());
         assertEquals(TestValues.POLICY_URL, policy.getPolicyUrl().toString());
-        assertEquals(TestValues.FUNDER_ID_1, policy.getFunder().toString());
         assertEquals(TestValues.INSTITUTION_ID_1, policy.getInstitution().toString());
     }
 
@@ -80,7 +79,6 @@ public class PolicyModelTests {
         assertEquals(root.getJSONArray("repositories").get(0),TestValues.REPOSITORY_ID_1);
         assertEquals(root.getJSONArray("repositories").get(1),TestValues.REPOSITORY_ID_2);
         assertEquals(root.getString("institution"),TestValues.INSTITUTION_ID_1);         
-        assertEquals(root.getString("funder"),TestValues.FUNDER_ID_1);         
     }
     
     /**
@@ -118,7 +116,6 @@ public class PolicyModelTests {
         policy.setRepositories(repositories);
 
         policy.setInstitution(new URI(TestValues.INSTITUTION_ID_1));
-        policy.setFunder(new URI(TestValues.FUNDER_ID_1));
         
         return policy;
     }

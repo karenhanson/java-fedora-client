@@ -52,11 +52,7 @@ public class Policy extends PassEntity {
      */
     private URI institution;
     
-    /** 
-     * URI of the Funder whose Policy this is (note: if funder has a value, institution should be null)
-     */
-    private URI funder;
-
+    
     /**
      * @return the title
      */
@@ -122,22 +118,6 @@ public class Policy extends PassEntity {
 
     
     /**
-     * @return the funder
-     */
-    public URI getFunder() {
-        return funder;
-    }
-
-    
-    /**
-     * @param institution the institution to set
-     */
-    public void setFunder(URI funder) {
-        this.funder = funder;
-    }
-
-    
-    /**
      * @return the list of URIs of repositories
      */
     public List<URI> getRepositories() {
@@ -165,7 +145,6 @@ public class Policy extends PassEntity {
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (policyUrl != null ? !policyUrl.equals(that.policyUrl) : that.policyUrl != null) return false;
         if (repositories != null ? !repositories.equals(that.repositories) : that.repositories != null) return false;
-        if (funder != null ? !funder.equals(that.funder) : that.funder != null) return false;
         if (institution != null ? !institution.equals(that.institution) : that.institution != null) return false;
         return true;
     }
@@ -179,7 +158,6 @@ public class Policy extends PassEntity {
         result = 31 * result + (policyUrl != null ? policyUrl.hashCode() : 0);
         result = 31 * result + (repositories != null ? repositories.hashCode() : 0);
         result = 31 * result + (institution != null ? institution.hashCode() : 0);
-        result = 31 * result + (funder != null ? funder.hashCode() : 0);
         return result;
     }
        

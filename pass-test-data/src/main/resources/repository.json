@@ -4,6 +4,7 @@
 	"name": "Repository A",
 	"description": "An OA repository run by funder A",
 	"url": "https://repo-example.org/",
-	"formSchema":"{\"customFieldName\": \"String\"}"
+	"formSchema":"{\"customFieldName\": \"String\"}",
+	"integrationType":"web-link"
 }
 	

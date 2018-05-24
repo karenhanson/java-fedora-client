@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
 
+import org.dataconservancy.pass.model.Repository.IntegrationType;
 import org.json.JSONObject;
 
 import static org.junit.Assert.assertEquals;
@@ -51,6 +52,7 @@ public class RepositoryModelTests {
         assertEquals(TestValues.REPOSITORY_DESCRIPTION, repository.getDescription());
         assertEquals(TestValues.REPOSITORY_URL, repository.getUrl().toString());
         assertEquals(TestValues.REPOSITORY_FORMSCHEMA, repository.getFormSchema());
+        assertEquals(TestValues.REPOSITORY_INTEGRATION_TYPE, repository.getIntegrationType().toString());
     }
 
     /**
@@ -71,7 +73,8 @@ public class RepositoryModelTests {
         assertEquals(root.getString("name"),TestValues.REPOSITORY_NAME);
         assertEquals(root.getString("description"),TestValues.REPOSITORY_DESCRIPTION);
         assertEquals(root.getString("url"),TestValues.REPOSITORY_URL);        
-        assertEquals(root.getString("formSchema"),TestValues.REPOSITORY_FORMSCHEMA);          
+        assertEquals(root.getString("formSchema"),TestValues.REPOSITORY_FORMSCHEMA); 
+        assertEquals(root.getString("integrationType"),TestValues.REPOSITORY_INTEGRATION_TYPE);
     }
     
     /**
@@ -103,6 +106,7 @@ public class RepositoryModelTests {
         repository.setDescription(TestValues.REPOSITORY_DESCRIPTION);
         repository.setUrl(new URI(TestValues.REPOSITORY_URL));
         repository.setFormSchema(TestValues.REPOSITORY_FORMSCHEMA);
+        repository.setIntegrationType(IntegrationType.of(TestValues.REPOSITORY_INTEGRATION_TYPE));
         
         return repository;
     }
