@@ -106,7 +106,13 @@ public class Submission extends PassEntity {
          * All related Deposits have a status of "accepted"
          */
         @JsonProperty("accepted")
-        ACCEPTED("accepted");
+        ACCEPTED("accepted"),
+
+        /**
+         * One or more related Deposits have a status of "rejected"
+         */
+        @JsonProperty("rejected")
+        REJECTED("rejected");
 
         private static final Map<String, AggregatedDepositStatus> map = new HashMap<>(values().length, 1);  
         static {
