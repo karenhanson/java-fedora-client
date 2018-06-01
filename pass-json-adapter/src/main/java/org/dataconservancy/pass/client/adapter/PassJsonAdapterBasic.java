@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * JSON Adapter converts a PassEntity object into JSON (with or without context) and back
  * @author Karen Hanson
  */
 public class PassJsonAdapterBasic implements PassJsonAdapter {
@@ -40,7 +40,7 @@ public class PassJsonAdapterBasic implements PassJsonAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(PassJsonAdapterBasic.class);
     
     private final static String CONTEXT_PROPKEY = "pass.jsonld.context";
-    private final static String DEFAULT_CONTEXT = "https://oa-pass.github.io/pass-data-model/src/main/resources/context-2.1.jsonld";
+    private final static String DEFAULT_CONTEXT = "https://oa-pass.github.io/pass-data-model/src/main/resources/context-2.2.jsonld";
     
     /**
      * {@inheritDoc}

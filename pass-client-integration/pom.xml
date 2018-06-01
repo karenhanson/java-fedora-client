@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.dataconservancy.pass</groupId>
     <artifactId>pass-client</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.3.2-SNAPSHOT</version>
   </parent>
   <artifactId>pass-client-integration</artifactId>
 
@@ -63,7 +63,7 @@
           <images>
             <image>
               <alias>fcrepo</alias>
-              <name>oapass/fcrepo:4.7.5-2.1-SNAPSHOT</name>
+              <name>oapass/fcrepo:4.7.5-2.2-SNAPSHOT</name>
               <run>
                 <hostname>fcrepo</hostname>
                 <namingStrategy>alias</namingStrategy>
@@ -74,9 +74,9 @@
                   <FCREPO_STOMP_PORT>${FCREPO_STOMP_PORT}</FCREPO_STOMP_PORT>
                   <FCREPO_JMS_BASEURL>http://${FCREPO_HOST}:${FCREPO_PORT}/fcrepo/rest</FCREPO_JMS_BASEURL>
                   <FCREPO_ACTIVEMQ_CONFIGURATION>classpath:/activemq-queue.xml</FCREPO_ACTIVEMQ_CONFIGURATION>
-                  <COMPACTION_URI>https://oa-pass.github.io/pass-data-model/src/main/resources/context-2.1.jsonld</COMPACTION_URI>
-                  <COMPACTION_PRELOAD_URI_PASS_STATIC>https://oa-pass.github.io/pass-data-model/src/main/resources/context-2.1.jsonld</COMPACTION_PRELOAD_URI_PASS_STATIC>
-                  <COMPACTION_PRELOAD_FILE_PASS_STATIC>/usr/local/tomcat/lib/context-2.1.jsonld</COMPACTION_PRELOAD_FILE_PASS_STATIC>
+                  <COMPACTION_URI>https://oa-pass.github.io/pass-data-model/src/main/resources/context-2.2.jsonld</COMPACTION_URI>
+                  <COMPACTION_PRELOAD_URI_PASS_STATIC>https://oa-pass.github.io/pass-data-model/src/main/resources/context-2.2.jsonld</COMPACTION_PRELOAD_URI_PASS_STATIC>
+                  <COMPACTION_PRELOAD_FILE_PASS_STATIC>/usr/local/tomcat/lib/context-2.2.jsonld</COMPACTION_PRELOAD_FILE_PASS_STATIC>
                 </env>
                 <ports>
                   <port>${FCREPO_PORT}:${FCREPO_PORT}</port>
@@ -100,7 +100,7 @@
             </image>
             <image>
               <alias>indexer</alias>
-              <name>oapass/indexer:0.0.8-2.1-SNAPSHOT</name>
+              <name>oapass/indexer:0.0.10-2.2-SNAPSHOT</name>
               <run>
                 <namingStrategy>alias</namingStrategy>
                 <env>
@@ -111,7 +111,7 @@
                   <PI_ES_INDEX>http://elasticsearch:9200/pass/</PI_ES_INDEX>
                   <PI_FEDORA_JMS_BROKER>tcp://${FCREPO_HOST}:${FCREPO_JMS_PORT}</PI_FEDORA_JMS_BROKER>
                   <PI_FEDORA_JMS_QUEUE>fedora</PI_FEDORA_JMS_QUEUE>
-                  <PI_TYPE_PREFIX>http://example.org/pass/</PI_TYPE_PREFIX>
+                  <PI_TYPE_PREFIX>http://oapass.org/ns/pass#</PI_TYPE_PREFIX>
                   <PI_LOG_LEVEL>DEBUG</PI_LOG_LEVEL>
                 </env>
                 <links>
