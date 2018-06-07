@@ -122,9 +122,6 @@ public class FedoraPassCrudClient {
         if (FedoraConfig.getUserName() != null) {
             okBuilder.addInterceptor((requestChain) -> {
                 Request request = requestChain.request();
-                if (!request.url().toString().startsWith(FedoraConfig.getBaseUrl())) {
-                    return requestChain.proceed(request);
-                }
                 LOG.trace("Adding 'Authorization' header for communication with {}", FedoraConfig.getBaseUrl());
                 Request.Builder reqBuilder = request.newBuilder();
                 byte[] bytes = format("%s:%s",
