@@ -112,7 +112,13 @@ public class Submission extends PassEntity {
          * One or more related Deposits have a status of "rejected"
          */
         @JsonProperty("rejected")
-        REJECTED("rejected");
+        REJECTED("rejected"),
+
+        /**
+         * Processing the Submission failed, and should be re-tried later.
+         */
+        @JsonProperty("failed")
+        FAILED("failed");
 
         private static final Map<String, AggregatedDepositStatus> map = new HashMap<>(values().length, 1);  
         static {

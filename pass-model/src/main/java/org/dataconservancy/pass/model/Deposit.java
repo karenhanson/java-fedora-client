@@ -74,7 +74,12 @@ public class Deposit extends PassEntity {
         * requirements of the Deposit have been satisfied
         */
         @JsonProperty("rejected")
-        REJECTED("rejected");
+        REJECTED("rejected"),
+        /**
+         * A failure occurred performing the deposit; it may be re-tried later.
+         */
+        @JsonProperty("failed")
+        FAILED("failed");
 
         private static final Map<String, DepositStatus> map = new HashMap<>(values().length, 1);  
         static {
