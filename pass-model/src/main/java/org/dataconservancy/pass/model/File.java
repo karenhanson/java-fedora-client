@@ -63,11 +63,29 @@ public class File extends PassEntity {
      * list of possible File Roles 
      */
     public enum FileRole {
+        /**
+        * Author accepted manuscript
+        */
         @JsonProperty("manuscript")
         MANUSCRIPT("manuscript"),
         
+        /**
+        * Supplemental material for the Publication
+        */
         @JsonProperty("supplemental")
-        SUPPLEMENTAL("supplemental");
+        SUPPLEMENTAL("supplemental"),
+        
+        /**
+        * An image, data plot, map, or schematic
+        */
+        @JsonProperty("figure")
+        FIGURE("figure"),
+        
+        /**
+        * Tabular data
+        */
+        @JsonProperty("table")
+        TABLE("table");
 
         private static final Map<String, FileRole> map = new HashMap<>(values().length, 1);  
         static {
