@@ -15,14 +15,13 @@
  */
 package org.dataconservancy.pass.model;
 
-import java.net.URI;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A Repository Copy represents a copy of a Publication that exists in a target Repository. 
@@ -79,7 +78,13 @@ public class RepositoryCopy extends PassEntity {
         * The target Repository has rejected the Deposit
         */
         @JsonProperty("complete")
-        COMPLETE("complete");
+        COMPLETE("complete"),
+
+        /**
+         * The RepositoryCopy has been rejected by the remote Repository.
+         */
+        @JsonProperty("rejected")
+        REJECTED("rejected");
 
         private static final Map<String, CopyStatus> map = new HashMap<>(values().length, 1);  
         static {
