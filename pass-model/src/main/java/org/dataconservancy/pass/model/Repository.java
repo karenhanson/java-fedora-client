@@ -53,7 +53,12 @@ public class Repository extends PassEntity {
      * Type of integration PASS has with the Repository
      */
     private IntegrationType integrationType;
-    
+
+    /**
+     * Key that is unique to this {@code Repository} instance.  Used to reference the {@code Repository} when its URI
+     * is not available (e.g. prior to the creation of a {@code Repository} resource in Fedora).
+     */
+    private String repositoryKey;
 
     /**
      * Possible deposit statuses. Note that some repositories may not go through every status.
@@ -179,6 +184,25 @@ public class Repository extends PassEntity {
         this.integrationType = integrationType;
     }
 
+    /**
+     * Key that is unique to this {@code Repository} instance.  Used to look up the {@code Repository} when its URI
+     * is not available (e.g. prior to the creation of a {@code Repository} resource in Fedora).
+     *
+     * @return a String unique to this {@code Repository} within PASS, may be {@code null}
+     */
+    public String getRepositoryKey() {
+        return repositoryKey;
+    }
+
+    /**
+     * Key that is unique to this {@code Repository} instance.  Used to look up the {@code Repository} when its URI
+     * is not available (e.g. prior to the creation of a {@code Repository} resource in Fedora).
+     *
+     * @param repositoryKey a String unique to this {@code Repository} within PASS
+     */
+    public void setRepositoryKey(String repositoryKey) {
+        this.repositoryKey = repositoryKey;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -193,6 +217,7 @@ public class Repository extends PassEntity {
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
         if (formSchema != null ? !formSchema.equals(that.formSchema) : that.formSchema != null) return false;
         if (integrationType != null ? !integrationType.equals(that.integrationType) : that.integrationType != null) return false;
+        if (repositoryKey != null ? !repositoryKey.equals(that.repositoryKey) : that.repositoryKey != null) return false;
         return true;
     }
 
@@ -205,6 +230,7 @@ public class Repository extends PassEntity {
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (formSchema != null ? formSchema.hashCode() : 0);
         result = 31 * result + (integrationType != null ? integrationType.hashCode() : 0);
+        result = 31 * result + (repositoryKey != null ? repositoryKey.hashCode() : 0);
         return result;
     }
     

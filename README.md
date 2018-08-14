@@ -45,7 +45,7 @@ Environment variables should be uppercase and separated by underscores, as per O
 a system property `-Dpass.fedora.user=myUser` or as an environment variable `PASS_FEDORA_USER=myUser`.  System properties override environment variables. 
 
 * pass.fedora.baseurl (default=http://localhost:8080/fcrepo/rest)
-* pass.fedora.user (default=admin)
+* pass.fedora.user (default=fedoraAdmin)
 * pass.fedora.password (default=moo)
 * pass.elasticsearch.url (defaults = http://localhost:9200/pass)
 * pass.elasticsearch.limit (defaults = 200) you can also override the default by using the findBy functions that accept a limit and offset value

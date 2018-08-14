@@ -29,7 +29,7 @@ public class FedoraConfig {
     private static final Logger LOG = LoggerFactory.getLogger(FedoraConfig.class);
 
     private static final String USER_KEY = "pass.fedora.user";
-    private static final String DEFAULT_USER  = "admin";
+    private static final String DEFAULT_USER  = "fedoraAdmin";
 
     private static final String PWD_KEY = "pass.fedora.password";
     private static final String DEFAULT_PASSWORD = "moo";

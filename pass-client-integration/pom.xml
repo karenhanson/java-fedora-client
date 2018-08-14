@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.dataconservancy.pass</groupId>
     <artifactId>pass-client</artifactId>
-    <version>0.3.3-SNAPSHOT</version>
+    <version>0.3.4-SNAPSHOT</version>
   </parent>
   <artifactId>pass-client-integration</artifactId>
 
@@ -63,7 +63,7 @@
           <images>
             <image>
               <alias>fcrepo</alias>
-              <name>oapass/fcrepo:4.7.5-2.2-SNAPSHOT</name>
+              <name>oapass/fcrepo:4.7.5-2.3-SNAPSHOT</name>
               <run>
                 <hostname>fcrepo</hostname>
                 <namingStrategy>alias</namingStrategy>
@@ -74,9 +74,6 @@
                   <FCREPO_STOMP_PORT>${FCREPO_STOMP_PORT}</FCREPO_STOMP_PORT>
                   <FCREPO_JMS_BASEURL>http://${FCREPO_HOST}:${FCREPO_PORT}/fcrepo/rest</FCREPO_JMS_BASEURL>
                   <FCREPO_ACTIVEMQ_CONFIGURATION>classpath:/activemq-queue.xml</FCREPO_ACTIVEMQ_CONFIGURATION>
-                  <COMPACTION_URI>https://oa-pass.github.io/pass-data-model/src/main/resources/context-2.2.jsonld</COMPACTION_URI>
-                  <COMPACTION_PRELOAD_URI_PASS_STATIC>https://oa-pass.github.io/pass-data-model/src/main/resources/context-2.2.jsonld</COMPACTION_PRELOAD_URI_PASS_STATIC>
-                  <COMPACTION_PRELOAD_FILE_PASS_STATIC>/usr/local/tomcat/lib/context-2.2.jsonld</COMPACTION_PRELOAD_FILE_PASS_STATIC>
                 </env>
                 <ports>
                   <port>${FCREPO_PORT}:${FCREPO_PORT}</port>
@@ -92,7 +89,7 @@
                 </volumes>
                 <wait>
                   <http>
-                    <url>http://admin:moo@${FCREPO_HOST}:${FCREPO_PORT}/fcrepo/rest</url>
+                    <url>http://fedoraAdmin:moo@${FCREPO_HOST}:${FCREPO_PORT}/fcrepo/rest</url>
                   </http>
                   <time>120000</time>
                 </wait>
@@ -100,7 +97,7 @@
             </image>
             <image>
               <alias>indexer</alias>
-              <name>oapass/indexer:0.0.10-2.2-SNAPSHOT</name>
+              <name>oapass/indexer:0.0.13-2.3-SNAPSHOT</name>
               <run>
                 <namingStrategy>alias</namingStrategy>
                 <env>
