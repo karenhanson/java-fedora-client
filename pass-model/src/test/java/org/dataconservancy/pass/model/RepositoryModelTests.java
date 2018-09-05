@@ -53,6 +53,7 @@ public class RepositoryModelTests {
         assertEquals(TestValues.REPOSITORY_URL, repository.getUrl().toString());
         assertEquals(TestValues.REPOSITORY_FORMSCHEMA, repository.getFormSchema());
         assertEquals(TestValues.REPOSITORY_INTEGRATION_TYPE, repository.getIntegrationType().toString());
+        assertEquals(TestValues.REPOSITORY_AGREEMENTTEXT, repository.getAgreementText().toString());
     }
 
     /**
@@ -72,9 +73,11 @@ public class RepositoryModelTests {
         assertEquals(root.getString("@type"),"Repository");
         assertEquals(root.getString("name"),TestValues.REPOSITORY_NAME);
         assertEquals(root.getString("description"),TestValues.REPOSITORY_DESCRIPTION);
-        assertEquals(root.getString("url"),TestValues.REPOSITORY_URL);        
+        assertEquals(root.getString("url"),TestValues.REPOSITORY_URL);
+        assertEquals(root.getString("agreementText"), TestValues.REPOSITORY_AGREEMENTTEXT);
         assertEquals(root.getString("formSchema"),TestValues.REPOSITORY_FORMSCHEMA); 
         assertEquals(root.getString("integrationType"),TestValues.REPOSITORY_INTEGRATION_TYPE);
+        assertEquals(root.getString("repositoryKey"),TestValues.REPOSITORY_KEY);
     }
     
     /**
@@ -105,8 +108,10 @@ public class RepositoryModelTests {
         repository.setName(TestValues.REPOSITORY_NAME);
         repository.setDescription(TestValues.REPOSITORY_DESCRIPTION);
         repository.setUrl(new URI(TestValues.REPOSITORY_URL));
+        repository.setAgreementText(TestValues.REPOSITORY_AGREEMENTTEXT);
         repository.setFormSchema(TestValues.REPOSITORY_FORMSCHEMA);
         repository.setIntegrationType(IntegrationType.of(TestValues.REPOSITORY_INTEGRATION_TYPE));
+        repository.setRepositoryKey(TestValues.REPOSITORY_KEY);
         
         return repository;
     }

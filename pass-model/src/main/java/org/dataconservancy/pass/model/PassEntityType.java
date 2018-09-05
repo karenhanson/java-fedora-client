@@ -33,6 +33,7 @@ public enum PassEntityType {
     REPOSITORY ("Repository", "repositories"),
     REPOSITORY_COPY ("RepositoryCopy", "repositoryCopies"),
     SUBMISSION ("Submission", "submissions"),
+    SUBMISSION_EVENT ("SubmissionEvent", "submissionEvents"),
     USER ("User", "users");
     
     private String name;

@@ -1,14 +1,15 @@
 {
 	"@id": "https://example.org/fedora/submissions/1",
 	"@type": "Submission",
-	"aggregatedDepositStatus": "in-progress",
+	"submissionStatus": "in-progress",
 	"publication": "https://example.org/fedora/publications/1",
-	"user": "https://example.org/fedora/users/1",
+	"submitter": "https://example.org/fedora/users/1",
+	"preparers": ["https://example.org/fedora/users/2"],
 	"repositories": ["https://example.org/fedora/repositories/1","https://example.org/fedora/repositories/2"],
 	"grants": ["https://example.org/fedora/grants/1","https://example.org/fedora/grants/2"],
 	"submitted": true,
 	"submittedDate": "2018-01-05T12:12:12.000Z",
 	"metadata": "{\"customFieldName\": \"value\"}",
-	"source": "other"
+	"source": "pass"
 }
 	

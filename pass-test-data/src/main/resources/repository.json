@@ -2,9 +2,11 @@
 	"@id": "https://example.org/fedora/repositories/1",
 	"@type": "Repository",
 	"name": "Repository A",
+	"agreementText": "I agree to the repository deposit agreement",
 	"description": "An OA repository run by funder A",
 	"url": "https://repo-example.org/",
 	"formSchema":"{\"customFieldName\": \"String\"}",
-	"integrationType":"web-link"
+	"integrationType":"web-link",
+	"repositoryKey":"nih-repository"
 }
 	

@@ -63,7 +63,7 @@ public class Submission extends PassEntity {
     /** 
      * Status of Submission 
      */
-    private AggregatedDepositStatus aggregatedDepositStatus;
+    private SubmissionStatus submissionStatus;
 
     /**
      * URI of Publication associated with the Submission
@@ -76,10 +76,20 @@ public class Submission extends PassEntity {
     private List<URI> repositories = new ArrayList<>();
 
     /**
-     * URI of the User responsible for managing the Submission.
+     * URI of the User responsible for managing and submitting the Submission 
+     * this may be a a `User.id` or may temporarily hold a `mailto:` URI containing
+     * the encoded name and email address of the submitter (e.g. "mailto:John%20Doe%3Cjohndoe%40example.org%3E")
+     * 
      */
-    private URI user;
+    private URI submitter;
 
+    /**
+     * URI of the User(s) who prepared, or who could contribute to the preparation of, the Submission.
+     * Prepares can edit the content of the Submission (describe the Publication, add Grants, add Files, 
+     * select Repositories) but cannot approve any Repository agreements or submit the Publication.
+     */
+    private List<URI> preparers = new ArrayList<>();
+    
     /** 
      * List of URIs for grants associated with the submission 
      */
@@ -87,54 +97,102 @@ public class Submission extends PassEntity {
     
     
     /** 
-     * Possible aggregatedDepositStatus of a submission, this is dependent on information from the server and
-     * is calculated using the status of associated Deposits
+     *  The possible values for the Submission.submissionStatus field. 
+     *  Note that not all Submissions will go through every status.
      */
-    public enum AggregatedDepositStatus {
+    public enum SubmissionStatus {
         /**
-         * No Deposits have been initiated for the Submission
+         * When the PASS system identifies a need for a User to submit a Publication to a particular Repository, 
+         * it will create a new Submission record with this status in order to prompt the User to provide the 
+         * document and complete the Submission.
          */
-        @JsonProperty("not-started")
-        NOT_STARTED("not-started"),
+        @JsonProperty("manuscript-required")
+        MANUSCRIPT_REQUIRED("manuscript-required"),
+        
         /**
-         * One or more Deposits for the Submission have been initiated, and at least one 
-         * has not reached the status of "accepted"
+         * A Submission was prepared by a preparer but now needs the submitter to approve and submit it or provide 
+         * feedback.
+         */        
+        @JsonProperty("approval-requested")
+        APPROVAL_REQUESTED("approval-requested"),
+        
+        /**
+         * A Submission was prepared by a preparer, but on review by the submitter, a change was requested. 
+         * The Submission has been handed back to the preparer for editing.
+         */
+        @JsonProperty("changes-requested")
+        CHANGES_REQUESTED("changes-requested"),
+
+        /**
+         * A Submission was prepared and then cancelled by the submitter or preparer without being submitted. 
+         * No further edits can be made to the Submission.
+         */
+        @JsonProperty("cancelled")
+        CANCELLED("cancelled"),
+
+        /**
+         * he submit button has been pressed through the UI, but the Deposits have not yet been processed by 
+         * the Deposit service. From this status forward, the Submission becomes read-only to both the submitter 
+         * and preparers.
+         */
+        @JsonProperty("submitted")
+        SUBMITTED("submitted"),
+
+        /**
+         * The Submission is being processed by the Deposit services.
          */
         @JsonProperty("in-progress")
         IN_PROGRESS("in-progress"),
+
         /**
-         * All related Deposits have a status of "accepted"
+         * The material has not yet been transferred to all repositories - a retry is likely pending.
+         */
+        @JsonProperty("failed")
+        FAILED("failed"),
+
+        /**
+         * Material was successfully transferred to each Repository without error, but PASS has not yet 
+         * received feedback on the status of every copy in the target Repositories.
          */
         @JsonProperty("accepted")
         ACCEPTED("accepted"),
 
         /**
-         * One or more related Deposits have a status of "rejected"
+         * There are multiple Deposits and RepositoryCopies, but these are at different stages making a 
+         * single combined status impossible to calculate.
          */
-        @JsonProperty("rejected")
-        REJECTED("rejected"),
+        @JsonProperty("mixed-status")
+        MIXED_STATUS("mixed-status"),
 
         /**
-         * Processing the Submission failed, and should be re-tried later.
+         * The target repositories have all received a copy of the Submission, and have indicated that 
+         * the Submission was successful.
          */
-        @JsonProperty("failed")
-        FAILED("failed");
+        @JsonProperty("complete")
+        COMPLETE("complete"),
 
-        private static final Map<String, AggregatedDepositStatus> map = new HashMap<>(values().length, 1);  
+        /**
+         * The target repositories have all received a copy of the Submission, but upon inspection all 
+         * of them rejected it.
+         */
+        @JsonProperty("rejected")
+        REJECTED("rejected");
+
+        private static final Map<String, SubmissionStatus> map = new HashMap<>(values().length, 1);  
         static {
-          for (AggregatedDepositStatus s : values()) map.put(s.value, s);
+          for (SubmissionStatus s : values()) map.put(s.value, s);
         }
         
         private String value;
         
-        private AggregatedDepositStatus(String value){
+        private SubmissionStatus(String value){
             this.value = value;
         }
         
-        public static AggregatedDepositStatus of(String status) {
-            AggregatedDepositStatus result = map.get(status);
+        public static SubmissionStatus of(String status) {
+            SubmissionStatus result = map.get(status);
             if (result == null) {
-              throw new IllegalArgumentException("Invalid Aggregated Deposit Status: " + status);
+              throw new IllegalArgumentException("Invalid Submission Status: " + status);
             }
             return result;
           }
@@ -152,6 +210,7 @@ public class Submission extends PassEntity {
     public enum Source {
         @JsonProperty("pass")
         PASS("pass"),
+        
         @JsonProperty("other")
         OTHER("other");
         
@@ -232,18 +291,18 @@ public class Submission extends PassEntity {
 
     
     /**
-     * @return the aggregatedDepositStatus
+     * @return the submissionStatus
      */
-    public AggregatedDepositStatus getAggregatedDepositStatus() {
-        return aggregatedDepositStatus;
+    public SubmissionStatus getSubmissionStatus() {
+        return submissionStatus;
     }
 
     
     /**
-     * @param aggregatedDepositStatus the aggregatedDepositStatus to set
+     * @param submissionStatus the submissionStatus to set
      */
-    public void setAggregatedDepositStatus(AggregatedDepositStatus aggregatedDepositStatus) {
-        this.aggregatedDepositStatus = aggregatedDepositStatus;
+    public void setSubmissionStatus(SubmissionStatus submissionStatus) {
+        this.submissionStatus = submissionStatus;
     }
 
     
@@ -280,18 +339,34 @@ public class Submission extends PassEntity {
     
     
     /**
-     * @return the user
+     * @return the submitter
      */
-    public URI getUser() {
-        return user;
+    public URI getSubmitter() {
+        return submitter;
     }
 
     
     /**
-     * @param user the user to set
+     * @param user the submitter to set
      */
-    public void setUser(URI user) {
-        this.user = user;
+    public void setSubmitter(URI submitter) {
+        this.submitter = submitter;
+    }
+
+    
+    /**
+     * @return the preparers
+     */
+    public List<URI> getPreparers() {
+        return preparers;
+    }
+
+    
+    /**
+     * @param preparers the preparers to set
+     */
+    public void setPreparers(List<URI> preparers) {
+        this.preparers = preparers;
     }
 
     
@@ -323,10 +398,11 @@ public class Submission extends PassEntity {
         if (source != null ? !source.equals(that.source) : that.source != null) return false;
         if (submitted != null ? !submitted.equals(that.submitted) : that.submitted != null) return false;
         if (submittedDate != null ? !submittedDate.equals(that.submittedDate) : that.submittedDate != null) return false;        
-        if (aggregatedDepositStatus != null ? !aggregatedDepositStatus.equals(that.aggregatedDepositStatus) : that.aggregatedDepositStatus != null) return false;
+        if (submissionStatus != null ? !submissionStatus.equals(that.submissionStatus) : that.submissionStatus != null) return false;
         if (publication != null ? !publication.equals(that.publication) : that.publication != null) return false;
         if (repositories != null ? !repositories.equals(that.repositories) : that.repositories != null) return false;
-        if (user != null ? !user.equals(that.user) : that.user != null) return false;
+        if (submitter != null ? !submitter.equals(that.submitter) : that.submitter != null) return false;
+        if (preparers != null ? !preparers.equals(that.preparers) : that.preparers != null) return false;
         if (grants != null ? !grants.equals(that.grants) : that.grants != null) return false;
         return true;
     }
@@ -339,10 +415,11 @@ public class Submission extends PassEntity {
         result = 31 * result + (source != null ? source.hashCode() : 0);
         result = 31 * result + (submitted != null ? submitted.hashCode() : 0);
         result = 31 * result + (submittedDate != null ? submittedDate.hashCode() : 0);
-        result = 31 * result + (aggregatedDepositStatus != null ? aggregatedDepositStatus.hashCode() : 0);
+        result = 31 * result + (submissionStatus != null ? submissionStatus.hashCode() : 0);
         result = 31 * result + (publication != null ? publication.hashCode() : 0);
         result = 31 * result + (repositories != null ? repositories.hashCode() : 0);
-        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (submitter != null ? submitter.hashCode() : 0);
+        result = 31 * result + (preparers != null ? preparers.hashCode() : 0);
         result = 31 * result + (grants != null ? grants.hashCode() : 0);
         return result;
     }
