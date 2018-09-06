@@ -71,7 +71,8 @@ public class Submission extends PassEntity {
     private URI publication;
     
     /** 
-     * List of repositories that the submission will be deposited to 
+     * List of repositories that the submission will be deposited to
+     * Note that the order of the list does not carry any particular significance 
      */
     private List<URI> repositories = new ArrayList<>();
 
@@ -87,11 +88,13 @@ public class Submission extends PassEntity {
      * URI of the User(s) who prepared, or who could contribute to the preparation of, the Submission.
      * Prepares can edit the content of the Submission (describe the Publication, add Grants, add Files, 
      * select Repositories) but cannot approve any Repository agreements or submit the Publication.
+     * Note that the order of the list does not carry any particular significance
      */
     private List<URI> preparers = new ArrayList<>();
     
     /** 
      * List of URIs for grants associated with the submission 
+     * Note that the order of the list does not carry any particular significance
      */
     private List<URI> grants = new ArrayList<>();
     
