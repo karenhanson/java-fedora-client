@@ -44,6 +44,11 @@ public class Repository extends PassEntity {
      */
     private URI url;
 
+    /**
+     * The legal text that a submitter must agree to in order to submit a publication to this repository
+     */
+    private String agreementText;
+        
     /** 
      * Stringified JSON representing a form template to be loaded by the front-end when this Repository is selected
      */
@@ -154,6 +159,22 @@ public class Repository extends PassEntity {
 
     
     /**
+     * @return the agreement text
+     */
+    public String getAgreementText() {
+        return agreementText;
+    }
+
+    
+    /**
+     * @param agreementText the agreement text to set
+     */
+    public void setAgreementText(String agreementText) {
+        this.agreementText = agreementText;
+    }
+
+    
+    /**
      * @return the formSchema
      */
     public String getFormSchema() {
@@ -162,7 +183,7 @@ public class Repository extends PassEntity {
 
     
     /**
-     * @param url the url to set
+     * @param formSchema the form schema to set
      */
     public void setFormSchema(String formSchema) {
         this.formSchema = formSchema;

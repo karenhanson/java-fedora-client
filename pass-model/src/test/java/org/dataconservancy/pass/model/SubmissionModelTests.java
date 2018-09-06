@@ -26,7 +26,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
 
-import org.dataconservancy.pass.model.Submission.AggregatedDepositStatus;
+import org.dataconservancy.pass.model.Submission.Source;
+import org.dataconservancy.pass.model.Submission.SubmissionStatus;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -58,14 +59,16 @@ public class SubmissionModelTests {
         assertEquals(TestValues.SUBMISSION_ID_1, submission.getId().toString());
         assertEquals(TestValues.SUBMISSION_METADATA, submission.getMetadata());
         assertEquals(TestValues.SUBMISSION_SUBMITTED, submission.getSubmitted());
-        assertEquals(TestValues.SUBMISSION_STATUS, submission.getAggregatedDepositStatus().toString());
+        assertEquals(TestValues.SUBMISSION_STATUS, submission.getSubmissionStatus().toString());
         assertEquals(TestValues.PUBLICATION_ID_1, submission.getPublication().toString());
-        assertEquals(TestValues.USER_ID_1, submission.getUser().toString());
+        assertEquals(TestValues.USER_ID_1, submission.getSubmitter().toString());
+        assertEquals(TestValues.USER_ID_2, submission.getPreparers().get(0).toString());
         assertEquals(TestValues.REPOSITORY_ID_1, submission.getRepositories().get(0).toString());
         assertEquals(TestValues.REPOSITORY_ID_2, submission.getRepositories().get(1).toString());
         assertEquals(TestValues.GRANT_ID_1, submission.getGrants().get(0).toString());
         assertEquals(TestValues.GRANT_ID_2, submission.getGrants().get(1).toString());
         assertEquals(TestValues.SUBMISSION_DATE_STR, dateFormatter.print(submission.getSubmittedDate()));
+        assertEquals(TestValues.SUBMISSION_SOURCE, submission.getSource().toString());
     }
 
     /**
@@ -83,9 +86,10 @@ public class SubmissionModelTests {
 
         assertEquals(root.getString("@id"),TestValues.SUBMISSION_ID_1);
         assertEquals(root.getString("@type"),"Submission");
-        assertEquals(root.getString("aggregatedDepositStatus"),TestValues.SUBMISSION_STATUS);
+        assertEquals(root.getString("submissionStatus"),TestValues.SUBMISSION_STATUS);
         assertEquals(root.getString("publication"),TestValues.PUBLICATION_ID_1);
-        assertEquals(root.getString("user"),TestValues.USER_ID_1);
+        assertEquals(root.getString("submitter"),TestValues.USER_ID_1);
+        assertEquals(root.getJSONArray("preparers").get(0),TestValues.USER_ID_2);
         assertEquals(root.getBoolean("submitted"),TestValues.SUBMISSION_SUBMITTED);
         assertEquals(root.getString("metadata"),TestValues.SUBMISSION_METADATA);
         assertEquals(root.getJSONArray("repositories").get(0),TestValues.REPOSITORY_ID_1);
@@ -93,6 +97,7 @@ public class SubmissionModelTests {
         assertEquals(root.getJSONArray("grants").get(0),TestValues.GRANT_ID_1);
         assertEquals(root.getJSONArray("grants").get(1),TestValues.GRANT_ID_2);
         assertEquals(root.getString("submittedDate"),TestValues.SUBMISSION_DATE_STR);    
+        assertEquals(root.getString("source"), TestValues.SUBMISSION_SOURCE);
     }
     
     /**
@@ -108,7 +113,7 @@ public class SubmissionModelTests {
         Submission submission2 = createSubmission();
         
         assertEquals(submission1,submission2);
-        submission1.setAggregatedDepositStatus(Submission.AggregatedDepositStatus.ACCEPTED);
+        submission1.setSubmissionStatus(Submission.SubmissionStatus.ACCEPTED);
         assertTrue(!submission1.equals(submission2));
         
         assertTrue(submission1.hashCode()!=submission2.hashCode());
@@ -120,11 +125,16 @@ public class SubmissionModelTests {
     private Submission createSubmission() throws Exception {
         Submission submission = new Submission();
         submission.setId(new URI(TestValues.SUBMISSION_ID_1));
-        submission.setAggregatedDepositStatus(AggregatedDepositStatus.of(TestValues.SUBMISSION_STATUS));
+        submission.setSubmissionStatus(SubmissionStatus.of(TestValues.SUBMISSION_STATUS));
         submission.setMetadata(TestValues.SUBMISSION_METADATA);
         submission.setSubmitted(TestValues.SUBMISSION_SUBMITTED);
         submission.setPublication(new URI(TestValues.PUBLICATION_ID_1));
-        submission.setUser(new URI(TestValues.USER_ID_1));
+        submission.setSubmitter(new URI(TestValues.USER_ID_1));
+        submission.setSource(Source.PASS);
+        
+        List<URI> preparers = new ArrayList<URI>();
+        preparers.add(new URI(TestValues.USER_ID_2));
+        submission.setPreparers(preparers);
         
         List<URI> repositories = new ArrayList<URI>();
         repositories.add(new URI(TestValues.REPOSITORY_ID_1));

@@ -40,6 +40,7 @@ public class TestValues {
     public static final String REPOSITORYCOPY_ID_1 = "https://example.org/fedora/repositoryCopies/1";
     public static final String SUBMISSION_ID_1 = "https://example.org/fedora/submissions/1";
     public static final String SUBMISSION_ID_2 = "https://example.org/fedora/submissions/2";
+    public static final String SUBMISSIONEVENT_ID = "https://example.org/fedora/submissionEvents/1";
     public static final String USER_ID_1 = "https://example.org/fedora/users/1";
     public static final String USER_ID_2 = "https://example.org/fedora/users/2";
     public static final String USER_ID_3 = "https://example.org/fedora/users/3";
@@ -91,10 +92,12 @@ public class TestValues {
 
     public static final String REPOSITORY_NAME = "Repository A";
     public static final String REPOSITORY_DESCRIPTION = "An OA repository run by funder A";
+    public static final String REPOSITORY_AGREEMENTTEXT = "I agree to the repository deposit agreement";
     public static final String REPOSITORY_URL = "https://repo-example.org/";
     //TODO: verify format of formSchema field
     public static final String REPOSITORY_FORMSCHEMA = "{\"customFieldName\": \"String\"}";
     public static final String REPOSITORY_INTEGRATION_TYPE = "web-link";
+    public static final String REPOSITORY_KEY = "nih-repository";
     
     public static final String REPOSITORYCOPY_STATUS = "accepted";
     public static final String REPOSITORYCOPY_EXTERNALID_1 = "PMC12345";
@@ -103,10 +106,16 @@ public class TestValues {
     
     public static final String SUBMISSION_STATUS = "in-progress";
     public static final String SUBMISSION_DATE_STR = "2018-01-05T12:12:12.000Z";
-    public static final String SUBMISSION_SOURCE = "other";
+    public static final String SUBMISSION_SOURCE = "pass";
     public static final Boolean SUBMISSION_SUBMITTED = true;
     public static final String SUBMISSION_METADATA = "{\"customFieldName\": \"value\"}";
 
+    public static final String SUBMISSIONEVENT_EVENT_TYPE = "approval-requested";
+    public static final String SUBMISSIONEVENT_PERFORMED_DATE_STR = "2018-01-06T12:12:12.000Z";
+    public static final String SUBMISSIONEVENT_PERFORMER_ROLE = "preparer";
+    public static final String SUBMISSIONEVENT_COMMENT = "Does this look OK?";
+    public static final String SUBMISSIONEVENT_LINK = "https://example.org/ember/path/to/submission";
+    
     public static final String USER_NAME = "am12345";
     public static final String USER_FIRST_NAME = "June";
     public static final String USER_MIDDLE_NAME = "Marie";

@@ -1,0 +1,12 @@
+{
+	"@id": "https://example.org/fedora/submissionEvents/1",
+	"@type": "SubmissionEvent",
+	"eventType": "approval-requested",
+	"performedDate": "2018-01-06T12:12:12.000Z",
+	"performedBy": "https://example.org/fedora/users/1",
+	"performerRole": "preparer",
+	"submission": "https://example.org/fedora/submissions/1",
+	"comment": "Does this look OK?",
+	"link":"https://example.org/ember/path/to/submission"
+}
+	

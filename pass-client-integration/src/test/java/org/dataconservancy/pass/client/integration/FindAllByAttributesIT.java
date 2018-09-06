@@ -31,7 +31,7 @@ import org.dataconservancy.pass.model.Grant;
 import org.dataconservancy.pass.model.Grant.AwardStatus;
 import org.dataconservancy.pass.model.PassEntity;
 import org.dataconservancy.pass.model.Submission;
-import org.dataconservancy.pass.model.Submission.AggregatedDepositStatus;
+import org.dataconservancy.pass.model.Submission.SubmissionStatus;
 import org.dataconservancy.pass.model.User;
 
 import static org.junit.Assert.assertEquals;
@@ -94,25 +94,25 @@ public class FindAllByAttributesIT extends ClientITBase {
 
     @Test
     public void testFindSubmissionWithNoSource() throws Exception {
-        URI user = URI.create("http://example.com/user");
+        URI user = URI.create("http://example.com/user/1");
         Submission submission1 = random(Submission.class, 1);
         submission1.setSource(null);
         submission1.setMetadata("foo");
-        submission1.setUser(user);
+        submission1.setSubmitter(user);
         URI expectedUri1 = client.createResource(submission1);
         createdUris.put(expectedUri1, Submission.class);
 
         Submission submission2 = random(Submission.class, 1);
         submission2.setSource(null);
         submission2.setMetadata("foo");
-        submission2.setUser(user);
+        submission2.setSubmitter(user);
         URI expectedUri2 = client.createResource(submission2);
         createdUris.put(expectedUri2, Submission.class);
 
         Submission submission3 = random(Submission.class, 1);
         submission2.setSource(Submission.Source.OTHER);
         submission2.setMetadata("foo");
-        submission2.setUser(user);
+        submission2.setSubmitter(user);
         URI expectedUri3 = client.createResource(submission3);
         createdUris.put(expectedUri3, User.class);
 
@@ -134,7 +134,7 @@ public class FindAllByAttributesIT extends ClientITBase {
         Set<URI> uris = client.findAllByAttributes(Submission.class, new HashMap<String, Object>() {{
             put("metadata", "foo");
             put("source", null);
-            put("user", user);
+            put("submitter", user);
         }});
 
         // Only the two Submissions with null sources should be found.  The other Submission has a non-null source,
@@ -189,7 +189,6 @@ public class FindAllByAttributesIT extends ClientITBase {
         assertEquals(2, matches.size());
 
     }
-    
     
     
     /**
@@ -290,7 +289,7 @@ public class FindAllByAttributesIT extends ClientITBase {
             Map<String,Object> map = new HashMap<String,Object>();
             List<URI> coll = new ArrayList<URI>(); 
             map.put("repositories", coll);
-            map.put("AggregatedDepositStatus", AggregatedDepositStatus.ACCEPTED);
+            map.put("SubmissionStatus", SubmissionStatus.ACCEPTED);
             client.findAllByAttributes(Submission.class, map);
         } catch (Exception ex) {
             assertTrue(ex.getMessage().contains("cannot be a Collection"));

@@ -123,6 +123,28 @@ public class FindByAttributeIT extends ClientITBase {
     }
     
     /**
+     * Confirm that a search on Submission.submitter that has a `mailto:` instead of a `User.id` still matches
+     * when used in a findByAttribute
+     */
+    @Test
+    public void testSubmissionWithMailtoUser() throws Exception {
+        String emailStr = "mailto:Lesley%20Smith%3Clesleysmith%40example.org%3E";
+        Submission submission = random(Submission.class, 1);
+        submission.setSubmitter(new URI(emailStr));
+        final URI submissionid = client.createResource(submission); //create something so it's not empty
+        createdUris.put(submissionid, Submission.class);
+        
+        attempt(RETRIES, () -> {
+            final URI uri = client.findByAttribute(Submission.class, "@id", submissionid);
+            assertEquals(submissionid, uri);
+        });
+        
+        URI matchedId = client.findByAttribute(Submission.class, "submitter", emailStr);
+        assertEquals(submissionid, matchedId);
+        
+    }
+    
+    /**
      * Ensures that a search on a field of type multi-line array with multi values in it works
      * in this case it uses the repositories list in Submission as an example
      */
