@@ -238,6 +238,7 @@ public class Repository extends PassEntity {
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
         if (formSchema != null ? !formSchema.equals(that.formSchema) : that.formSchema != null) return false;
         if (integrationType != null ? !integrationType.equals(that.integrationType) : that.integrationType != null) return false;
+        if (agreementText != null ? !agreementText.equals(that.agreementText) : that.agreementText != null) return false; 
         if (repositoryKey != null ? !repositoryKey.equals(that.repositoryKey) : that.repositoryKey != null) return false;
         return true;
     }
@@ -251,6 +252,7 @@ public class Repository extends PassEntity {
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (formSchema != null ? formSchema.hashCode() : 0);
         result = 31 * result + (integrationType != null ? integrationType.hashCode() : 0);
+        result = 31 * result + (agreementText != null ? agreementText.hashCode() : 0);
         result = 31 * result + (repositoryKey != null ? repositoryKey.hashCode() : 0);
         return result;
     }
