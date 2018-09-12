@@ -39,6 +39,40 @@ URI grantUri = client.findByAttribute(Grant.class, "awardNumber", awardNumber);
 ```
 The Java docs provide more information about this functionality.
 
+### Crawling/iterating the repository.
+Simple walking of PASS entities is achieved by providing a `Consumer<URI>`, which is invoked for each matching PASS entity.  The API provides a mechanism for crawling all PassEntities (under an implicit base URI, `FedoraConfig.getBaseUrl()`):
+
+    PassClient client = PassClientFactory.getPassClient();
+    
+    // Process all PASS entities
+    client.client.processAllEntities(myConsumer);
+    
+    // Process only submissions
+    client.client.processAllEntities(myConsumer, Submission.class);
+
+
+For finer grained control, use `org.dataconservancy.pass.client.fedora.RepositoryCrawler`.  Resources can be ignored (not sent to the consumer, but their children still recursed), or skipped entirely (thus preventing recursion to their children).  `RepositoryCrawler.Ignore` and `RepositoryCrawler.Skip` classes have useful predicates for skipping or ignoring resources.
+
+For example, to iterate ONLY submission resources (and not binary files that might be children of them), use recursion depth of 1, and ignore the parent `submissions/` container, as it is not a `Submission`:
+
+    import static org.dataconservancy.pass.client.fedora.RepositoryCrawler.Ignore.IGNORE_ROOT;
+    import static org.dataconservancy.pass.client.fedora.RepositoryCrawler.Skip.depth;
+    ...
+     
+    RepositoryCrawler crawler = new RepositoryCrawler();
+    int numVisited = crawler.visit("http://localhost:8080/fcrepo/rest/submissions/", myConsumer, IGNORE_ROOT, depth(1));
+    
+As another example, to iterate ALL pass entities, ignoring ACLs,  ignoring parent containers, and ignoring children of PASS entities (like binary files POSTed to submissions), start with the repository root, to a depth of 2, and ignore containers:
+
+    import static org.dataconservancy.pass.client.fedora.RepositoryCrawler.Ignore.IGNORE_CONTAINERS;
+    import static org.dataconservancy.pass.client.fedora.RepositoryCrawler.Skip.SKIP_ACLS;
+    ...
+    
+    RepositoryCrawler crawler = new RepositoryCrawler();
+    int numVisited = crawler.visit(URI.create(FedoraConfig.getBaseUrl()), myConsumer, IGNORE_CONTAINERS,
+                depth(2).or(SKIP_ACLS));
+
+
 ### Configuration
 Configuration may be provided via system properties, or environment variables.  System properties are case-sensitive and separated by periods, as per Java conventions.
 Environment variables should be uppercase and separated by underscores, as per OS conventions.  For example, the fedora user may be provided by 

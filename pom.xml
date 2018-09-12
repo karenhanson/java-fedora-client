@@ -58,6 +58,7 @@
     <jackson.version>2.9.4</jackson.version>
     <fcrepo-java-client.version>0.3.0</fcrepo-java-client.version>
     <logback.version>1.2.3</logback.version>
+    <mockito.version>2.22.0</mockito.version>
     <openpojo.version>0.8.10</openpojo.version>
     <elasticsearch-client.version>6.2.3</elasticsearch-client.version>
     <slf4j.version>1.7.25</slf4j.version>
@@ -277,6 +278,13 @@
         <groupId>com.squareup.okhttp3</groupId>
         <artifactId>logging-interceptor</artifactId>
         <version>${okhttp.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

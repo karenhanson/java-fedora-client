@@ -36,6 +36,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import org.dataconservancy.pass.client.fedora.FedoraConfig;
 import org.junit.After;
@@ -290,6 +296,18 @@ public abstract class ClientITBase {
             }
         }
         throw new RuntimeException("Failed executing task", caught);
+    }
+    
+    static CloseableHttpClient getHttpClient() {
+        final CredentialsProvider provider = new BasicCredentialsProvider();
+        final UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(FedoraConfig.getUserName(),
+                FedoraConfig.getPassword());
+        provider.setCredentials(AuthScope.ANY, credentials);
+
+        return HttpClientBuilder.create()
+                .setDefaultCredentialsProvider(provider)
+                .build();
+
     }
 
 }

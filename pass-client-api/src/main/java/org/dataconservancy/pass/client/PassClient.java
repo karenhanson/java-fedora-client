@@ -21,6 +21,7 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.dataconservancy.pass.model.PassEntity;
 
@@ -263,5 +264,32 @@ public interface PassClient {
      * @return the {@code URI} used to retrieve the uploaded content
      */
     public URI upload(URI entityUri, InputStream content, Map<String, ?> params);
+    
+    /**
+     * Visit all PASS entities in the repository of a given class.
+     * <p>
+     * The search space for resources is set by the implementation. For example, all resources underneath a base URI
+     * in Fedora.
+     * </p>
+     *
+     * @param processor {@link Consumer} that is given a URI for every resource visited.
+     * @param modelClass Class of PASS entity to visit. If null, will visit all classes.
+     * @return the number of entities visited.
+     */
+    public <T extends PassEntity> int processAllEntities(Consumer<URI> processor, Class<T> modelClass);
+
+    /**
+     * Visit all PASS entities
+     * <p>
+     * The search space for resources is set by the implementation. For example, all resources underneath a base URI
+     * in Fedora.
+     * </p>
+     *
+     * @param processor {@link Consumer} that is given a URI for every resource visited.
+     * @return the number of entities visited
+     */
+    public default <T extends PassEntity> int processAllEntities(Consumer<URI> processor) {
+        return processAllEntities(processor, null);
+    }
 
 }

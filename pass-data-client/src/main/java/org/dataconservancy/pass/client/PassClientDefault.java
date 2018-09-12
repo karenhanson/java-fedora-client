@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.dataconservancy.pass.client.elasticsearch.ElasticsearchPassClient;
 import org.dataconservancy.pass.client.fedora.FedoraPassCrudClient;
@@ -149,4 +150,11 @@ public class PassClientDefault implements PassClient {
         return indexClient.findAllByAttributes(modelClass, valueAttributesMap, limit, offset);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T extends PassEntity> int processAllEntities(Consumer<URI> processor, Class<T> modelClass) {
+        return crudClient.processAllEntities(processor, modelClass);
+    }
 }

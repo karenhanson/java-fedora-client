@@ -20,17 +20,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 
-import org.dataconservancy.pass.client.fedora.FedoraConfig;
-
 import org.apache.http.HttpStatus;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
@@ -63,17 +56,5 @@ public class DeleteResourceIT extends ClientITBase {
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    static CloseableHttpClient getHttpClient() {
-        final CredentialsProvider provider = new BasicCredentialsProvider();
-        final UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(FedoraConfig.getUserName(),
-                FedoraConfig.getPassword());
-        provider.setCredentials(AuthScope.ANY, credentials);
-
-        return HttpClientBuilder.create()
-                .setDefaultCredentialsProvider(provider)
-                .build();
-
     }
 }

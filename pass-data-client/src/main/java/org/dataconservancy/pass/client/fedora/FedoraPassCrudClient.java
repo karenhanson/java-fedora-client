@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,6 +59,10 @@ import org.fcrepo.client.GetBuilder;
 
 import static java.lang.String.format;
 import static java.util.Base64.getEncoder;
+
+import static org.dataconservancy.pass.client.fedora.RepositoryCrawler.Ignore.IGNORE_CONTAINERS;
+import static org.dataconservancy.pass.client.fedora.RepositoryCrawler.Skip.depth;
+import static org.dataconservancy.pass.client.fedora.RepositoryCrawler.Skip.SKIP_ACLS;
 
 /**
  * Fedora CRUD client does basic work of creating, retrieving, updating, and deleting
@@ -90,6 +95,11 @@ public class FedoraPassCrudClient {
      * A JSON adapter for PASS 
      */
     private PassJsonAdapter adapter;
+    
+    /**
+     * Crawls the repository
+     */
+    private RepositoryCrawler crawler = new RepositoryCrawler();
 
     /**
      * Instantiates default implementations of the underlying Fedora client, JSON adapter, and OkHttpClient.
@@ -339,6 +349,29 @@ public class FedoraPassCrudClient {
             throw new RuntimeException("An problem occurred while POSTing binary content to Resource " +
                     passEntityUri + ": " + e.getMessage(), e);
         }
+    }
+    
+    public <T extends PassEntity> int processAllEntities(Consumer<URI> processor, Class<T> modelClass) {
+        if (modelClass == null) {
+            return crawler.visit(
+                    URI.create(FedoraConfig.getBaseUrl()), 
+                    processor, 
+                    IGNORE_CONTAINERS, 
+                    depth(2).or(SKIP_ACLS));
+        }
+
+        URI container = null;
+        try {
+            container = new URI(FedoraConfig.getContainer(modelClass.getSimpleName()));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Container name could not be converted to a URI", e);
+        }
+
+        return crawler.visit(
+                container,
+                processor,
+                IGNORE_CONTAINERS,
+                depth(1).or(SKIP_ACLS));
     }
 
     private <T extends PassEntity> T createInternal(T modelObj, boolean includeContext) {
