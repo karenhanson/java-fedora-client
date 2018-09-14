@@ -113,7 +113,7 @@ public class SubmissionModelTests {
         Submission submission2 = createSubmission();
         
         assertEquals(submission1,submission2);
-        submission1.setSubmissionStatus(Submission.SubmissionStatus.ACCEPTED);
+        submission1.setSubmissionStatus(Submission.SubmissionStatus.CANCELLED);
         assertTrue(!submission1.equals(submission2));
         
         assertTrue(submission1.hashCode()!=submission2.hashCode());

@@ -16,6 +16,7 @@
 package org.dataconservancy.pass.client;
 
 import java.io.InputStream;
+
 import java.net.URI;
 
 import java.util.Collection;
@@ -48,6 +49,16 @@ public class PassClientDefault implements PassClient {
     public PassClientDefault() {
         crudClient = new FedoraPassCrudClient();
         indexClient = new ElasticsearchPassClient();
+    }
+    
+    /**
+     * Sets option to overwrite (PUT) when updating instead of the default PATCH.
+     * @param overwriteOnUpdate - set to true to use PUT as update type
+     * @return
+     */
+    public PassClientDefault overWriteOnUpdate(boolean overwriteOnUpdate) {
+        this.crudClient.overwriteOnUpdate(overwriteOnUpdate);
+        return this;
     }
     
     /**
