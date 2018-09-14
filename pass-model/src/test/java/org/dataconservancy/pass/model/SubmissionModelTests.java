@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
 
+import org.dataconservancy.pass.model.Submission.AggregatedDepositStatus;
 import org.dataconservancy.pass.model.Submission.Source;
 import org.dataconservancy.pass.model.Submission.SubmissionStatus;
 import org.joda.time.DateTime;
@@ -60,6 +61,7 @@ public class SubmissionModelTests {
         assertEquals(TestValues.SUBMISSION_METADATA, submission.getMetadata());
         assertEquals(TestValues.SUBMISSION_SUBMITTED, submission.getSubmitted());
         assertEquals(TestValues.SUBMISSION_STATUS, submission.getSubmissionStatus().toString());
+        assertEquals(TestValues.SUBMISSION_AGG_DEPOSIT_STATUS, submission.getAggregatedDepositStatus().toString());
         assertEquals(TestValues.PUBLICATION_ID_1, submission.getPublication().toString());
         assertEquals(TestValues.USER_ID_1, submission.getSubmitter().toString());
         assertEquals(TestValues.USER_ID_2, submission.getPreparers().get(0).toString());
@@ -87,6 +89,7 @@ public class SubmissionModelTests {
         assertEquals(root.getString("@id"),TestValues.SUBMISSION_ID_1);
         assertEquals(root.getString("@type"),"Submission");
         assertEquals(root.getString("submissionStatus"),TestValues.SUBMISSION_STATUS);
+        assertEquals(root.getString("aggregatedDepositStatus"),TestValues.SUBMISSION_AGG_DEPOSIT_STATUS);
         assertEquals(root.getString("publication"),TestValues.PUBLICATION_ID_1);
         assertEquals(root.getString("submitter"),TestValues.USER_ID_1);
         assertEquals(root.getJSONArray("preparers").get(0),TestValues.USER_ID_2);
@@ -126,6 +129,7 @@ public class SubmissionModelTests {
         Submission submission = new Submission();
         submission.setId(new URI(TestValues.SUBMISSION_ID_1));
         submission.setSubmissionStatus(SubmissionStatus.of(TestValues.SUBMISSION_STATUS));
+        submission.setAggregatedDepositStatus(AggregatedDepositStatus.of(TestValues.SUBMISSION_AGG_DEPOSIT_STATUS));
         submission.setMetadata(TestValues.SUBMISSION_METADATA);
         submission.setSubmitted(TestValues.SUBMISSION_SUBMITTED);
         submission.setPublication(new URI(TestValues.PUBLICATION_ID_1));

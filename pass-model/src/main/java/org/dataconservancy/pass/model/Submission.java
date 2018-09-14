@@ -61,10 +61,15 @@ public class Submission extends PassEntity {
     private DateTime submittedDate;
     
     /** 
-     * Status of Submission 
+     * Status of Submission. Focused on informing User of current state of Submission.
      */
     private SubmissionStatus submissionStatus;
 
+    /** 
+     * Overall status of Submission's Deposits
+     */
+    private AggregatedDepositStatus aggregatedDepositStatus;
+    
     /**
      * URI of Publication associated with the Submission
      */
@@ -134,52 +139,29 @@ public class Submission extends PassEntity {
         CANCELLED("cancelled"),
 
         /**
-         * he submit button has been pressed through the UI, but the Deposits have not yet been processed by 
-         * the Deposit service. From this status forward, the Submission becomes read-only to both the submitter 
-         * and preparers.
+         * The submit button has been pressed through the UI. From this status forward, the Submission 
+         * becomes read-only to both the submitter and preparers. This status indicates that either 
+         * (a) the Submission is still being processed, or (b) PASS has finished the Deposit process, 
+         * but there is not yet confirmation from the Repository that indicates the Submission was valid. 
+         * Some Submissions may remain in a submitted state indefinitely depending on PASS's capacity to 
+         * verify completion of the process in the target Repository.
          */
         @JsonProperty("submitted")
         SUBMITTED("submitted"),
 
         /**
-         * The Submission is being processed by the Deposit services.
+         * Indicates that a User action may be required outside of PASS. The Submission is stalled or 
+         * has been rejected by one or more Repository
          */
-        @JsonProperty("in-progress")
-        IN_PROGRESS("in-progress"),
-
-        /**
-         * The material has not yet been transferred to all repositories - a retry is likely pending.
-         */
-        @JsonProperty("failed")
-        FAILED("failed"),
-
-        /**
-         * Material was successfully transferred to each Repository without error, but PASS has not yet 
-         * received feedback on the status of every copy in the target Repositories.
-         */
-        @JsonProperty("accepted")
-        ACCEPTED("accepted"),
-
-        /**
-         * There are multiple Deposits and RepositoryCopies, but these are at different stages making a 
-         * single combined status impossible to calculate.
-         */
-        @JsonProperty("mixed-status")
-        MIXED_STATUS("mixed-status"),
+        @JsonProperty("needs-attention")
+        NEEDS_ATTENTION("needs-attention"),
 
         /**
          * The target repositories have all received a copy of the Submission, and have indicated that 
          * the Submission was successful.
          */
         @JsonProperty("complete")
-        COMPLETE("complete"),
-
-        /**
-         * The target repositories have all received a copy of the Submission, but upon inspection all 
-         * of them rejected it.
-         */
-        @JsonProperty("rejected")
-        REJECTED("rejected");
+        COMPLETE("complete");
 
         private static final Map<String, SubmissionStatus> map = new HashMap<>(values().length, 1);  
         static {
@@ -207,6 +189,55 @@ public class Submission extends PassEntity {
         
     }
 
+    
+    /** 
+     * Possible aggregatedDepositStatus of a submission, this is dependent on information from the server and
+     * is calculated using the status of associated Deposits
+     */
+    public enum AggregatedDepositStatus {
+        /**
+         * No Deposits have been initiated for the Submission
+         */
+        @JsonProperty("not-started")
+        NOT_STARTED("not-started"),
+        /**
+         * One or more Deposits for the Submission have been initiated, and at least one 
+         * has not reached the status of "accepted"
+         */
+        @JsonProperty("in-progress")
+        IN_PROGRESS("in-progress"),
+        /**
+         * All related Deposits have a status of "accepted"
+         */
+        @JsonProperty("accepted")
+        ACCEPTED("accepted");
+
+        private static final Map<String, AggregatedDepositStatus> map = new HashMap<>(values().length, 1);  
+        static {
+          for (AggregatedDepositStatus s : values()) map.put(s.value, s);
+        }
+        
+        private String value;
+        
+        private AggregatedDepositStatus(String value){
+            this.value = value;
+        }
+        
+        public static AggregatedDepositStatus of(String status) {
+            AggregatedDepositStatus result = map.get(status);
+            if (result == null) {
+              throw new IllegalArgumentException("Invalid Aggregated Deposit Status: " + status);
+            }
+            return result;
+          }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+        
+    }
+    
 
     /** 
      * Source of the Submission, from a PASS user or imported from another source*/
@@ -298,6 +329,22 @@ public class Submission extends PassEntity {
      */
     public SubmissionStatus getSubmissionStatus() {
         return submissionStatus;
+    }
+
+    
+    /**
+     * @return the aggregatedDepositStatus
+     */
+    public AggregatedDepositStatus getAggregatedDepositStatus() {
+        return aggregatedDepositStatus;
+    }
+
+    
+    /**
+     * @param aggregatedDepositStatus the aggregatedDepositStatus to set
+     */
+    public void setAggregatedDepositStatus(AggregatedDepositStatus aggregatedDepositStatus) {
+        this.aggregatedDepositStatus = aggregatedDepositStatus;
     }
 
     
@@ -402,6 +449,7 @@ public class Submission extends PassEntity {
         if (submitted != null ? !submitted.equals(that.submitted) : that.submitted != null) return false;
         if (submittedDate != null ? !submittedDate.equals(that.submittedDate) : that.submittedDate != null) return false;        
         if (submissionStatus != null ? !submissionStatus.equals(that.submissionStatus) : that.submissionStatus != null) return false;
+        if (aggregatedDepositStatus != null ? !aggregatedDepositStatus.equals(that.aggregatedDepositStatus) : that.aggregatedDepositStatus != null) return false;
         if (publication != null ? !publication.equals(that.publication) : that.publication != null) return false;
         if (repositories != null ? !repositories.equals(that.repositories) : that.repositories != null) return false;
         if (submitter != null ? !submitter.equals(that.submitter) : that.submitter != null) return false;
@@ -419,6 +467,7 @@ public class Submission extends PassEntity {
         result = 31 * result + (submitted != null ? submitted.hashCode() : 0);
         result = 31 * result + (submittedDate != null ? submittedDate.hashCode() : 0);
         result = 31 * result + (submissionStatus != null ? submissionStatus.hashCode() : 0);
+        result = 31 * result + (aggregatedDepositStatus != null ? aggregatedDepositStatus.hashCode() : 0);
         result = 31 * result + (publication != null ? publication.hashCode() : 0);
         result = 31 * result + (repositories != null ? repositories.hashCode() : 0);
         result = 31 * result + (submitter != null ? submitter.hashCode() : 0);

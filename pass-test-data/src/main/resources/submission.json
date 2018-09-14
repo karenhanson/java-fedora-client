@@ -1,7 +1,8 @@
 {
 	"@id": "https://example.org/fedora/submissions/1",
 	"@type": "Submission",
-	"submissionStatus": "in-progress",
+	"submissionStatus": "submitted",
+	"aggregatedDepositStatus": "in-progress",
 	"publication": "https://example.org/fedora/publications/1",
 	"submitter": "https://example.org/fedora/users/1",
 	"preparers": ["https://example.org/fedora/users/2"],

@@ -289,7 +289,7 @@ public class FindAllByAttributesIT extends ClientITBase {
             Map<String,Object> map = new HashMap<String,Object>();
             List<URI> coll = new ArrayList<URI>(); 
             map.put("repositories", coll);
-            map.put("SubmissionStatus", SubmissionStatus.ACCEPTED);
+            map.put("SubmissionStatus", SubmissionStatus.SUBMITTED);
             client.findAllByAttributes(Submission.class, map);
         } catch (Exception ex) {
             assertTrue(ex.getMessage().contains("cannot be a Collection"));
