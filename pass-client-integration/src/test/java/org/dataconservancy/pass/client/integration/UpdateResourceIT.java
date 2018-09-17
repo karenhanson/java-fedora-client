@@ -27,6 +27,8 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import org.junit.Test;
 
+import org.dataconservancy.pass.client.PassClient;
+import org.dataconservancy.pass.client.PassClientFactory;
 import org.dataconservancy.pass.client.fedora.UpdateConflictException;
 import org.dataconservancy.pass.model.Deposit;
 import org.dataconservancy.pass.model.Grant;
@@ -106,6 +108,48 @@ public class UpdateResourceIT extends ClientITBase {
         assertEquals(incompleteUser.getEmail(), updatedUser.getEmail());
         assertEquals(null, updatedUser.getUsername());
     }    
+    
+
+    
+    /**
+     * Checks the behavior of PUT - PUT should not allow partial updates of the data model.
+     * The model should be completely overwritten every time
+     */
+    @Test
+    public void putUpdateWithDifferentModelsTest() {
+        //create an instance that uses the PUT update
+        final PassClient overwriteOnUpdateClient = PassClientFactory.getPassClient(true);
+        
+        //create a complete user
+        User user = random(User.class, 1);
+        final URI userId = overwriteOnUpdateClient.createResource(user);
+        createdUris.put(userId, User.class);
+
+        //adding a pause for indexer to catchup
+        attempt(RETRIES, () -> {
+            final URI foundUri = overwriteOnUpdateClient.findByAttribute(User.class, "@id", userId);
+            assertEquals(userId, foundUri);
+        });
+        
+        //update using an incomplete user
+        org.dataconservancy.pass.client.integration.User incompleteUser = new org.dataconservancy.pass.client.integration.User();
+        incompleteUser.setId(userId);
+        incompleteUser.setDisplayName("Ms Tester");
+        incompleteUser.setEmail("mtester@blahblahetc.test");
+        incompleteUser.setUsername(null);
+        overwriteOnUpdateClient.updateResource(incompleteUser);
+        
+        //verify User record does not have original fields, they have been completely overwritten with the partial model
+        User updatedUser = overwriteOnUpdateClient.readResource(userId, User.class);
+        assertEquals(userId, updatedUser.getId());
+        assertEquals(null, updatedUser.getAffiliation());
+        assertEquals(null, updatedUser.getFirstName());
+        assertEquals(null, updatedUser.getLastName());
+        assertEquals(incompleteUser.getDisplayName(), updatedUser.getDisplayName());
+        assertEquals(incompleteUser.getEmail(), updatedUser.getEmail());
+        assertEquals(null, updatedUser.getUsername());        
+    }    
+    
 
     /**
      * Checks that if you try to update a resource that was updated elsewhere between your read/write
@@ -140,15 +184,18 @@ public class UpdateResourceIT extends ClientITBase {
     @Test
     public void testUpdateWithNoChanges() throws Exception {
         Deposit deposit = client.readResource(client.createResource(random(Deposit.class, 1)), Deposit.class);
+        createdUris.put(deposit.getId(), Deposit.class);
         Deposit updated = client.updateAndReadResource(deposit, Deposit.class);
 
         assertNotEquals(deposit.getVersionTag(), updated.getVersionTag());
         assertEquals(deposit.getId().toString(), updated.getId().toString());
     }
 
+    /** simple update test using PATCH **/
     @Test
-    public void testUpdateWithChange() throws Exception {
+    public void testPatchUpdateWithChange() throws Exception {
         Deposit deposit = client.readResource(client.createResource(random(Deposit.class, 1)), Deposit.class);
+        createdUris.put(deposit.getId(), Deposit.class);
 
         String expectedStatusRef = "http://example.org/status/1";
         deposit.setDepositStatusRef(expectedStatusRef);
@@ -160,6 +207,28 @@ public class UpdateResourceIT extends ClientITBase {
         assertEquals(expectedStatusRef, updated.getDepositStatusRef());
         assertEquals(deposit.getId().toString(), updated.getId().toString());
     }
+
+
+    /** simple update test using PUT **/
+    @Test
+    public void testPutUpdateWithChange() throws Exception {
+        //create an instance that uses the PUT update
+        final PassClient overwriteOnUpdateClient = PassClientFactory.getPassClient(true);
+        
+        Deposit deposit = overwriteOnUpdateClient.readResource(overwriteOnUpdateClient.createResource(random(Deposit.class, 1)), Deposit.class);
+        createdUris.put(deposit.getId(), Deposit.class);
+
+        String expectedStatusRef = "http://example.org/status/1";
+        deposit.setDepositStatusRef(expectedStatusRef);
+
+        Deposit updated = overwriteOnUpdateClient.updateAndReadResource(deposit, Deposit.class);
+
+        // Doesn't really matter, it changes anyway
+        assertNotEquals(deposit.getVersionTag(), updated.getVersionTag());
+        assertEquals(expectedStatusRef, updated.getDepositStatusRef());
+        assertEquals(deposit.getId().toString(), updated.getId().toString());
+    }
+    
 
     PassEntity removeRelationships(PassEntity resource) {
         try {

@@ -76,8 +76,12 @@ public class FedoraPassCrudClient {
     private final static String JSONLD_CONTENTTYPE = "application/ld+json; charset=utf-8";
     private final static String JSONLD_PATCH_CONTENTTYPE = "application/merge-patch+json; charset=utf-8";
     private final static String SERVER_MANAGED_OMITTYPE = "http://fedora.info/definitions/v4/repository#ServerManaged";
+    private final static String ACCEPT_HEADER = "Accept";
     private final static String COMPACTED_ACCEPTTYPE = "application/ld+json";
+    private final static String PREFER_HEADER = "Prefer";
+    private final static String PREFER_LENIENT_VAL = "handling=lenient; received=\"minimal\"";
     private final static String INCOMING_INCLUDETYPE = "http://fedora.info/definitions/v4/repository#InboundReferences";
+    private final static String IFMATCH_HEADER = "If-Match";
     private final static String ETAG_HEADER = "ETag";
     private final static String ETAG_WEAK_PREFIX = "W/";
     
@@ -100,7 +104,15 @@ public class FedoraPassCrudClient {
      * Crawls the repository
      */
     private RepositoryCrawler crawler = new RepositoryCrawler();
-
+    
+    /** 
+     * If this is set to true, on update PUT will be used instead of PATCH to perform updates
+     * thus overwriting the updated record with the new version. This can be used when it is not 
+     * desirable to leave behind fields from previous model versions. This should be set 
+     * one time on instantiation. Defaults to false (i.e. PATCH is used)
+     */
+    private boolean overwriteOnUpdate = false;
+    
     /**
      * Instantiates default implementations of the underlying Fedora client, JSON adapter, and OkHttpClient.
      */
@@ -173,12 +185,22 @@ public class FedoraPassCrudClient {
         if (adapter == null) {
             throw new IllegalArgumentException("adapter parameter cannot be null");
         }
-        if (client == null) {
+        if (okHttpClient == null) {
             throw new IllegalArgumentException("okhttpclient parameter cannot be null");
         }
         this.client = client;
         this.adapter = adapter;
         this.okHttpClient = okHttpClient;
+    }
+    
+    /** 
+     * Set CRUD client to use PUT instead of PATCH when performing an update
+     * @param overwriteOnUpdate
+     * @return
+     */
+    public FedoraPassCrudClient overwriteOnUpdate(boolean overwriteOnUpdate) {
+        this.overwriteOnUpdate = overwriteOnUpdate;
+        return this;
     }
 
     /**
@@ -388,8 +410,8 @@ public class FedoraPassCrudClient {
         Request.Builder reqBuilder = new Request.Builder()
                 .url(container.toString())
                 .post(body)
-                .addHeader("Accept", COMPACTED_ACCEPTTYPE)
-                .addHeader("Prefer", "return=representation; omits=\"" + SERVER_MANAGED_OMITTYPE + "\"");
+                .addHeader(ACCEPT_HEADER, COMPACTED_ACCEPTTYPE)
+                .addHeader(PREFER_HEADER, "return=representation; omits=\"" + SERVER_MANAGED_OMITTYPE + "\"");
 
         try (Response res = okHttpClient.newCall(reqBuilder.build()).execute()) {
             handleNon2xx(modelObj, res);
@@ -406,17 +428,23 @@ public class FedoraPassCrudClient {
 
     private <T extends PassEntity> T updateInternal(T modelObj, boolean includeContext, boolean performRead) {
         byte[] json = adapter.toJson(modelObj, true);
-        RequestBody body = RequestBody.create(MediaType.parse(JSONLD_PATCH_CONTENTTYPE), json);
 
         Request.Builder reqBuilder = new Request.Builder()
                 .url(modelObj.getId().toString())
-                .patch(body)
-                .addHeader("Accept", COMPACTED_ACCEPTTYPE);
+                .addHeader(ACCEPT_HEADER, COMPACTED_ACCEPTTYPE);
+        
+        if (overwriteOnUpdate) {
+            RequestBody body = RequestBody.create(MediaType.parse(JSONLD_CONTENTTYPE), json);
+            reqBuilder.put(body).addHeader(PREFER_HEADER, PREFER_LENIENT_VAL);
+        } else {
+            RequestBody body = RequestBody.create(MediaType.parse(JSONLD_PATCH_CONTENTTYPE), json);
+            reqBuilder.patch(body);
+        }
 
         if (modelObj.getVersionTag() != null) {
-            reqBuilder.addHeader("If-Match", modelObj.getVersionTag());
+            reqBuilder.addHeader(IFMATCH_HEADER, modelObj.getVersionTag());
         } else {
-            LOG.warn("Executing PATCH without 'If-Match' header: a {}, id '{}' has a null 'version tag'",
+            LOG.warn("Executing update without 'If-Match' header: a {}, id '{}' has a null 'version tag'",
                     modelObj.getClass().getName(), modelObj.getId());
         }
 
