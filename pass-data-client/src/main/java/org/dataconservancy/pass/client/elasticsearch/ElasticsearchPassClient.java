@@ -90,7 +90,7 @@ public class ElasticsearchPassClient {
     }
     
     /**
-     * @see org.dataconservancy.pass.client.PassClient#findByAttribute(Class, String, Object, int, int)
+     * @see org.dataconservancy.pass.client.PassClient#findByAttribute(Class, String, Object)
      */
     public <T extends PassEntity> URI findByAttribute(Class<T> modelClass, String attribute, Object value) {
         validateModelParam(modelClass);
@@ -123,7 +123,7 @@ public class ElasticsearchPassClient {
 
         
     /**
-     * @see org.dataconservancy.pass.client.PassClient#findAllByAttribute(Class, String, Object)
+     * @see org.dataconservancy.pass.client.PassClient#findAllByAttribute(Class, String, Object, int, int)
      */
     public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value) {
         return findAllByAttribute(modelClass, attribute, value, ElasticsearchConfig.getIndexerLimit(), 0);

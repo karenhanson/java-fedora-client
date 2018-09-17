@@ -16,6 +16,7 @@
 package org.dataconservancy.pass.client;
 
 import java.io.InputStream;
+
 import java.net.URI;
 
 import java.util.Collection;
@@ -23,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import org.dataconservancy.pass.model.Deposit;
+import org.dataconservancy.pass.model.Grant;
 import org.dataconservancy.pass.model.PassEntity;
 
 /**
@@ -34,38 +37,38 @@ import org.dataconservancy.pass.model.PassEntity;
 public interface PassClient {
 
     /**
-     * Takes any PassEntity and persists it in the database, returns the URI if successful 
+     * Takes any {@link PassEntity} and persists it in the database, returns the URI if successful 
      * or appropriate exception if not. Note that PassEntities that are being created should
-     * have null as their ID, the URI will the the ID field when reading the resource back
+     * have {@code null} as their ID, the URI will the the ID field when reading the resource back
      * @param modelObj
      * @return URI of new record
      */
     public URI createResource(PassEntity modelObj);
 
     /**
-     * Takes any PassEntity and persists it in the database, and returns an updated version of the resource if
+     * Takes any {@link PassEntity} and persists it in the database, and returns an updated version of the resource if
      * successful or appropriate exception if not. Note that PassEntities that are being created should
-     * have null as their ID; the URI will be present on the returned object.
+     * have {@code null} as their ID; the URI will be present on the returned object.
      * @param modelObj
      * @return an updated version of the resource
      */
     public <T extends PassEntity> T createAndReadResource(T modelObj, Class<T> modelClass);
     
     /**
-     * Takes any PassEntity, and updates the record matching the ID field.  
-     * Note that if you attempt to update an object that was updated between the readResource and the
-     * updateResource, an `UpdateConflictException` will be thrown. This comparison is based on 
-     * the value in PassEntity.versionTag. Setting versionTag to null will ignore conflicts and do the update.
+     * Takes any {@link PassEntity}, and updates the record matching the ID field.  
+     * Note that if you attempt to update an object that was updated between the {@code readResource} and the
+     * {@code updateResource}, an {@code UpdateConflictException} will be thrown. This comparison is based on 
+     * the value in {@code PassEntity.versionTag}. Setting {@code versionTag} to {@code null} will ignore conflicts and do the update.
      * @param modelObj
      * @return
      */
     public void updateResource(PassEntity modelObj);
 
     /**
-     * Takes any PassEntity, and updates the record matching the ID field.
+     * Takes any {@link PassEntity}, and updates the record matching the ID field.
      * Note that if you attempt to update an object that was updated between the readResource and the
-     * updateResource, an `UpdateConflictException` will be thrown. This comparison is based on
-     * the value in PassEntity.versionTag. Setting versionTag to null will ignore conflicts and do the update.
+     * updateResource, an {@link UpdateConflictException} will be thrown. This comparison is based on
+     * the value in {@code PassEntity.versionTag}. Setting {@code versionTag} to {@code null} will ignore conflicts and do the update.
      * @param modelObj
      * @return an updated version of the resource
      */
@@ -88,19 +91,18 @@ public interface PassClient {
     
     /**
      * Retrieves URI for a SINGLE RECORD by matching the entity type and filtering by the field
-     * specified using the value provided. 
-     * For example, to find the Grant using the 
-     * awardNumber:
-     * 
-     *    String awardNum = "abcdef123";
-     *    URI grantId = findByAttribute(Grant.class, "awardNumber", awardNum);
-     * 
-     * If >1 records are found, a RuntimeException will be thrown. If no records are found it will return null.
-     * 
+     * specified using the value provided. For example, to find the {@link Grant} using the {@code awardNumber}:
+     * <pre>
+     *   {@code
+     *   String awardNum = "abcdef123";
+     *   URI grantId = findByAttribute(Grant.class, "awardNumber", awardNum);
+     * }</pre>
+     * If >1 records are found, a RuntimeException will be thrown. If no records are found it will return {@code null}.
+     * <p>
      * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
      * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
      * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
-     * 
+     * </p>
      * @param modelClass
      * @param attribute
      * @param value
@@ -111,18 +113,19 @@ public interface PassClient {
     
     /**
      * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the field
-     * specified using the value provided. For example, to find Deposits using a Repository.id:
-     * 
-     *    URI repositoryId = new URI("https://example.com/fedora/repositories/3");
-     *    Set<URI> entityUris = findByAttribute(Deposit.class, "repository", repositoryId);
-     *    
+     * specified using the value provided. For example, to find {@link Deposit}s using a {@code Repository.id}:
+     * <pre>
+     *   {@code
+     *   URI repositoryId = new URI("https://example.com/fedora/repositories/3");
+     *   Set<URI> entityUris = findByAttribute(Deposit.class, "repository", repositoryId);
+     * }</pre>
      * By default this will return a maximum of 200 matching records, unless the pass.elasticsearch.limit
      * environment variable is set. If there are no matches, it will return an empty list.
-     * 
+     * <p>
      * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
      * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
      * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
-     * 
+     * </p>
      * @param modelClass
      * @param attribute
      * @param value
@@ -133,18 +136,21 @@ public interface PassClient {
     
     /**
      * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the field
-     * specified using the value provided.  For example, to find Deposits using a Repository.id:
+     * specified using the value provided.  For example, to find Deposits using a Repository.id starting from
+     * record number 40, retrieving 20 records:
+     * <pre>
+     *   {@code
+     *   URI repositoryId = new URI("https://example.com/fedora/repositories/3");
+     *   Set<URI> entityUris = findByAttribute(Deposit.class, "repository", repositoryId, 20, 40);
+     * }</pre>
      * 
-     *    URI repositoryId = new URI("https://example.com/fedora/repositories/3");
-     *    Set<URI> entityUris = findByAttribute(Deposit.class, "repository", repositoryId);
-     *    
      * The number of records will be limited by limit provided, and the offset will be applied to the default 
      * sorting. If there are no matches, it will return an empty list. This will override the limit env variable
-     * 
+     * <p>
      * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
      * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
      * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
-     * 
+     * </p>
      * @param modelClass
      * @param attribute
      * @param value
@@ -159,21 +165,23 @@ public interface PassClient {
      * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the attributes
      * and values specified. An "AND" operator will be used for searching multiple attributes. 
      * For example, to find a Submission using a GrantId AND DOI:
+     * <pre>
+     *   {@code
+     *   Map<String, Object> map = new HashMap<String, Object>();
+     *   URI grantId = new URI("https://example.com/fedora/grants/3");
+     *   String doi = "10.001/12345abc";
+     *   map.put("grants", grantId)
+     *   map.put("doi", doi);
+     *   Set<URI> entityUris = findByAttribute(Submission.class, map);
+     * }</pre>
      * 
-     *    Map<String, Object> map = new HashMap<String, Object>();
-     *    URI grantId = new URI("https://example.com/fedora/grants/3");
-     *    String doi = "10.001/12345abc";
-     *    map.put("grants", grantId)
-     *    map.put("doi", doi);
-     *    Set<URI> entityUris = findByAttribute(Submission.class, map);
-     *    
      * By default this will return a maximum of 200 matching records, unless the pass.elasticsearch.limit
      * environment variable is set. If there are no matches, it will return an empty list.      
-     * 
+     * <p>
      * The Map "value" parameter will be converted to a String for the purpose of searching the index. The map's value cannot 
      * be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
      * For example, if searching on Submission.repositories, a single repository URI should be provided for matching.
-     * 
+     * </p>
      * @param modelClass
      * @param attribute
      * @param value
@@ -185,20 +193,23 @@ public interface PassClient {
     /**
      * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the attributes
      * and values specified. For example, to find a Submission using a GrantId and DOI:
-     * 
-     *    Map<String, Object> map = new HashMap<String, Object>();
-     *    URI grantId = new URI("https://example.com/fedora/grants/3");
-     *    String doi = "10.001/12345abc";
-     *    map.put("grants", grantId)
-     *    map.put("doi", doi);
-     *    Set<URI> entityUris = findByAttribute(Submission.class, map);
+     *<pre>
+     *   {@code
+     *   Map<String, Object> map = new HashMap<String, Object>();
+     *   URI grantId = new URI("https://example.com/fedora/grants/3");
+     *   String doi = "10.001/12345abc";
+     *   map.put("grants", grantId)
+     *   map.put("doi", doi);
+     *   Set<URI> entityUris = findByAttribute(Submission.class, map);
+     * }</pre>
      *    
      * The number of records will be limited by limit provided, and the offset will be applied to the default 
      * sorting. If there are no matches, it will return an empty list. This will override the limit env variable
-     * 
+     * <p>
      * The Map "value" parameter will be converted to a String for the purpose of searching the index. The map's value cannot 
      * be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
      * For example, if searching on Submission.repositories, a single repository URI should be provided for matching.
+     * </p>
      * 
      * @param modelClass
      * @param attribute
@@ -210,10 +221,10 @@ public interface PassClient {
     public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> attributeValuesMap, int limit, int offset);
 
     /**
-     * Retrieve inbound links to the repository resource identified by {@code passEntity}.
+     * Retrieve inbound links to the repository resource identified by {@link PassEntity}.
      * <p>
      * Keys in the returned map will be the predicate, and values will be the incoming URIs that reference the
-     * {@code passEntity}.
+     * {@link PassEntity}.
      * </p>
      *
      * @param passEntity the URI of a repository resource
@@ -273,7 +284,7 @@ public interface PassClient {
      * </p>
      *
      * @param processor {@link Consumer} that is given a URI for every resource visited.
-     * @param modelClass Class of PASS entity to visit. If null, will visit all classes.
+     * @param modelClass Class of PASS entity to visit. If {@code null}, will visit all classes.
      * @return the number of entities visited.
      */
     public <T extends PassEntity> int processAllEntities(Consumer<URI> processor, Class<T> modelClass);
