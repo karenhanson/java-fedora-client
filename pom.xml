@@ -18,6 +18,7 @@
     <module>pass-client-util</module>
     <module>pass-client-integration</module>
     <module>pass-test-data</module>
+    <module>pass-client-shaded-v2_3</module>
   </modules>
 
   <profiles>
@@ -305,5 +306,31 @@
     </snapshotRepository>
 
   </distributionManagement>
+  
+  <repositories>
+    <repository>
+      <id>oss</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+    <repository>
+      <id>dc.public.snapshots</id>
+      <name>Data Conservancy Public Maven Repository (snapshots)</name>
+      <layout>default</layout>
+      <url>http://maven.dataconservancy.org/public/snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  
 
 </project>

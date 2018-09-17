@@ -207,6 +207,13 @@
       <artifactId>pass-data-client</artifactId>
       <version>${project.version}</version>
     </dependency>
+    
+    <dependency>
+      <groupId>org.dataconservancy.pass</groupId>
+      <artifactId>pass-client-shaded-v2_3</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.unitils</groupId>
