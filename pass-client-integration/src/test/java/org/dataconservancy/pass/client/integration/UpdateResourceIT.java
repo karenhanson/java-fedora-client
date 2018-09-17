@@ -184,17 +184,18 @@ public class UpdateResourceIT extends ClientITBase {
     @Test
     public void testUpdateWithNoChanges() throws Exception {
         Deposit deposit = client.readResource(client.createResource(random(Deposit.class, 1)), Deposit.class);
+        createdUris.put(deposit.getId(), Deposit.class);
         Deposit updated = client.updateAndReadResource(deposit, Deposit.class);
 
         assertNotEquals(deposit.getVersionTag(), updated.getVersionTag());
         assertEquals(deposit.getId().toString(), updated.getId().toString());
-        createdUris.put(deposit.getId(), Deposit.class);
     }
 
     /** simple update test using PATCH **/
     @Test
     public void testPatchUpdateWithChange() throws Exception {
         Deposit deposit = client.readResource(client.createResource(random(Deposit.class, 1)), Deposit.class);
+        createdUris.put(deposit.getId(), Deposit.class);
 
         String expectedStatusRef = "http://example.org/status/1";
         deposit.setDepositStatusRef(expectedStatusRef);
@@ -205,7 +206,6 @@ public class UpdateResourceIT extends ClientITBase {
         assertNotEquals(deposit.getVersionTag(), updated.getVersionTag());
         assertEquals(expectedStatusRef, updated.getDepositStatusRef());
         assertEquals(deposit.getId().toString(), updated.getId().toString());
-        createdUris.put(deposit.getId(), Deposit.class);
     }
 
 
@@ -216,6 +216,7 @@ public class UpdateResourceIT extends ClientITBase {
         final PassClient overwriteOnUpdateClient = PassClientFactory.getPassClient(true);
         
         Deposit deposit = overwriteOnUpdateClient.readResource(overwriteOnUpdateClient.createResource(random(Deposit.class, 1)), Deposit.class);
+        createdUris.put(deposit.getId(), Deposit.class);
 
         String expectedStatusRef = "http://example.org/status/1";
         deposit.setDepositStatusRef(expectedStatusRef);
@@ -226,7 +227,6 @@ public class UpdateResourceIT extends ClientITBase {
         assertNotEquals(deposit.getVersionTag(), updated.getVersionTag());
         assertEquals(expectedStatusRef, updated.getDepositStatusRef());
         assertEquals(deposit.getId().toString(), updated.getId().toString());
-        createdUris.put(deposit.getId(), Deposit.class);
     }
     
 
