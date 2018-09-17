@@ -123,8 +123,8 @@ public class TestValues {
     public static final String USER_LAST_NAME = "Smith";
     public static final String USER_DISPLAY_NAME = "June Smith";
     public static final String USER_EMAIL = "js@example.com";
-    public static final String USER_INSTITUTIONAL_ID = "jms001";
-    public static final String USER_LOCALKEY = "abcdef";
+    public static final String USER_LOCATORID1 = "johnshopkins.edu:employeeid:12345";
+    public static final String USER_LOCATORID2 = "johnshopkins.edu:hopkinsid:DRA2D";
     public static final String USER_ORCID_ID = "https://orcid.org/0000-1111-2222-3333";
     public static final String USER_AFFILIATION = "Johns Hopkins University";
     public static final String USER_ROLE_1 = "admin";

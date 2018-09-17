@@ -67,15 +67,12 @@ public class User extends PassEntity {
     private String affiliation; 
     
     /** 
-     * ID assigned by User's institution (JHED-ID for JHU)
+     * A list of ids associated with the user by various system that PASS interacts with. 
+     * The value of each entry would be in the form of : {@code domain:type:value}. 
+     * For example, @{code ["johnshopkins.edu:hopkinsid:DRA2D", "johnshopkins.edu:employeeid:12345", 
+     * "johnshopkins.edu:jhed:bostaur1"]}
      */
-    private String institutionalId;
-    
-    /** 
-     * A key used to look up the User in a local system. In the case of JHU, this is the ID 
-     * from the person's COEUS record, which is different from the JHED-ID.
-     */
-    private String localKey;
+    private List<String> locatorIds = new ArrayList<String>();
     
     /** 
      * ORCID ID for User 
@@ -233,34 +230,18 @@ public class User extends PassEntity {
 
     
     /**
-     * @return the institutionalId
+     * @return the locatorIds
      */
-    public String getInstitutionalId() {
-        return institutionalId;
-    }
-
-    
-    /**
-     * @param institutionalId the institutionalId to set
-     */
-    public void setInstitutionalId(String institutionalId) {
-        this.institutionalId = institutionalId;
-    }
-
-    
-    /**
-     * @return the localKey
-     */
-    public String getLocalKey() {
-        return localKey;
+    public List<String> getLocatorIds() {
+        return locatorIds;
     }
 
     
     /**
      * @param localKey the localKey to set
      */
-    public void setLocalKey(String localKey) {
-        this.localKey = localKey;
+    public void setLocatorIds(List<String> locatorIds) {
+        this.locatorIds = locatorIds;
     }
 
     
@@ -311,8 +292,7 @@ public class User extends PassEntity {
         if (displayName != null ? !displayName.equals(that.displayName) : that.displayName != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (affiliation != null ? !affiliation.equals(that.affiliation) : that.affiliation != null) return false;
-        if (institutionalId != null ? !institutionalId.equals(that.institutionalId) : that.institutionalId != null) return false;
-        if (localKey != null ? !localKey.equals(that.localKey) : that.localKey != null) return false;
+        if (locatorIds != null ? !locatorIds.equals(that.locatorIds) : that.locatorIds != null) return false;
         if (orcidId != null ? !orcidId.equals(that.orcidId) : that.orcidId != null) return false;
         if (roles != null ? !roles.equals(that.roles) : that.roles != null) return false;
         return true;
@@ -329,8 +309,7 @@ public class User extends PassEntity {
         result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (affiliation != null ? affiliation.hashCode() : 0);
-        result = 31 * result + (institutionalId != null ? institutionalId.hashCode() : 0);
-        result = 31 * result + (localKey != null ? localKey.hashCode() : 0);
+        result = 31 * result + (locatorIds != null ? locatorIds.hashCode() : 0);
         result = 31 * result + (orcidId != null ? orcidId.hashCode() : 0);
         result = 31 * result + (roles != null ? roles.hashCode() : 0);
         return result;

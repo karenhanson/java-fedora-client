@@ -54,13 +54,14 @@ public class UserModelTest {
         assertEquals(TestValues.USER_NAME, user.getUsername());
         assertEquals(TestValues.USER_ROLE_1, user.getRoles().get(0).toString());
         assertEquals(TestValues.USER_ROLE_2, user.getRoles().get(1).toString());
+        assertEquals(TestValues.USER_LOCATORID1, user.getLocatorIds().get(0).toString());
+        assertEquals(TestValues.USER_LOCATORID2, user.getLocatorIds().get(1).toString());
         assertEquals(TestValues.USER_FIRST_NAME, user.getFirstName());
         assertEquals(TestValues.USER_MIDDLE_NAME, user.getMiddleName());
         assertEquals(TestValues.USER_LAST_NAME, user.getLastName());
         assertEquals(TestValues.USER_DISPLAY_NAME, user.getDisplayName());
         assertEquals(TestValues.USER_EMAIL, user.getEmail());
         assertEquals(TestValues.USER_AFFILIATION, user.getAffiliation());
-        assertEquals(TestValues.USER_INSTITUTIONAL_ID, user.getInstitutionalId());
         assertEquals(TestValues.USER_ORCID_ID, user.getOrcidId());
     }
 
@@ -86,8 +87,8 @@ public class UserModelTest {
         assertEquals(root.getString("displayName"),TestValues.USER_DISPLAY_NAME);
         assertEquals(root.getString("email"),TestValues.USER_EMAIL);        
         assertEquals(root.getString("affiliation"),TestValues.USER_AFFILIATION);         
-        assertEquals(root.getString("institutionalId"),TestValues.USER_INSTITUTIONAL_ID);   
-        assertEquals(root.getString("localKey"),TestValues.USER_LOCALKEY);         
+        assertEquals(root.getJSONArray("locatorIds").get(0),TestValues.USER_LOCATORID1);
+        assertEquals(root.getJSONArray("locatorIds").get(1),TestValues.USER_LOCATORID2);   
         assertEquals(root.getString("orcidId"),TestValues.USER_ORCID_ID);              
         assertEquals(root.getJSONArray("roles").get(0),TestValues.USER_ROLE_1);
         assertEquals(root.getJSONArray("roles").get(1),TestValues.USER_ROLE_2);
@@ -125,9 +126,12 @@ public class UserModelTest {
         user.setDisplayName(TestValues.USER_DISPLAY_NAME);
         user.setEmail(TestValues.USER_EMAIL);
         user.setAffiliation(TestValues.USER_AFFILIATION);
-        user.setInstitutionalId(TestValues.USER_INSTITUTIONAL_ID);
-        user.setLocalKey(TestValues.USER_LOCALKEY);
         user.setOrcidId(TestValues.USER_ORCID_ID);
+        
+        List<String> locatorIds = new ArrayList<String>();
+        locatorIds.add(TestValues.USER_LOCATORID1);
+        locatorIds.add(TestValues.USER_LOCATORID2);
+        user.setLocatorIds(locatorIds);
         
         List<Role> roles = new ArrayList<Role>();
         roles.add(Role.of(TestValues.USER_ROLE_1));
