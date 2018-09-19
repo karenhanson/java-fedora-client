@@ -37,11 +37,14 @@ import static org.mockito.Mockito.when;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import org.dataconservancy.pass.client.fedora.RepositoryCrawler.State;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -198,6 +201,31 @@ public class RepositoryCrawlerTest {
                 SKIP_ACLS));
         assertEquals(allExceptAclsAndContainers.size(), visited.size());
         assertTrue(visited.containsAll(allExceptAclsAndContainers));
+    }
+
+    @Test
+    public void aclRegexTest() {
+        final String baseuri = endWithSlash(FedoraConfig.getBaseUrl());
+        final String acl1 = baseuri + ".acl";
+        final String acl2 = baseuri + ".acl/";
+        final String acl3 = baseuri + "acls/";
+        final String acl4 = baseuri + "acls";
+        final String acl5 = baseuri + "acls/foo";
+        final String acl6 = baseuri + ".acl/foo";
+
+        final String noacl1 = baseuri + "aclfoo";
+        final String noacl2 = baseuri + "fooaclfoo";
+        final String noacl3 = baseuri + "fooacl";
+
+        for (final String uri : Arrays.asList(acl1, acl2, acl3, acl4, acl5, acl6)) {
+            final State state = new State(0, null, URI.create(uri));
+            assertTrue(SKIP_ACLS.test(state));
+        }
+
+        for (final String uri : Arrays.asList(noacl1, noacl2, noacl3)) {
+            final State state = new State(0, null, URI.create(uri));
+            assertFalse(SKIP_ACLS.test(state));
+        }
     }
 
     @Test

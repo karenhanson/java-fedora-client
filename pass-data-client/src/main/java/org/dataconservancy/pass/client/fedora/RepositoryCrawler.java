@@ -22,6 +22,7 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 /**
  * Crawl/walk through a hierarchy of containers in a repository.
@@ -35,6 +36,9 @@ import java.util.function.Predicate;
 public class RepositoryCrawler {
 
     Lister repo = new FcrepoLister();
+
+    // Does the resource URI have a path that is like /acls/, /.acl, etc?
+    static final Pattern ACL_PATTERN = Pattern.compile(".+/\\.*acls*(?=/|$).*");
 
     /**
      * Visit a container and its children.
@@ -112,7 +116,7 @@ public class RepositoryCrawler {
      *
      * @author apb@jhu.edu
      */
-    public class State {
+    public static class State {
 
         /** The depth of recursion */
         public final int depth;
@@ -148,7 +152,8 @@ public class RepositoryCrawler {
         public static final Predicate<State> SKIP_NONE = s -> false;
 
         /** Skip ACLs */
-        public static final Predicate<State> SKIP_ACLS = s -> s.id.toString().matches(".+/acls[/.+?|$]");
+        public static final Predicate<State> SKIP_ACLS = s -> RepositoryCrawler.ACL_PATTERN.matcher(s.id.toString())
+                .matches();
 
         /**
          * Limit recursion to a given depth.
@@ -177,7 +182,7 @@ public class RepositoryCrawler {
 
         /** Ignore all "top level" containers for PASS entities, such as /submissions, etc */
         public static final Predicate<State> IGNORE_CONTAINERS = s -> s.id.toString().matches(
-                endWithSlash(FedoraConfig.getBaseUrl()) + "[a-zA-Z]+/*$") ||
+                endWithSlash(FedoraConfig.getBaseUrl()) + "\\.{0,1}[a-zA-Z]+/*$") ||
                 RepositoryCrawler.endWithSlash(s.id.toString()).equals(
                         RepositoryCrawler.endWithSlash(FedoraConfig.getBaseUrl()));
     }
