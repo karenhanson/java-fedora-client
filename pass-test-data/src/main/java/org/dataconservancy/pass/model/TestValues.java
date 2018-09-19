@@ -103,8 +103,9 @@ public class TestValues {
     public static final String REPOSITORYCOPY_EXTERNALID_1 = "PMC12345";
     public static final String REPOSITORYCOPY_EXTERNALID_2 = "NIHMS1234";
     public static final String REPOSITORYCOPY_ACCESSURL = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/";
-    
-    public static final String SUBMISSION_STATUS = "in-progress";
+
+    public static final String SUBMISSION_AGG_DEPOSIT_STATUS = "in-progress";
+    public static final String SUBMISSION_STATUS = "submitted";
     public static final String SUBMISSION_DATE_STR = "2018-01-05T12:12:12.000Z";
     public static final String SUBMISSION_SOURCE = "pass";
     public static final Boolean SUBMISSION_SUBMITTED = true;
