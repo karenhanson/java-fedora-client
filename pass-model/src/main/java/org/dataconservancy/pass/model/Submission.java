@@ -200,17 +200,31 @@ public class Submission extends PassEntity {
          */
         @JsonProperty("not-started")
         NOT_STARTED("not-started"),
+        
         /**
          * One or more Deposits for the Submission have been initiated, and at least one 
          * has not reached the status of "accepted"
          */
         @JsonProperty("in-progress")
         IN_PROGRESS("in-progress"),
+        
+        /**
+         * One or more Deposits for the Submission has a status of "failed"
+         */
+        @JsonProperty("failed")
+        FAILED("failed"), 
+        
         /**
          * All related Deposits have a status of "accepted"
          */
         @JsonProperty("accepted")
-        ACCEPTED("accepted");
+        ACCEPTED("accepted"), 
+        
+        /**
+         * One or more Deposits for the Submission has a status of "rejected"
+         */
+        @JsonProperty("rejected")
+        REJECTED("rejected");
 
         private static final Map<String, AggregatedDepositStatus> map = new HashMap<>(values().length, 1);  
         static {
