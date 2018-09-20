@@ -23,11 +23,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
+import org.apache.commons.io.IOUtils;
+
 import org.dataconservancy.pass.client.PassJsonAdapter;
 import org.dataconservancy.pass.client.util.ConfigUtil;
 import org.dataconservancy.pass.model.PassEntity;
-
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ public class PassJsonAdapterBasic implements PassJsonAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(PassJsonAdapterBasic.class);
     
     private final static String CONTEXT_PROPKEY = "pass.jsonld.context";
-    private final static String DEFAULT_CONTEXT = "https://oa-pass.github.io/pass-data-model/src/main/resources/context-3.0.jsonld";
+    private final static String DEFAULT_CONTEXT = "https://oa-pass.github.io/pass-data-model/src/main/resources/context-3.1.jsonld";
     
     /**
      * {@inheritDoc}

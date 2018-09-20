@@ -238,7 +238,7 @@ public abstract class ClientITBase {
         @SuppressWarnings("rawtypes")
         final List list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            if (method.getName().equals("setIssns") || method.getName().equals("setExternalIds")) {
+            if (method.getName().equals("setIssns") || method.getName().equals("setExternalIds") || method.getName().equals("setLocatorIds")) {
                 list.add(UUID.randomUUID().toString());
             } else if (method.getName().equals("setRoles")) {
                 final Object role = method.getDeclaringClass().newInstance();
