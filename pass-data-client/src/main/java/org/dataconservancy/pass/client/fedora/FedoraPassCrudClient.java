@@ -233,7 +233,7 @@ public class FedoraPassCrudClient {
      */
     public void deleteResource(URI uri) {
         try (FcrepoResponse response = new DeleteBuilder(uri, client).perform()) {
-            LOG.info("Resource deletion status: {}", response.getStatusCode());
+            LOG.info("Resource deletion status for {}: {}", uri, response.getStatusCode());
         } catch (IOException | FcrepoOperationFailedException e) {
             throw new RuntimeException("A problem occurred while attempting to delete a Resource", e);
         }
@@ -256,7 +256,7 @@ public class FedoraPassCrudClient {
                 .preferRepresentation(null, omits)
                 .perform()) {
 
-          LOG.info("Resource read status: {}", response.getStatusCode());
+          LOG.info("Resource read status for {}: {}", uri, response.getStatusCode());
           T model = adapter.toModel(response.getBody(), modelClass);
           
           //remove the etag prefix, not needed for version comparison
@@ -285,7 +285,7 @@ public class FedoraPassCrudClient {
                 .preferRepresentation(include, omits)
                 .perform()) {
 
-            LOG.info("Resource read status: {}", response.getStatusCode());
+            LOG.info("Resource read status: for {}: {}", passEntityUri, response.getStatusCode());
 
             JsonNode raw = new ObjectMapper().readTree(response.getBody());
             JsonNode graph = raw.withArray("@graph");
@@ -417,7 +417,7 @@ public class FedoraPassCrudClient {
             handleNon2xx(modelObj, res);
 
             PassEntity entity = adapter.toModel(res.body().byteStream(), modelObj.getClass());
-            LOG.info("Container creation status and location: {}, {}", res.code(), entity.getId());
+            LOG.info("Creation status and location: {}: {}", res.code(), entity.getId());
 
             return (T) entity;
         } catch (Exception e) {
@@ -454,6 +454,7 @@ public class FedoraPassCrudClient {
                         modelObj.getId(), modelObj.getId());
                 throw new UpdateConflictException(msg);
             }
+            LOG.info("Resource update status for {}: {}", modelObj.getId(), res.code());
             handleNon2xx(modelObj, res);
         } catch (UpdateConflictException e) {
             throw e;

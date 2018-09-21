@@ -15,6 +15,10 @@
  */
 package org.dataconservancy.pass.client.elasticsearch;
 
+import static java.lang.String.format;
+import static java.lang.String.join;
+import static java.util.stream.Collectors.toList;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -112,7 +116,11 @@ public class ElasticsearchPassClient {
              
         Set<URI> passEntityUris = getIndexerResults(querystring, 2, 0); //get 2 so we can check only one result matched
         if (passEntityUris.size()>1) {
-            throw new RuntimeException("More than one results was returned by this query. findByAttribute() searches should match only one result");
+            throw new RuntimeException(
+                    format("More than one results was returned by this query (%s = %s). " + 
+                            "findByAttribute() searches should match only one result.  Instead found:\n %s", 
+                            attribute, value, 
+                            join("\n", passEntityUris.stream().map(URI::toString).collect(toList()))));
         }
         URI passEntityUri = null;
         if (passEntityUris.size()>0) {
