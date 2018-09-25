@@ -81,8 +81,7 @@ public interface PassClient {
     public void deleteResource(URI uri);
     
     /**
-     * Retrieves the entity matching the URI provided, populates the  
-     * appropriate Java class with its values.
+     * Retrieves the entity matching the URI provided, populates the appropriate Java class with its values.
      * @param uri
      * @param modelClass
      * @return
