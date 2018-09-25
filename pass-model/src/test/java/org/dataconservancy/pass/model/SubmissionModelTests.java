@@ -35,6 +35,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONObject;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -123,6 +124,20 @@ public class SubmissionModelTests {
         submission1 = submission2;
         assertEquals(submission1.hashCode(),submission2.hashCode());
         
+    }
+
+    /**
+     * Verifies that we can use the "submitted" status related to a SubmissionStatus.
+     * @throws Exception
+     */
+    @Test
+    public void testSubmissionStatusSubmitted() throws Exception {
+        assertFalse(SubmissionStatus.APPROVAL_REQUESTED.isSubmitted());
+        assertFalse(SubmissionStatus.CANCELLED.isSubmitted());
+        assertTrue(SubmissionStatus.COMPLETE.isSubmitted());
+        
+        Submission submission = createSubmission();
+        assertTrue(submission.getSubmissionStatus().isSubmitted());
     }
     
     private Submission createSubmission() throws Exception {

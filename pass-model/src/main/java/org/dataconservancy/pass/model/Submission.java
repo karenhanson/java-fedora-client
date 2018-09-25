@@ -115,28 +115,28 @@ public class Submission extends PassEntity {
          * document and complete the Submission.
          */
         @JsonProperty("manuscript-required")
-        MANUSCRIPT_REQUIRED("manuscript-required"),
+        MANUSCRIPT_REQUIRED("manuscript-required", false),
         
         /**
          * A Submission was prepared by a preparer but now needs the submitter to approve and submit it or provide 
          * feedback.
          */        
         @JsonProperty("approval-requested")
-        APPROVAL_REQUESTED("approval-requested"),
+        APPROVAL_REQUESTED("approval-requested", false),
         
         /**
          * A Submission was prepared by a preparer, but on review by the submitter, a change was requested. 
          * The Submission has been handed back to the preparer for editing.
          */
         @JsonProperty("changes-requested")
-        CHANGES_REQUESTED("changes-requested"),
+        CHANGES_REQUESTED("changes-requested", false),
 
         /**
          * A Submission was prepared and then cancelled by the submitter or preparer without being submitted. 
          * No further edits can be made to the Submission.
          */
         @JsonProperty("cancelled")
-        CANCELLED("cancelled"),
+        CANCELLED("cancelled", false),
 
         /**
          * The submit button has been pressed through the UI. From this status forward, the Submission 
@@ -147,21 +147,21 @@ public class Submission extends PassEntity {
          * verify completion of the process in the target Repository.
          */
         @JsonProperty("submitted")
-        SUBMITTED("submitted"),
+        SUBMITTED("submitted", true),
 
         /**
          * Indicates that a User action may be required outside of PASS. The Submission is stalled or 
          * has been rejected by one or more Repository
          */
         @JsonProperty("needs-attention")
-        NEEDS_ATTENTION("needs-attention"),
+        NEEDS_ATTENTION("needs-attention", true),
 
         /**
          * The target repositories have all received a copy of the Submission, and have indicated that 
          * the Submission was successful.
          */
         @JsonProperty("complete")
-        COMPLETE("complete");
+        COMPLETE("complete", true);
 
         private static final Map<String, SubmissionStatus> map = new HashMap<>(values().length, 1);  
         static {
@@ -170,8 +170,11 @@ public class Submission extends PassEntity {
         
         private String value;
         
-        private SubmissionStatus(String value){
+        private boolean submitted;
+        
+        private SubmissionStatus(String value, boolean submitted){
             this.value = value;
+            this.submitted = submitted;
         }
         
         public static SubmissionStatus of(String status) {
@@ -182,6 +185,10 @@ public class Submission extends PassEntity {
             return result;
           }
 
+        public boolean isSubmitted() {
+            return submitted;
+        }
+        
         @Override
         public String toString() {
             return this.value;
@@ -309,9 +316,18 @@ public class Submission extends PassEntity {
     /**
      * @return the submitted
      */
+    public Boolean calculate() {
+        return submitted;
+    }
+
+    
+    /**
+     * @param submitted the submitted to set
+     */
     public Boolean getSubmitted() {
         return submitted;
     }
+
 
     
     /**
