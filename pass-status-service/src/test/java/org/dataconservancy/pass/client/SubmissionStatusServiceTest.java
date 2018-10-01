@@ -3,9 +3,11 @@ package org.dataconservancy.pass.client;
 import java.net.URI;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -53,9 +55,13 @@ public class SubmissionStatusServiceTest extends SubmissionStatusTestBase {
     public void testCalcSubmissionStatusPostSubmission() throws Exception {
 
         List<URI> repositories = Arrays.asList(repo1Id, repo2Id);
-        Set<URI> depositUris = new HashSet<URI>(Arrays.asList(deposit1Id, deposit2Id));
-        Set<URI> repoCopyUris = new HashSet<URI>(Arrays.asList(repoCopy1Id, repoCopy2Id));
-        Set<URI> submissionEvents = new HashSet<URI>();
+        
+        Map<String, Collection<URI>> submissionIncoming = new HashMap<String, Collection<URI>>();
+        submissionIncoming.put("submission", new HashSet<URI>(Arrays.asList(deposit1Id, deposit2Id)));
+        submissionIncoming.put("acls", new HashSet<URI>(Arrays.asList(new URI("fake:uri"))));
+
+        Map<String, Collection<URI>> publicationsIncoming = new HashMap<String, Collection<URI>>();
+        publicationsIncoming.put("publication", new HashSet<URI>(Arrays.asList(repoCopy1Id, repoCopy2Id)));
         
         Submission submission = new Submission();
         submission.setId(new URI("submission:1"));
@@ -65,20 +71,17 @@ public class SubmissionStatusServiceTest extends SubmissionStatusTestBase {
         
         service = new SubmissionStatusService(submission, client);
         
-        when(client.findAllByAttribute(eq(Deposit.class), eq("submission"), Mockito.any())).thenReturn(depositUris);
+        when(client.getIncoming(Mockito.any())).thenReturn(submissionIncoming).thenReturn(publicationsIncoming);;
         when(client.readResource(Mockito.any(), eq(Deposit.class))).thenReturn(deposit(DepositStatus.ACCEPTED, repo1Id)).thenReturn(deposit(DepositStatus.ACCEPTED, repo2Id));
-        
-        when(client.findAllByAttribute(eq(RepositoryCopy.class), eq("submission"), Mockito.any())).thenReturn(repoCopyUris);
         when(client.readResource(Mockito.any(), eq(RepositoryCopy.class))).thenReturn(repoCopy(CopyStatus.ACCEPTED,repo1Id)).thenReturn(repoCopy(CopyStatus.ACCEPTED,repo2Id));
         
-        when(client.findAllByAttribute(eq(SubmissionEvent.class), eq("submission"), Mockito.any())).thenReturn(submissionEvents);
-
         SubmissionStatus newStatus = service.calculateSubmissionStatus();
         assertEquals(SubmissionStatus.SUBMITTED, newStatus);
 
-        verify(client, Mockito.times(1)).findAllByAttribute(eq(Deposit.class),  eq("submission"), Mockito.any());
-        verify(client, Mockito.times(1)).findAllByAttribute(eq(RepositoryCopy.class), eq("publication"), Mockito.any());
-        verify(client, Mockito.times(0)).findAllByAttribute(eq(SubmissionEvent.class),  eq("submission"), Mockito.any());
+        verify(client, Mockito.times(2)).getIncoming(Mockito.any());
+        verify(client, Mockito.times(2)).readResource(Mockito.any(), eq(Deposit.class));
+        verify(client, Mockito.times(2)).readResource(Mockito.any(), eq(RepositoryCopy.class));
+        verify(client, Mockito.times(0)).readResource(Mockito.any(), eq(SubmissionEvent.class));
         
     }
     
@@ -92,7 +95,10 @@ public class SubmissionStatusServiceTest extends SubmissionStatusTestBase {
     public void testCalcSubmissionStatusPreSubmission() throws Exception {
 
         List<URI> repositories = Arrays.asList(repo1Id, repo2Id);
-        Set<URI> submissionEventUris = new HashSet<URI>(Arrays.asList(subEvent1Id, subEvent2Id));
+        
+        Map<String, Collection<URI>> submissionIncoming = new HashMap<String, Collection<URI>>();
+        submissionIncoming.put("submission", new HashSet<URI>(Arrays.asList(subEvent1Id, subEvent2Id)));
+        submissionIncoming.put("acls", new HashSet<URI>(Arrays.asList(new URI("fake:uri"))));
         
         Submission submission = new Submission();
         submission.setId(new URI("submission:1"));
@@ -102,7 +108,7 @@ public class SubmissionStatusServiceTest extends SubmissionStatusTestBase {
         
         service = new SubmissionStatusService(submission, client);
         
-        when(client.findAllByAttribute(eq(SubmissionEvent.class), eq("submission"), Mockito.any())).thenReturn(submissionEventUris);
+        when(client.getIncoming(Mockito.any())).thenReturn(submissionIncoming);
         when(client.readResource(Mockito.any(), eq(SubmissionEvent.class)))
             .thenReturn(submissionEvent(new DateTime(2018, 2, 1, 12, 1, 0, 0), EventType.APPROVAL_REQUESTED))
             .thenReturn(submissionEvent(new DateTime(2018, 2, 1, 12, 2, 0, 0), EventType.CHANGES_REQUESTED));
@@ -110,9 +116,10 @@ public class SubmissionStatusServiceTest extends SubmissionStatusTestBase {
         SubmissionStatus newStatus = service.calculateSubmissionStatus();
         assertEquals(SubmissionStatus.CHANGES_REQUESTED, newStatus);
 
-        verify(client, Mockito.times(0)).findAllByAttribute(eq(Deposit.class),  eq("submission"), Mockito.any());
-        verify(client, Mockito.times(0)).findAllByAttribute(eq(RepositoryCopy.class), eq("publication"), Mockito.any());
-        verify(client, Mockito.times(1)).findAllByAttribute(eq(SubmissionEvent.class),  eq("submission"), Mockito.any());
+        verify(client, Mockito.times(1)).getIncoming(Mockito.any());
+        verify(client, Mockito.times(2)).readResource(Mockito.any(), eq(SubmissionEvent.class));
+        verify(client, Mockito.times(0)).readResource(Mockito.any(), eq(Deposit.class));
+        verify(client, Mockito.times(0)).readResource(Mockito.any(), eq(RepositoryCopy.class));
         
     }
         

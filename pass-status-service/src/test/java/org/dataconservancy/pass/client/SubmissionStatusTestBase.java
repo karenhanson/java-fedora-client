@@ -51,13 +51,13 @@ public abstract class SubmissionStatusTestBase {
         repo1Id = new URI("repository:1");
         repo2Id = new URI("repository:2");
         repo3Id = new URI("repository:3");
-        publicationId = new URI("publication:1");
-        deposit1Id = new URI("deposit:1");
-        deposit2Id = new URI("deposit:2");
-        repoCopy1Id = new URI("repositoryCopy:1");
-        repoCopy2Id = new URI("repositoryCopy:2");
-        subEvent1Id = new URI("submissionEvent:1");
-        subEvent2Id = new URI("submissionEvent:2");
+        publicationId = new URI("publications:1");
+        deposit1Id = new URI("deposits:1");
+        deposit2Id = new URI("deposits:2");
+        repoCopy1Id = new URI("repositoryCopies:1");
+        repoCopy2Id = new URI("repositoryCopies:2");
+        subEvent1Id = new URI("submissionEvents:1");
+        subEvent2Id = new URI("submissionEvents:2");
     }
     
     protected Deposit deposit(DepositStatus status, URI repoUri) {
