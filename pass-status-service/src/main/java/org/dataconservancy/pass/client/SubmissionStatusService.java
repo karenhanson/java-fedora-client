@@ -2,12 +2,17 @@ package org.dataconservancy.pass.client;
 
 import java.net.URI;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.dataconservancy.pass.client.util.SubmissionStatusCalculator;
 import org.dataconservancy.pass.model.Deposit;
+import org.dataconservancy.pass.model.PassEntity;
+import org.dataconservancy.pass.model.PassEntityType;
 import org.dataconservancy.pass.model.RepositoryCopy;
 import org.dataconservancy.pass.model.Submission;
 import org.dataconservancy.pass.model.Submission.SubmissionStatus;
@@ -28,6 +33,9 @@ public class SubmissionStatusService
 {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubmissionStatusService.class);
+    
+    private static final String SUBMISSION_MAP_KEY = "submission";
+    private static final String PUBLICATION_MAP_KEY = "publication";
     
     private PassClient client;
     
@@ -99,29 +107,21 @@ public class SubmissionStatusService
         SubmissionStatus fromStatus = submission.getSubmissionStatus();
         SubmissionStatus toStatus;
         
+        Collection<URI> submissionLinks = retrieveLinks(submissionId, SUBMISSION_MAP_KEY);
         
         if (!submitted) {
             
-            // before submission, we need too look at events for clues about status
-            Set<URI> submissionEventUris = client.findAllByAttribute(SubmissionEvent.class, "submission", submissionId);
-            List<SubmissionEvent> submissionEvents = submissionEventUris.stream()
-                    .map(r -> client.readResource(r, SubmissionEvent.class))
-                    .collect(Collectors.toList());
+            List<SubmissionEvent> submissionEvents = getConnectedRecords(submissionLinks, PassEntityType.SUBMISSION_EVENT, SubmissionEvent.class);
             
             toStatus = SubmissionStatusCalculator.calculatePreSubmissionStatus(submissionEvents);            
                         
         } else {
-            
-            Set<URI> depositUris = client.findAllByAttribute(Deposit.class, "submission", submissionId);
-            List<Deposit> deposits = depositUris.stream()
-                                        .map(r -> client.readResource(r, Deposit.class))
-                                        .collect(Collectors.toList());
-            
-            Set<URI> repositoryCopyUris = client.findAllByAttribute(RepositoryCopy.class, "publication", submission.getPublication());
-            List<RepositoryCopy> repositoryCopies = repositoryCopyUris.stream()
-                    .map(r -> client.readResource(r, RepositoryCopy.class))
-                    .collect(Collectors.toList());
 
+            List<Deposit> deposits = getConnectedRecords(submissionLinks, PassEntityType.DEPOSIT, Deposit.class);            
+
+            Collection<URI> publicationLinks = retrieveLinks(submission.getPublication(), PUBLICATION_MAP_KEY);
+            List<RepositoryCopy> repositoryCopies = getConnectedRecords(publicationLinks, PassEntityType.REPOSITORY_COPY, RepositoryCopy.class);
+            
             toStatus = SubmissionStatusCalculator.calculatePostSubmissionStatus(submission.getRepositories(), deposits, repositoryCopies);
             
         }
@@ -196,5 +196,43 @@ public class SubmissionStatusService
         
         return toStatus;
     }
+    
+    
+    /**
+     * Retrieve incoming links for resource, filtered by a map key.
+     * @param uri
+     * @param mapKey
+     * @return
+     */
+    private Collection<URI> retrieveLinks(URI uri, String mapKey) {
+        Collection<URI> links = new HashSet<>();
+        if (uri==null || mapKey==null) {
+            return links;
+        }
+        Map<String, Collection<URI>> linksMap = client.getIncoming(uri);
+        if (linksMap.containsKey(mapKey)) {
+            links = linksMap.get(mapKey);
+        }
+        return links;
+    }
+
+    
+    /**
+     * Filter links list by entity type required and read in resources from database
+     * @param links
+     * @param entityType
+     * @param modelClass
+     * @return
+     */
+    private <T extends PassEntity> List<T> getConnectedRecords(Collection<URI> links, PassEntityType entityType, Class<T> modelClass) {
+        if (links==null || entityType==null || modelClass==null) {
+            return new ArrayList<T>();
+        }
+        return links.stream()
+            .filter(link -> link.toString().contains(entityType.getPlural()))
+            .map(res -> client.readResource(res, modelClass))
+            .collect(Collectors.toList());
+    }
+    
     
 }
