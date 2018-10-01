@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.dataconservancy.pass.client.SubmissionStatusService;
 import org.dataconservancy.pass.model.Deposit;
 import org.dataconservancy.pass.model.Deposit.DepositStatus;
+import org.dataconservancy.pass.model.Publication;
 import org.dataconservancy.pass.model.RepositoryCopy;
 import org.dataconservancy.pass.model.RepositoryCopy.CopyStatus;
 import org.dataconservancy.pass.model.Submission;
@@ -44,14 +45,12 @@ public class SubmissionStatusServiceIT extends ClientITBase {
     //some test URIs 
     private URI repo1Id;
     private URI repo2Id;
-    private URI publicationId;
     
     @Before
     public void createDefaultTestData() throws Exception {
 
         repo1Id = new URI("repository:1");
         repo2Id = new URI("repository:2");
-        publicationId = new URI("publication:1");
         
     }
     
@@ -62,6 +61,10 @@ public class SubmissionStatusServiceIT extends ClientITBase {
      */
     @Test
     public void testSetPreSubmissionStatusWhenNull() {
+        
+        Publication publication = random(Publication.class, 1);
+        URI publicationId = client.createResource(publication);
+        this.createdUris.put(publicationId, Publication.class); 
         
         // create a random Submission, but add important values for this test
         Submission submission = random(Submission.class, 1);
@@ -86,12 +89,6 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         subEvent2.setSubmission(submissionId);
         URI subEvent2Id = client.createResource(subEvent2);
         this.createdUris.put(subEvent2Id, SubmissionEvent.class);
-        
-        //wait for index
-        attempt(RETRIES, () -> {
-            final URI uri = client.findByAttribute(SubmissionEvent.class, "@id", subEvent2Id);
-            assertEquals(subEvent2Id, uri);
-        }); 
 
         SubmissionStatusService service = new SubmissionStatusService(submissionId);
         SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus();
@@ -109,6 +106,10 @@ public class SubmissionStatusServiceIT extends ClientITBase {
      */
     @Test
     public void testDoNotOverridePreSubmissionStatusWhenHasValue() {
+
+        Publication publication = random(Publication.class, 1);
+        URI publicationId = client.createResource(publication);
+        this.createdUris.put(publicationId, Publication.class);
         
         // create a random Submission, but add important values for this test
         Submission submission = random(Submission.class, 1);
@@ -131,14 +132,8 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         subEvent2.setEventType(EventType.CANCELLED);
         subEvent2.setPerformedDate(new DateTime(2018, 2, 1, 14, 1, 0, 0));
         subEvent2.setSubmission(submissionId);
-        URI subEvent2Id = client.createResource(subEvent2);
+        final URI subEvent2Id = client.createResource(subEvent2);
         this.createdUris.put(subEvent2Id, SubmissionEvent.class);
-        
-        //wait for index
-        attempt(RETRIES, () -> {
-            final URI uri = client.findByAttribute(SubmissionEvent.class, "@id", subEvent2Id);
-            assertEquals(subEvent2Id, uri);
-        }); 
 
         SubmissionStatusService service = new SubmissionStatusService(submissionId);
         SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus();
@@ -158,6 +153,10 @@ public class SubmissionStatusServiceIT extends ClientITBase {
      */
     @Test
     public void testOverridePreSubmissionStatusWhenSet() {
+
+        Publication publication = random(Publication.class, 1);
+        URI publicationId = client.createResource(publication);
+        this.createdUris.put(publicationId, Publication.class);
         
         // create a random Submission, but add important values for this test
         Submission submission = random(Submission.class, 1);
@@ -183,12 +182,6 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         URI subEvent2Id = client.createResource(subEvent2);
         this.createdUris.put(subEvent2Id, SubmissionEvent.class);
         
-        //wait for index
-        attempt(RETRIES, () -> {
-            final URI uri = client.findByAttribute(SubmissionEvent.class, "@id", subEvent2Id);
-            assertEquals(subEvent2Id, uri);
-        }); 
-
         SubmissionStatusService service = new SubmissionStatusService(submissionId);
         //this time we set override to true
         SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus(true);
@@ -201,13 +194,16 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         
     }
     
-
     
     /**
      * Make sure Deposits used in post-submission status calc
      */
     @Test
     public void testPostSubmissionStatusFromDeposits() {
+
+        Publication publication = random(Publication.class, 1);
+        URI publicationId = client.createResource(publication);
+        this.createdUris.put(publicationId, Publication.class);
         
         // create a random Submission, but add important values for this test
         Submission submission = random(Submission.class, 1);
@@ -233,12 +229,6 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         URI deposit2Id = client.createResource(deposit1);
         this.createdUris.put(deposit2Id, Deposit.class);
         
-        //wait for index
-        attempt(RETRIES, () -> {
-            final URI uri = client.findByAttribute(Deposit.class, "@id", deposit2Id);
-            assertEquals(deposit2Id, uri);
-        }); 
-
         SubmissionStatusService service = new SubmissionStatusService(submissionId);
         //this time we set override to true
         SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus();
@@ -257,6 +247,10 @@ public class SubmissionStatusServiceIT extends ClientITBase {
      */
     @Test
     public void testPostSubmissionStatusFromRepositoryCopies() {
+
+        Publication publication = random(Publication.class, 1);
+        URI publicationId = client.createResource(publication);
+        this.createdUris.put(publicationId, Publication.class);
         
         // create a random Submission, but add important values for this test
         Submission submission = random(Submission.class, 1);
@@ -299,12 +293,6 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         URI repoCopy2Id = client.createResource(repoCopy2);
         this.createdUris.put(repoCopy2Id, RepositoryCopy.class);
         
-        //wait for index
-        attempt(RETRIES, () -> {
-            final URI uri = client.findByAttribute(RepositoryCopy.class, "@id", repoCopy2Id);
-            assertEquals(repoCopy2Id, uri);
-        }); 
-
         SubmissionStatusService service = new SubmissionStatusService(submissionId);
         //this time we won't update Submission record, just return the value
         SubmissionStatus newStatus = service.calculateSubmissionStatus();
@@ -324,6 +312,10 @@ public class SubmissionStatusServiceIT extends ClientITBase {
      */
     @Test
     public void testPostSubmissionStatusFromDepositsAndRepoCopies() {
+        
+        Publication publication = random(Publication.class, 1);
+        URI publicationId = client.createResource(publication);
+        this.createdUris.put(publicationId, Publication.class);
         
         // create a random Submission, but add important values for this test
         Submission submission = random(Submission.class, 1);
@@ -357,12 +349,6 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         repoCopy1.setCopyStatus(CopyStatus.COMPLETE);
         URI repoCopy1Id = client.createResource(repoCopy1);
         this.createdUris.put(repoCopy1Id, RepositoryCopy.class);
-        
-        //wait for index
-        attempt(RETRIES, () -> {
-            final URI uri = client.findByAttribute(RepositoryCopy.class, "@id", repoCopy1Id);
-            assertEquals(repoCopy1Id, uri);
-        }); 
 
         SubmissionStatusService service = new SubmissionStatusService(submissionId);
         SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus();
