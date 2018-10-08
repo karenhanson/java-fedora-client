@@ -97,10 +97,16 @@ public class Grant extends PassEntity {
         
     /** Status of award/grant */
     public enum AwardStatus {
+        
+        /** Active award */
         @JsonProperty("active")
         ACTIVE("active"),
+        
+        /** Pre-award */
         @JsonProperty("pre-award")
         PRE_AWARD("pre-award"),
+        
+        /** Terminated */
         @JsonProperty("terminated")
         TERMINATED("terminated");
 
@@ -115,6 +121,12 @@ public class Grant extends PassEntity {
             this.value = value;
         }
         
+        /**
+         * Parse award status
+         * 
+         * @param status Serialized status
+         * @return Parsed status
+         */
         public static AwardStatus of(String status) {
             AwardStatus result = map.get(status);
             if (result == null) {

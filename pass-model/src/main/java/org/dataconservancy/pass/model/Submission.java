@@ -177,6 +177,12 @@ public class Submission extends PassEntity {
             this.submitted = submitted;
         }
         
+        
+        /** Parse the submission status.
+         * 
+         * @param status Serialized submission status string
+         * @return The submission status
+         */
         public static SubmissionStatus of(String status) {
             SubmissionStatus result = map.get(status);
             if (result == null) {
@@ -185,6 +191,10 @@ public class Submission extends PassEntity {
             return result;
           }
 
+        /** Determine if submitted.
+         * 
+         * @return True if submitted.
+         */
         public boolean isSubmitted() {
             return submitted;
         }
@@ -244,6 +254,12 @@ public class Submission extends PassEntity {
             this.value = value;
         }
         
+        /** 
+         * Parse the aggregated deposit status.
+         * 
+         * @param status Serialized status
+         * @return parsed deposit status.
+         */
         public static AggregatedDepositStatus of(String status) {
             AggregatedDepositStatus result = map.get(status);
             if (result == null) {
@@ -263,9 +279,12 @@ public class Submission extends PassEntity {
     /** 
      * Source of the Submission, from a PASS user or imported from another source*/
     public enum Source {
+        
+        /** PASS source */
         @JsonProperty("pass")
         PASS("pass"),
         
+        /** Other source */
         @JsonProperty("other")
         OTHER("other");
         
@@ -322,7 +341,7 @@ public class Submission extends PassEntity {
 
     
     /**
-     * @param submitted the submitted to set
+     * @return Boolean indicating submitted
      */
     public Boolean getSubmitted() {
         return submitted;
@@ -426,15 +445,15 @@ public class Submission extends PassEntity {
     }
 
     
-    /**
-     * @param user the submitter to set
+    /** Set the submitter
+     * @param submitter the submitter to set
      */
     public void setSubmitter(URI submitter) {
         this.submitter = submitter;
     }
 
     
-    /**
+    /** Gets the list of preparers
      * @return the preparers
      */
     public List<URI> getPreparers() {

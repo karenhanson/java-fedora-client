@@ -95,6 +95,12 @@ public class Repository extends PassEntity {
             this.value = value;
         }
         
+        /** 
+         * Parse the integration type.
+         * 
+         * @param integrationType String serialized integration type
+         * @return parsed integration type.
+         */
         public static IntegrationType of(String integrationType) {
             IntegrationType result = map.get(integrationType);
             if (result == null) {
@@ -183,7 +189,7 @@ public class Repository extends PassEntity {
 
     
     /**
-     * @param formSchema the form schema to set
+     * @param formSchema the form schema (typically, a stringified JSON blob)
      */
     public void setFormSchema(String formSchema) {
         this.formSchema = formSchema;

@@ -43,11 +43,12 @@ public class RepositoryCrawler {
     /**
      * Visit a container and its children.
      * <p>
-     * Invokes a supplied visitor {@link consumer} for every resource underneath a repository container, potentially
+     * Invokes a supplied visitor {@link Consumer} for every resource underneath a repository container, potentially
      * ignoring individual resources, or skipping trees or limiting recursion depth respectively.
      * </p>
      * <p>
      * Some examples:
+     * </p>
      * <ul>
      * <li>Process all submissions, but <em>not</em> binaries POSTed to submissions, and <em>not</em> the submissions
      * container itself:
@@ -55,7 +56,6 @@ public class RepositoryCrawler {
      * <li>Process all PASS resources, skipping ACLs and top-level containers:
      * <code>visit("https://pass.local/fcepo/rest/", consumer, IGNORE_CONTAINERS, depth(2).or(SKIP_ACLS));</code>
      * </ul>
-     * </p>
      *
      * @param resource URI of a resource to visit. If the value ends in <code>/*</code>, the crawler will <em>not</em>
      *        consume the provided container itself, but <em>will</em> consume its children.
@@ -160,7 +160,7 @@ public class RepositoryCrawler {
          *
          * @param limit Recursion limit. 0 = no recursion, 1 = descent to children, 2 = descend to the children's
          *        children, etc.
-         * @return
+         * @return predicate for matching depth
          */
         public static Predicate<State> depth(int limit) {
             return s -> s.depth >= limit;

@@ -89,15 +89,20 @@ public class Contributor extends PassEntity {
      * list of possible contributor Roles 
      */
     public enum Role {
+        
+        /** Author role */
         @JsonProperty("author")
         AUTHOR("author"),
         
+        /** First author role */
         @JsonProperty("first-author")
         FIRST_AUTHOR("first-author"),
         
+        /** Last author role */
         @JsonProperty("last-author")
         LAST_AUTHOR("last-author"),
         
+        /** Corresponding author role */
         @JsonProperty("corresponding-author")
         CORRESPONDING_AUTHOR("corresponding-author");
 
@@ -112,6 +117,12 @@ public class Contributor extends PassEntity {
             this.value = value;
         }
         
+        /** 
+         * Parse the role.
+         * 
+         * @param role Serialized role string
+         * @return The parsed value.
+         */
         public static Role of(String role) {
             Role result = map.get(role);
             if (result == null) {
@@ -247,7 +258,7 @@ public class Contributor extends PassEntity {
 
     
     /**
-     * @param role the roles list to set
+     * @param roles the roles list to set
      */
     public void setRoles(List<Role> roles) {
         this.roles = roles;

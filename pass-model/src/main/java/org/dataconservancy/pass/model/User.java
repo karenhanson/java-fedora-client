@@ -88,8 +88,12 @@ public class User extends PassEntity {
      * list of possible user Roles 
      */
     public enum Role {
+        
+        /** Grant admin role */
         @JsonProperty("admin")
         ADMIN("admin"),
+        
+        /** Submitter role */
         @JsonProperty("submitter")
         SUBMITTER("submitter");
 
@@ -104,6 +108,11 @@ public class User extends PassEntity {
             this.value = value;
         }
         
+        /** Parse the role.
+         * 
+         * @param role Serialized role
+         * @return parsed role.
+         */
         public static Role of(String role) {
             Role result = map.get(role);
             if (result == null) {
@@ -238,7 +247,7 @@ public class User extends PassEntity {
 
     
     /**
-     * @param localKey the localKey to set
+     * @param locatorIds List of locator IDs
      */
     public void setLocatorIds(List<String> locatorIds) {
         this.locatorIds = locatorIds;
@@ -270,7 +279,7 @@ public class User extends PassEntity {
 
     
     /**
-     * @param role the roles list to set
+     * @param roles the roles list to set
      */
     public void setRoles(List<Role> roles) {
         this.roles = roles;

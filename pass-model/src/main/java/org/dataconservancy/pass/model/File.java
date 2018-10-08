@@ -98,6 +98,12 @@ public class File extends PassEntity {
             this.value = value;
         }
         
+        /** 
+         * Parse file role.
+         * 
+         * @param role Role string
+         * @return parsed file role.
+         */
         public static FileRole of(String role) {
             FileRole result = map.get(role);
             if (result == null) {

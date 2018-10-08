@@ -80,7 +80,6 @@ public class PassJsonAdapterBasic implements PassJsonAdapter {
 
     /**
      * {@inheritDoc}
-     * @param <T>
      */
     public <T extends PassEntity> T toModel(byte[] json, Class<T> valueType) {
         if (json.length == 0) {
@@ -105,7 +104,6 @@ public class PassJsonAdapterBasic implements PassJsonAdapter {
 
     /**
      * {@inheritDoc}
-     * @param <T>
      */
     public <T extends PassEntity> T toModel(InputStream json, Class<T> valueType) {
         try {

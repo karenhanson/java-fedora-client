@@ -58,13 +58,15 @@ public class SubmissionStatusCalculator  {
     
     /**
      * Calculates the appropriate post-Submission status based on data provided. 
+     * <p>
      * Post-Submission calculations uses the {@code Deposits} and {@code RepositoryCopies} associated 
      * with a {@code Submission's} {@code Repositories} to determine the status of a Submission 
      * after it has been submitted ({@code Submission.status=true}.
-     * @param repositories
-     * @param deposits
-     * @param repositoryCopies
-     * @return
+     * </p>
+     * @param repositories Submission repositories
+     * @param deposits Submission deposits
+     * @param repositoryCopies Submission repository copies
+     * @return Calculated submission status
      */
     public static SubmissionStatus calculatePostSubmissionStatus(List<URI> repositories,
                                             List<Deposit> deposits,
@@ -80,11 +82,13 @@ public class SubmissionStatusCalculator  {
 
     
     /**
-     * Calculates the appropriate pre-Submission status based on data provided. Pre-Submission 
-     * calculations use the {@code SubmissionEvents} associated with the {@link Submission} 
+     * Calculates the appropriate pre-Submission status based on data provided. 
+     * <p>
+     * Pre-Submission calculations use the {@code SubmissionEvents} associated with the {@link Submission} 
      * to determine the status of a Submission before it has been submitted ({@code Submission.status=false}.
-     * @param submissionEvents
-     * @return
+     * </p>
+     * @param submissionEvents List of submission events
+     * @return Calculated submission status
      */
     public static SubmissionStatus calculatePreSubmissionStatus(List<SubmissionEvent> submissionEvents) {
     if (submissionEvents==null) {submissionEvents = new ArrayList<SubmissionEvent>();}
@@ -109,9 +113,9 @@ public class SubmissionStatusCalculator  {
     /**
      * Checks validity of {@link SubmissionStatus} change, will throw exception or output a warning if there are any 
      * validation issue with the change
-     * @param submitted
-     * @param fromStatus
-     * @param toStatus
+     * @param submitted Whether the submission is submitted
+     * @param fromStatus Original status
+     * @param toStatus Desired new status
      */
     public static void validateStatusChange(boolean submitted, SubmissionStatus fromStatus, SubmissionStatus toStatus) {
         if (toStatus==null) {
@@ -146,11 +150,6 @@ public class SubmissionStatusCalculator  {
     }
     
     
-    /**
-     * Use the Repository.id to SubmissionStatus Map to calculate the combined SubmissionStatus.
-     * @param submissionRepositoryStatusMap
-     * @return
-     */
     private static SubmissionStatus calculateFromStatusMap(Map<URI, SubmissionStatus> submissionRepositoryStatusMap) {
         //we only need to know if a status is present or not to determine combined status
         Set<SubmissionStatus> statuses = new HashSet<SubmissionStatus>(submissionRepositoryStatusMap.values());        
@@ -164,15 +163,6 @@ public class SubmissionStatusCalculator  {
         }
     }
     
-            
-    /**
-     * Calculates the individual post-submission status for each {@link Repository} by checking the status 
-     * of the matching {@link Deposit} and {@link RepositoryCopy} if either or both exist.
-     * @param repositories
-     * @param deposits
-     * @param repoCopies
-     * @return
-     */
     private static Map<URI, SubmissionStatus> mapPostSubmissionRepositoryStatuses(List<URI> repositories, 
                                                                                  List<Deposit> deposits, 
                                                                                  List<RepositoryCopy> repoCopies) {
@@ -207,11 +197,6 @@ public class SubmissionStatusCalculator  {
         return statusMap;
     }
     
-    /**
-     * Maps the {@link EventType} to the corresponding {@code SubmissionStatus}
-     * @param eventType
-     * @return
-     */
     private static SubmissionStatus mapEventTypeToSubmissionStatus(EventType eventType) {
         switch (eventType) {
             case APPROVAL_REQUESTED: return APPROVAL_REQUESTED;

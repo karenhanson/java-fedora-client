@@ -46,6 +46,9 @@ public class PassClientDefault implements PassClient {
      */
     private ElasticsearchPassClient indexClient;
         
+    /** 
+     * Create a default pass client, with default configuration.
+     */
     public PassClientDefault() {
         crudClient = new FedoraPassCrudClient();
         indexClient = new ElasticsearchPassClient();

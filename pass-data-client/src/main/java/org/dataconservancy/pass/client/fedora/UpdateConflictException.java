@@ -13,28 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.dataconservancy.pass.client.fedora;
 
-
 /**
- * This exception is throw when attempting to update a Resource that has changed since the last 
- * readResource from the database. When read from Fedora, each PassEntity contains an ETag 
- * field that is verified during each update to avoid overwriting changes.
- * 
+ * This exception is throw when attempting to update a Resource that has changed since the last readResource from the
+ * database. When read from Fedora, each PassEntity contains an ETag field that is verified during each update to
+ * avoid overwriting changes.
+ *
  * @author Karen Hanson
  */
 public class UpdateConflictException extends RuntimeException {
+
     private static final long serialVersionUID = 1L;
-    
+
+    /**
+     * Default constructor
+     */
     public UpdateConflictException() {
         super();
     }
+
+    /**
+     * Constructor with message
+     *
+     * @param s message
+     */
     public UpdateConflictException(String s) {
         super(s);
     }
+
+    /**
+     * Constructor with message and exception.
+     *
+     * @param s Message
+     * @param throwable Exception
+     */
     public UpdateConflictException(String s, Throwable throwable) {
         super(s, throwable);
     }
+
+    /**
+     * Constructor with exception.
+     *
+     * @param throwable The exception.
+     */
     public UpdateConflictException(Throwable throwable) {
         super(throwable);
     }

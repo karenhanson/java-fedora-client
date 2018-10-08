@@ -38,8 +38,10 @@ public class FedoraConfig {
     private static final String DEFAULT_BASE_URL = "http://localhost:8080/fcrepo/rest/";
 
     
-    /**
-     * @param baseUrl the baseUrl to set
+    /** 
+     * Get the Fedora baseUrl
+     * 
+     * @return the baseURL
      */
     public static String getBaseUrl() {
         String baseUrl = ConfigUtil.getSystemProperty(BASEURL_KEY, DEFAULT_BASE_URL);
@@ -69,7 +71,10 @@ public class FedoraConfig {
         return user;
     }
     
-    /**
+    /** 
+     * Get a path for a container, given a PASS type
+     * 
+     * @param type String name of the PASS type.
      * @return the container path
      */
     public static String getContainer(String type) {

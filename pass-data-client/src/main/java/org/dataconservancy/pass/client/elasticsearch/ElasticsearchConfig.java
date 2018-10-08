@@ -42,7 +42,7 @@ public class ElasticsearchConfig {
     
     /**
      * Get indexer URL(s), defaults to DEFAULT_INDEXER_URL if one not set
-     * @return
+     * @return host URLs.
      */
     public static Set<URL> getIndexerHostUrl() {
         Set<URL> urls = new HashSet<URL>();
@@ -64,7 +64,7 @@ public class ElasticsearchConfig {
     
     /**
      * Get indexer limit setting, defaults to DEFAULT_INDEXER_LIMIT if environment variable not set
-     * @return
+     * @return indexer limit.
      */
     public static Integer getIndexerLimit() {      
         Integer limit = DEFAULT_INDEXER_LIMIT;

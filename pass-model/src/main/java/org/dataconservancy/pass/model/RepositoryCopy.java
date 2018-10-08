@@ -97,6 +97,11 @@ public class RepositoryCopy extends PassEntity {
             this.value = value;
         }
         
+        /** Parse the copy status.
+         * 
+         * @param status Serialized status.
+         * @return Parsed status.
+         */
         public static CopyStatus of(String status) {
             CopyStatus result = map.get(status);
             if (result == null) {
@@ -153,7 +158,7 @@ public class RepositoryCopy extends PassEntity {
 
     
     /**
-     * @param copy status the repository's status to set
+     * @param copyStatus The repository's status to set
      */
     public void setCopyStatus(CopyStatus copyStatus) {
         this.copyStatus = copyStatus;

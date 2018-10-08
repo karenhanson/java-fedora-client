@@ -43,7 +43,7 @@ public class SubmissionStatusService
     
     /**
      * Initiate service using a Submission object
-     * @param submission
+     * @param submission The submission
      */
     public SubmissionStatusService(Submission submission) { 
         if (submission==null) {
@@ -59,7 +59,7 @@ public class SubmissionStatusService
 
     /**
      * Initiate service using a `Submission.id` 
-     * @param submissionId
+     * @param submissionId Submission URI
      */
     public SubmissionStatusService(URI submissionId) { 
         if (submissionId==null) {
@@ -77,8 +77,8 @@ public class SubmissionStatusService
     
     /**
      * Supports setting a specific client, primarily for testing.
-     * @param submission
-     * @param client
+     * @param submission The submission
+     * @param client PASS client
      */
     public SubmissionStatusService(Submission submission, PassClient client) {
         if (submission==null) {
@@ -96,8 +96,7 @@ public class SubmissionStatusService
      * Calculates the appropriate {@link SubmissionStatus} for the {@link Submission} provided. 
      * This is based on the status of associated {@link Deposit}s and {@link RepositoryCopy}s for 
      * {@code submitted} records, and {@link SubmissionEvent}s for unsubmitted records.
-     * @param submission
-     * @return
+     * @return Calculated submission status
      */
     public SubmissionStatus calculateSubmissionStatus() {
 
@@ -141,15 +140,19 @@ public class SubmissionStatusService
 
     /**
      * Calculates the appropriate {@link SubmissionStatus} for the {@link Submission} provided. 
+     * <p>
      * This is based on the status of associated {@link Deposit}s and {@link RepositoryCopy}s for 
      * {@code submitted} records, and {@link SubmissionEvent}s for unsubmitted records then updates 
-     * the status as appropriate. <br><br>
+     * the status as appropriate.
+     * </p>
+     * <p>
      * The UI will typically have responsibility for updating the {@code submissionStatus} before
      * the {@link Submission} is submitted. Therefore, by default this service will not replace 
      * the existing status of an unsubmitted record unless the starting value was null (i.e. it has not 
      * been populated yet). To override this constraint, and replace the value anyway, use the method 
      * {@code calculateAndUpdateSubmissionStatus(boolean overrideUIStatus)} and supply a parameter of {@code true}
-     * @return
+     * </p>
+     * @return Calculated submission status
      */
     public SubmissionStatus calculateAndUpdateSubmissionStatus() {
         return calculateAndUpdateSubmissionStatus(false);
@@ -158,18 +161,23 @@ public class SubmissionStatusService
     
     /**
      * Calculates the appropriate {@link SubmissionStatus} for the {@link Submission} provided. 
+     * 
+     * <p>
      * This is based on the status of associated {@link Deposit}s and {@link RepositoryCopy}s for 
      * {@code submitted} records, and {@link SubmissionEvent}s for unsubmitted records then updates 
-     * the status as appropriate. <br><br>
+     * the status as appropriate.
+     * </p>
+     * <p>
      * The UI will typically have responsibility for updating the {@code submissionStatus} before
      * the {@link Submission} is submitted. Therefore, by default this service will not replace 
      * the existing status of an unsubmitted record unless the starting value was null (i.e. it has not 
      * been populated yet). To override this constraint, set the {@code overrideUIStatus} parameter to 
      * {@code true}
+     * </p>
      * @param overrideUIStatus - {@code true} will override the current pre-submission status on the 
      * {@code Submission} record, regardless of whether it was set by the UI.
      * {@code false} will not replace the current submission value, and favor the value set by the UI
-     * @return
+     * @return calculated submission status.
      */
     public SubmissionStatus calculateAndUpdateSubmissionStatus(boolean overrideUIStatus) {
         SubmissionStatus fromStatus = submission.getSubmissionStatus();
@@ -202,7 +210,7 @@ public class SubmissionStatusService
      * Retrieve incoming links for resource, filtered by a map key.
      * @param uri
      * @param mapKey
-     * @return
+     * @return Incoming links
      */
     private Collection<URI> retrieveLinks(URI uri, String mapKey) {
         Collection<URI> links = new HashSet<>();
@@ -222,7 +230,7 @@ public class SubmissionStatusService
      * @param links
      * @param entityType
      * @param modelClass
-     * @return
+     * @return list of connected resources.
      */
     private <T extends PassEntity> List<T> getConnectedRecords(Collection<URI> links, PassEntityType entityType, Class<T> modelClass) {
         if (links==null || entityType==null || modelClass==null) {

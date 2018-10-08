@@ -91,6 +91,12 @@ public class Deposit extends PassEntity {
             this.value = value;
         }
         
+        /** 
+         * Parse deposit status
+         * 
+         * @param status status string
+         * @return parsed status
+         */
         public static DepositStatus of(String status) {
             DepositStatus result = map.get(status);
             if (result == null) {
@@ -115,7 +121,7 @@ public class Deposit extends PassEntity {
 
     
     /**
-     * @param deposit status the deposit status to set
+     * @param depositStatus status the deposit status to set
      */
     public void setDepositStatus(DepositStatus depositStatus) {
         this.depositStatus = depositStatus;

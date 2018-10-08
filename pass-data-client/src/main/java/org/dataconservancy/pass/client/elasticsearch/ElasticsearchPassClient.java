@@ -70,8 +70,6 @@ public class ElasticsearchPassClient {
 
     private static final String NOT_EXISTS_TEMPLATE = "-" + EXISTS_TEMPLATE;
 
-    private static final String QS_ATTRIB_EXISTS_TEMPLATE = "AND " + EXISTS_TEMPLATE;
-
     private static final String QS_ATTRIB_NOT_EXISTS_TEMPLATE = "AND " + NOT_EXISTS_TEMPLATE;
     
     private static final String ID_FIELDNAME = "@id";
@@ -81,6 +79,9 @@ public class ElasticsearchPassClient {
      */
     private final HttpHost[] hosts;
         
+    /** 
+     * Default constructor for PASS client
+     */
     public ElasticsearchPassClient() {
         Set<URL> indexerUrls = ElasticsearchConfig.getIndexerHostUrl();      
         hosts = new HttpHost[indexerUrls.size()];
@@ -95,6 +96,12 @@ public class ElasticsearchPassClient {
     
     /**
      * @see org.dataconservancy.pass.client.PassClient#findByAttribute(Class, String, Object)
+     * 
+     * @param modelClass modelClass
+     * @param attribute attribute
+     * @param value value
+     * @return URI
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> URI findByAttribute(Class<T> modelClass, String attribute, Object value) {
         validateModelParam(modelClass);
@@ -131,7 +138,13 @@ public class ElasticsearchPassClient {
 
         
     /**
-     * @see org.dataconservancy.pass.client.PassClient#findAllByAttribute(Class, String, Object, int, int)
+     * @see org.dataconservancy.pass.client.PassClient#findAllByAttribute(Class, String, Object)
+     * 
+     * @param modelClass modelClass
+     * @param attribute attribute
+     * @param value value
+     * @return Set of URI
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value) {
         return findAllByAttribute(modelClass, attribute, value, ElasticsearchConfig.getIndexerLimit(), 0);
@@ -140,6 +153,14 @@ public class ElasticsearchPassClient {
         
     /**
      * @see org.dataconservancy.pass.client.PassClient#findAllByAttribute(Class, String, Object, int, int)
+     * 
+     * @param modelClass modelClass
+     * @param attribute attribute
+     * @param value value
+     * @param limit limit
+     * @param offset offset
+     * @return Set of URI
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value, int limit, int offset) {
         validateModelParam(modelClass);
@@ -166,7 +187,12 @@ public class ElasticsearchPassClient {
 
     
     /**
-     * @see org.dataconservancy.pass.client.PassClient#findAllByAttributes(Class, Map<String, Object>)
+     *  @see org.dataconservancy.pass.client.PassClient#findAllByAttributes(Class, Map)
+     *  
+     * @param modelClass modelClass
+     * @param valueAttributesMap valueAttributesMap
+     * @return Set of URI
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> valueAttributesMap) {
         return findAllByAttributes(modelClass, valueAttributesMap, ElasticsearchConfig.getIndexerLimit(), 0);
@@ -174,7 +200,14 @@ public class ElasticsearchPassClient {
     
     
     /**
-     * @see org.dataconservancy.pass.client.PassClient#findAllByAttributes(Class, Map<String, Object>, int, int)
+     * @see org.dataconservancy.pass.client.PassClient#findAllByAttributes(Class, Map, int, int)
+     * 
+     * @param modelClass modelClass
+     * @param valueAttributesMap valueAttributesMap
+     * @param limit limit
+     * @param offset offset
+     * @return Set of URI
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> valueAttributesMap, int limit, int offset) {
         validateModelParam(modelClass);

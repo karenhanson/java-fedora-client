@@ -13,35 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.dataconservancy.pass.client;
 
-
 /**
+ * PASS client factory.
  *
  * @author Karen Hanson
  */
 public class PassClientFactory {
-    
+
     /**
-     * Pass back an instance of the appropriate PassClient.
-     * Defaults to overwriteOnUpdate = false. 
-     * @return
+     * Provide an instance a PassClient.
+     * <p>
+     * Defaults to overwriteOnUpdate = false.
+     * </p>
+     * 
+     * @return PASS client
      */
     public static PassClient getPassClient() {
-        return new PassClientDefault();               
+        return new PassClientDefault();
     }
-    
+
     /**
+     * Provide an instance of a PassClient, using a prpvided update policy.
+     * <p>
      * Includes option to overwrite during an update. The current default is to only update fields that have changed
-     * thus allowing slightly different versions of the model to function together without overwriting each other. 
+     * thus allowing slightly different versions of the model to function together without overwriting each other.
      * This new option supports the scenario where you actually do want to completely overwrite a record with model
      * changes and all - to do this, you would pass in "overwriteOnUpdate=true".
-     * @param overwriteOnUpdate - true if you would like updates to completely overwrite the record, false if you 
-     * would like only fields that have changed to be updated
-     * @return
+     * </p>
+     * 
+     * @param overwriteOnUpdate - true if you would like updates to completely overwrite the record, false if you
+     *        would like only fields that have changed to be updated
+     * @return PASS client
      */
     public static PassClient getPassClient(boolean overwriteOnUpdate) {
-        return new PassClientDefault().overWriteOnUpdate(overwriteOnUpdate);  
+        return new PassClientDefault().overWriteOnUpdate(overwriteOnUpdate);
     }
 
 }

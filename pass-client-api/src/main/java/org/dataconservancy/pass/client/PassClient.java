@@ -40,7 +40,7 @@ public interface PassClient {
      * Takes any {@link PassEntity} and persists it in the database, returns the URI if successful 
      * or appropriate exception if not. Note that PassEntities that are being created should
      * have {@code null} as their ID, the URI will the the ID field when reading the resource back
-     * @param modelObj
+     * @param modelObj The entity to be created
      * @return URI of new record
      */
     public URI createResource(PassEntity modelObj);
@@ -49,121 +49,145 @@ public interface PassClient {
      * Takes any {@link PassEntity} and persists it in the database, and returns an updated version of the resource if
      * successful or appropriate exception if not. Note that PassEntities that are being created should
      * have {@code null} as their ID; the URI will be present on the returned object.
-     * @param modelObj
+     * @param modelObj the object to be created.
+     * @param modelClass The class of PASS entity.
      * @return an updated version of the resource
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> T createAndReadResource(T modelObj, Class<T> modelClass);
     
     /**
      * Takes any {@link PassEntity}, and updates the record matching the ID field.  
      * Note that if you attempt to update an object that was updated between the {@code readResource} and the
-     * {@code updateResource}, an {@code UpdateConflictException} will be thrown. This comparison is based on 
+     * {@code updateResource}, a runtime exception will be thrown. This comparison is based on 
      * the value in {@code PassEntity.versionTag}. Setting {@code versionTag} to {@code null} will ignore conflicts and do the update.
-     * @param modelObj
-     * @return
+     * @param modelObj The object to be updated
      */
     public void updateResource(PassEntity modelObj);
 
     /**
      * Takes any {@link PassEntity}, and updates the record matching the ID field.
      * Note that if you attempt to update an object that was updated between the readResource and the
-     * updateResource, an {@link UpdateConflictException} will be thrown. This comparison is based on
+     * updateResource, a runtime exception will be thrown. This comparison is based on
      * the value in {@code PassEntity.versionTag}. Setting {@code versionTag} to {@code null} will ignore conflicts and do the update.
-     * @param modelObj
+     * @param modelObj The entity to be updated
+     * @param modelClass The class of the PASS entity.
      * @return an updated version of the resource
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> T updateAndReadResource(T modelObj, Class<T> modelClass);
     
     /** 
      * Deletes the entity matching the URI provided
-     * @param modelObj
+     * @param uri the URI of the resource to be deleted.
      */
     public void deleteResource(URI uri);
     
     /**
      * Retrieves the entity matching the URI provided, populates the appropriate Java class with its values.
-     * @param uri
-     * @param modelClass
-     * @return
+     * @param uri The URI of the resource to be read.
+     * @param modelClass The class of PASS entity.
+     * @return The pass entity.
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> T readResource(URI uri, Class<T> modelClass);
     
     /**
      * Retrieves URI for a SINGLE RECORD by matching the entity type and filtering by the field
      * specified using the value provided. For example, to find the {@link Grant} using the {@code awardNumber}:
-     * <pre>
-     *   {@code
-     *   String awardNum = "abcdef123";
-     *   URI grantId = findByAttribute(Grant.class, "awardNumber", awardNum);
+     * 
+     * <p>
+     * For example, to find the Grant using the {@code awardNumber}:
+     * </p>
+     * <pre>{@code
+     *    String awardNum = "abcdef123";
+     *    URI grantId = findByAttribute(Grant.class, "awardNumber", awardNum);
      * }</pre>
-     * If >1 records are found, a RuntimeException will be thrown. If no records are found it will return {@code null}.
+     * <p>
+     * If &gt;1 records are found, a RuntimeException will be thrown. If no records are found it will return {@code null}.
+     * </p>
      * <p>
      * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
      * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
      * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
      * </p>
-     * @param modelClass
-     * @param attribute
-     * @param value
-     * @return
+     * @param modelClass The PASS entity class.
+     * @param attribute JSON attribute name.
+     * @param value value of the attribute.
+     * @return The matching PASS entity URI.
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> URI findByAttribute(Class<T> modelClass, String attribute, Object value);
     
     
     /**
      * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the field
-     * specified using the value provided. For example, to find {@link Deposit}s using a {@code Repository.id}:
-     * <pre>
-     *   {@code
-     *   URI repositoryId = new URI("https://example.com/fedora/repositories/3");
-     *   Set<URI> entityUris = findByAttribute(Deposit.class, "repository", repositoryId);
-     * }</pre>
+     * specified using the value provided.
+     * <p>
+     * 
+     * For example, to find {@link Deposit}s using a {@code Repository.id}:
+     * </p>
+     * <pre>{@code
+     *    URI repositoryId = new URI("https://example.com/fedora/repositories/3");
+     *    Set<URI> entityUris = findByAttribute(Deposit.class, "repository", repositoryId);
+     *  }</pre>
+     * <p>
      * By default this will return a maximum of 200 matching records, unless the pass.elasticsearch.limit
      * environment variable is set. If there are no matches, it will return an empty list.
+     * </p>
      * <p>
      * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
      * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
      * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
      * </p>
-     * @param modelClass
-     * @param attribute
-     * @param value
-     * @return
+     * @param modelClass The class of PASS entity.
+     * @param attribute JSON attribute name.
+     * @param value The value of the PASS attribute.
+     * @return Set of all matching PASS entity URIs.
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value);
     
     
     /**
      * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the field
-     * specified using the value provided.  For example, to find Deposits using a Repository.id starting from
+     * specified using the value provided.
+     * 
+     * <p>
+     * For example, to find Deposits using a Repository.id starting from
      * record number 40, retrieving 20 records:
      * <pre>
      *   {@code
      *   URI repositoryId = new URI("https://example.com/fedora/repositories/3");
      *   Set<URI> entityUris = findByAttribute(Deposit.class, "repository", repositoryId, 20, 40);
      * }</pre>
-     * 
+     * <p>
      * The number of records will be limited by limit provided, and the offset will be applied to the default 
      * sorting. If there are no matches, it will return an empty list. This will override the limit env variable
+     * </p>
      * <p>
      * The value parameter will be converted to a String for the purpose of searching the index. The value parameter 
      * cannot be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
      * For example, if searching on Submission.repositories, a single repository URI should be provided for matching
      * </p>
-     * @param modelClass
-     * @param attribute
-     * @param value
-     * @param limit
-     * @param offset
-     * @return
+     * @param modelClass The class of PASS entity.
+     * @param attribute JSON attribute name.
+     * @param value The value of the PASS attribute.
+     * @param limit Maximum number of results.
+     * @param offset Result offset.
+     * @return Set of all matching PASS entity URIs.
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> Set<URI> findAllByAttribute(Class<T> modelClass, String attribute, Object value, int limit, int offset);
     
     
     /**
      * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the attributes
-     * and values specified. An "AND" operator will be used for searching multiple attributes. 
+     * and values specified. An "AND" operator will be used for searching multiple attributes.
+     * 
+     * <p> 
      * For example, to find a Submission using a GrantId AND DOI:
+     * </p>
      * <pre>
      *   {@code
      *   Map<String, Object> map = new HashMap<String, Object>();
@@ -173,25 +197,30 @@ public interface PassClient {
      *   map.put("doi", doi);
      *   Set<URI> entityUris = findByAttribute(Submission.class, map);
      * }</pre>
-     * 
+     * <p>  
      * By default this will return a maximum of 200 matching records, unless the pass.elasticsearch.limit
      * environment variable is set. If there are no matches, it will return an empty list.      
+     * </p>
      * <p>
      * The Map "value" parameter will be converted to a String for the purpose of searching the index. The map's value cannot 
      * be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
      * For example, if searching on Submission.repositories, a single repository URI should be provided for matching.
      * </p>
-     * @param modelClass
-     * @param attribute
-     * @param value
-     * @return
+     * @param modelClass The class of PASS entity.
+     * @param attributeValuesMap Map of JSON attributes to values.
+     * @return Set of all matching PASS entity URIs.
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> attributeValuesMap);
     
     
     /**
      * Retrieves URIs for MULTIPLE MATCHING RECORDS by matching the entity type and filtering by the attributes
-     * and values specified. For example, to find a Submission using a GrantId and DOI:
+     * and values specified.
+     * 
+     * <p>
+     *  For example, to find a Submission using a GrantId and DOI:
+     * </p>
      *<pre>
      *   {@code
      *   Map<String, Object> map = new HashMap<String, Object>();
@@ -201,21 +230,21 @@ public interface PassClient {
      *   map.put("doi", doi);
      *   Set<URI> entityUris = findByAttribute(Submission.class, map);
      * }</pre>
-     *    
+     * <p>
      * The number of records will be limited by limit provided, and the offset will be applied to the default 
      * sorting. If there are no matches, it will return an empty list. This will override the limit env variable
+     * </p>
      * <p>
      * The Map "value" parameter will be converted to a String for the purpose of searching the index. The map's value cannot 
      * be a Collection. Where the attribute is a multi-valued field, only one value from that field should be provided.
      * For example, if searching on Submission.repositories, a single repository URI should be provided for matching.
      * </p>
-     * 
-     * @param modelClass
-     * @param attribute
-     * @param value
-     * @param limit
-     * @param offset
-     * @return
+     * @param modelClass The class of PASS entity.
+     * @param attributeValuesMap Map of JSON attribute name to values.
+     * @param limit Maximum number of results.
+     * @param offset Result offset.
+     * @return Set of all matching PASS entity URIs.
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> Set<URI> findAllByAttributes(Class<T> modelClass, Map<String, Object> attributeValuesMap, int limit, int offset);
 
@@ -285,6 +314,7 @@ public interface PassClient {
      * @param processor {@link Consumer} that is given a URI for every resource visited.
      * @param modelClass Class of PASS entity to visit. If {@code null}, will visit all classes.
      * @return the number of entities visited.
+     * @param <T> PASS entity type
      */
     public <T extends PassEntity> int processAllEntities(Consumer<URI> processor, Class<T> modelClass);
 
@@ -297,6 +327,7 @@ public interface PassClient {
      *
      * @param processor {@link Consumer} that is given a URI for every resource visited.
      * @return the number of entities visited
+     * @param <T> PASS entity type
      */
     public default <T extends PassEntity> int processAllEntities(Consumer<URI> processor) {
         return processAllEntities(processor, null);

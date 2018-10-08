@@ -102,7 +102,7 @@ public class Funder extends PassEntity {
 
     
     /**
-     * @param localId the localId to set
+     * @param localKey the localKey to set
      */
     public void setLocalKey(String localKey) {
         this.localKey = localKey;
