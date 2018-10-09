@@ -1,4 +1,8 @@
+
 # Java Fedora Client 
+[![Build Status](https://travis-ci.org/OA-PASS/java-fedora-client.png?branch=master)](https://travis-ci.org/OA-PASS/java-fedora-client)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.dataconservancy.pass/pass-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.dataconservancy.pass/)
+
 Java client for managing interactions with the PASS data in Fedora. Includes the data model represented as POJOs, annotated with Jackson for easy conversion to JSON.
 
 ## PASS POJOs
