@@ -69,13 +69,13 @@ public class SubmissionStatusServiceTest extends SubmissionStatusTestBase {
         submission.setPublication(publicationId);
         submission.setSubmitted(true);
         
-        service = new SubmissionStatusService(submission, client);
+        service = new SubmissionStatusService(client);
         
         when(client.getIncoming(Mockito.any())).thenReturn(submissionIncoming).thenReturn(publicationsIncoming);;
         when(client.readResource(Mockito.any(), eq(Deposit.class))).thenReturn(deposit(DepositStatus.ACCEPTED, repo1Id)).thenReturn(deposit(DepositStatus.ACCEPTED, repo2Id));
         when(client.readResource(Mockito.any(), eq(RepositoryCopy.class))).thenReturn(repoCopy(CopyStatus.ACCEPTED,repo1Id)).thenReturn(repoCopy(CopyStatus.ACCEPTED,repo2Id));
         
-        SubmissionStatus newStatus = service.calculateSubmissionStatus();
+        SubmissionStatus newStatus = service.calculateSubmissionStatus(submission);
         assertEquals(SubmissionStatus.SUBMITTED, newStatus);
 
         verify(client, Mockito.times(2)).getIncoming(Mockito.any());
@@ -106,14 +106,14 @@ public class SubmissionStatusServiceTest extends SubmissionStatusTestBase {
         submission.setPublication(publicationId);
         submission.setSubmitted(false);
         
-        service = new SubmissionStatusService(submission, client);
+        service = new SubmissionStatusService(client);
         
         when(client.getIncoming(Mockito.any())).thenReturn(submissionIncoming);
         when(client.readResource(Mockito.any(), eq(SubmissionEvent.class)))
             .thenReturn(submissionEvent(new DateTime(2018, 2, 1, 12, 1, 0, 0), EventType.APPROVAL_REQUESTED))
             .thenReturn(submissionEvent(new DateTime(2018, 2, 1, 12, 2, 0, 0), EventType.CHANGES_REQUESTED));
 
-        SubmissionStatus newStatus = service.calculateSubmissionStatus();
+        SubmissionStatus newStatus = service.calculateSubmissionStatus(submission);
         assertEquals(SubmissionStatus.CHANGES_REQUESTED, newStatus);
 
         verify(client, Mockito.times(1)).getIncoming(Mockito.any());
