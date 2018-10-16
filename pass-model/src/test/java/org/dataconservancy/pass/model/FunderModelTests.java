@@ -94,6 +94,27 @@ public class FunderModelTests {
         
     }
     
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testFunderCopyConstructor() throws Exception {
+        Funder funder = createFunder();
+        Funder funderCopy = new Funder(funder);
+        assertEquals(funder, funderCopy);
+        
+        String newLocalKey = "different:key";
+        funderCopy.setLocalKey(newLocalKey);
+        assertEquals(TestValues.FUNDER_LOCALKEY, funder.getLocalKey());
+        assertEquals(newLocalKey, funderCopy.getLocalKey());
+
+        URI newUrl = new URI("different:url");
+        funderCopy.setUrl(newUrl);
+        assertEquals(new URI(TestValues.FUNDER_URL), funder.getUrl());
+        assertEquals(newUrl, funderCopy.getUrl());
+    }
+    
     private Funder createFunder() throws Exception {
         Funder funder = new Funder();
         funder.setId(new URI(TestValues.FUNDER_ID_1));

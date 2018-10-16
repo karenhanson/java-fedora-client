@@ -51,6 +51,26 @@ public class Policy extends PassEntity {
      * URI of the Institution whose Policy this is (note: if institution has a value, funder should be null)
      */
     private URI institution;
+
+    
+    /**
+     * Policy constructor
+     */
+    public Policy() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param policy the policy to copy
+     */
+    public Policy(Policy policy) {
+        super(policy);
+        this.title = policy.title;
+        this.description = policy.description;
+        this.policyUrl = policy.policyUrl;
+        this.repositories = new ArrayList<URI>(policy.repositories);
+        this.institution = policy.institution;
+    }
     
     
     /**

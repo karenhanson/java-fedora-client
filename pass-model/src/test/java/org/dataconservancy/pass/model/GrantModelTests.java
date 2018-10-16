@@ -119,6 +119,28 @@ public class GrantModelTests {
         
     }
     
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testGrantCopyConstructor() throws Exception {
+        Grant grant = createGrant();
+        Grant grantCopy = new Grant(grant);
+        assertEquals(grant, grantCopy);
+        
+        String newLocalKey = "different:key";
+        grantCopy.setLocalKey(newLocalKey);
+        assertEquals(TestValues.GRANT_LOCALKEY, grant.getLocalKey());
+        assertEquals(newLocalKey, grantCopy.getLocalKey());
+
+        DateTime dt = dateFormatter.parseDateTime(TestValues.GRANT_AWARD_DATE_STR);
+        DateTime newAwardDate = new DateTime();
+        grantCopy.setAwardDate(newAwardDate);
+        assertEquals(dt, grant.getAwardDate());
+        assertEquals(newAwardDate, grantCopy.getAwardDate());
+    }
+    
     private Grant createGrant() throws Exception {
         Grant grant = new Grant();
         grant.setId(new URI(TestValues.GRANT_ID_1));

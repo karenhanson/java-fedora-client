@@ -84,6 +84,32 @@ public class User extends PassEntity {
      */
     private List<Role> roles = new ArrayList<Role>();
 
+    
+    /**
+     * User constructor
+     */
+    public User() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param user the user to copy
+     */
+    public User(User user) {
+        super(user);
+        this.username = user.username;
+        this.firstName = user.firstName;
+        this.middleName = user.middleName;
+        this.lastName = user.lastName;
+        this.displayName = user.displayName;
+        this.email = user.email;
+        this.affiliation = user.affiliation;
+        this.locatorIds = new ArrayList<String>(user.locatorIds);
+        this.orcidId = user.orcidId;
+        this.roles = new ArrayList<Role>(user.roles);
+    }
+    
+    
     /** 
      * list of possible user Roles 
      */

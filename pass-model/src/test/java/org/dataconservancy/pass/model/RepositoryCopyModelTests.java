@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.net.URI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -103,6 +104,29 @@ public class RepositoryCopyModelTests {
         repoCopy1 = repoCopy2;
         assertEquals(repoCopy1.hashCode(),repoCopy2.hashCode());
         
+    }
+    
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testRepositoryCopyCopyConstructor() throws Exception {
+        RepositoryCopy repositoryCopy = createRepositoryCopy();
+        List<String> externalIds = new ArrayList<String>(Arrays.asList(TestValues.REPOSITORYCOPY_EXTERNALID_1,TestValues.REPOSITORYCOPY_EXTERNALID_2));
+        repositoryCopy.setExternalIds(externalIds);
+        RepositoryCopy repositoryCopyCopy = new RepositoryCopy(repositoryCopy);
+        assertEquals(repositoryCopy, repositoryCopyCopy);
+        
+        URI newPublication = new URI("different:publication");
+        repositoryCopyCopy.setPublication(newPublication);
+        assertEquals(new URI(TestValues.PUBLICATION_ID_1), repositoryCopy.getPublication());
+        assertEquals(newPublication, repositoryCopyCopy.getPublication());
+        
+        List<String> externalIdsNew = new ArrayList<String>(Arrays.asList(TestValues.REPOSITORYCOPY_EXTERNALID_2));
+        repositoryCopyCopy.setExternalIds(externalIdsNew);
+        assertEquals(externalIds, repositoryCopy.getExternalIds());
+        assertEquals(externalIdsNew, repositoryCopyCopy.getExternalIds());
     }
     
     private RepositoryCopy createRepositoryCopy() throws Exception {

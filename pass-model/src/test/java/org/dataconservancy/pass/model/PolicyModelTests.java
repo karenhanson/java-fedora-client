@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.net.URI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -101,6 +102,32 @@ public class PolicyModelTests {
         policy1 = policy2;
         assertEquals(policy1.hashCode(),policy2.hashCode());
         
+    }
+    
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testPolicyCopyConstructor() throws Exception {
+        Policy policy = createPolicy();
+        List<URI> repositoriesOrig = 
+                new ArrayList<URI>(Arrays.asList(new URI(TestValues.REPOSITORY_ID_1),
+                                                 new URI(TestValues.REPOSITORY_ID_2)));
+        policy.setRepositories(repositoriesOrig);
+        
+        Policy policyCopy = new Policy(policy);
+        assertEquals(policy, policyCopy);
+        
+        URI newInstitution = new URI("different:institution");
+        policyCopy.setInstitution(newInstitution);
+        assertEquals(new URI(TestValues.INSTITUTION_ID_1), policy.getInstitution());
+        assertEquals(newInstitution, policyCopy.getInstitution());
+
+        List<URI> repositoriesNew = new ArrayList<URI>(Arrays.asList(new URI(TestValues.REPOSITORY_ID_2)));
+        policyCopy.setRepositories(repositoriesNew);
+        assertEquals(repositoriesOrig, policy.getRepositories());
+        assertEquals(repositoriesNew, policyCopy.getRepositories());
     }
     
     private Policy createPolicy() throws Exception {

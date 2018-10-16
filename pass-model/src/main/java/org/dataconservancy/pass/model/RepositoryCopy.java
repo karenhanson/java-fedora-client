@@ -15,13 +15,14 @@
  */
 package org.dataconservancy.pass.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A Repository Copy represents a copy of a Publication that exists in a target Repository. 
@@ -54,6 +55,27 @@ public class RepositoryCopy extends PassEntity {
      * URI of Repository the Copy is in
      */
     private URI repository;
+
+    
+    /**
+     * RepositoryCopy constructor
+     */
+    public RepositoryCopy() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param repositoryCopy the repositoryCopy to copy
+     */
+    public RepositoryCopy(RepositoryCopy repositoryCopy) {
+        super(repositoryCopy);
+        this.externalIds = new ArrayList<String>(repositoryCopy.externalIds);
+        this.copyStatus = repositoryCopy.copyStatus;
+        this.accessUrl = repositoryCopy.accessUrl;
+        this.publication = repositoryCopy.publication;
+        this.repository = repositoryCopy.repository;
+    }
+    
     
     /**
      * Possible repository copy statuses. Note that some repositories may not go through every status.

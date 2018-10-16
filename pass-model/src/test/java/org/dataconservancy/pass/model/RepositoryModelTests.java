@@ -102,6 +102,26 @@ public class RepositoryModelTests {
         
     }
     
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testRepositoryCopyConstructor() throws Exception {
+        Repository repository = createRepository();
+        Repository repositoryCopy = new Repository(repository);
+        assertEquals(repository, repositoryCopy);
+        
+        String newAgreementText = "new agreement text";
+        repositoryCopy.setAgreementText(newAgreementText);
+        assertEquals(TestValues.REPOSITORY_AGREEMENTTEXT, repository.getAgreementText());
+        assertEquals(newAgreementText, repositoryCopy.getAgreementText());
+        
+        repositoryCopy.setIntegrationType(IntegrationType.ONE_WAY);
+        assertEquals(IntegrationType.of(TestValues.REPOSITORY_INTEGRATION_TYPE), repository.getIntegrationType());
+        assertEquals(IntegrationType.ONE_WAY, repositoryCopy.getIntegrationType());
+    }
+    
     private Repository createRepository() throws Exception {
         Repository repository = new Repository();
         repository.setId(new URI(TestValues.REPOSITORY_ID_1));

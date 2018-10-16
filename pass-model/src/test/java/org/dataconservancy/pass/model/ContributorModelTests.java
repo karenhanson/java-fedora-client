@@ -57,7 +57,7 @@ public class ContributorModelTests {
         assertEquals(TestValues.PUBLICATION_ID_1, contributor.getPublication().toString());
         assertEquals(TestValues.USER_ID_1, contributor.getUser().toString());
         assertEquals(TestValues.CONTRIBUTOR_ROLE_1, Contributor.Role.FIRST_AUTHOR.toString());
-        assertEquals(TestValues.CONTRIBUTOR_ROLE_2, Contributor.Role.AUTHOR.toString());       
+        assertEquals(TestValues.CONTRIBUTOR_ROLE_2, Contributor.Role.AUTHOR.toString()); 
         
     }
 
@@ -105,6 +105,26 @@ public class ContributorModelTests {
         contributor1 = contributor2;
         assertEquals(contributor1.hashCode(),contributor2.hashCode());
         
+    }
+    
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testContributorCopyConstructor() throws Exception {
+        Contributor contributor = createContributor();
+        Contributor contributorCopy = new Contributor(contributor);
+        assertEquals(contributor, contributorCopy);
+        
+        String newEmail = "differentemail@differentemail.com";
+        contributorCopy.setEmail(newEmail);
+        assertEquals(TestValues.USER_EMAIL, contributor.getEmail());
+        assertEquals(newEmail, contributorCopy.getEmail());
+        
+        contributorCopy.setUser(new URI(TestValues.USER_ID_2));
+        assertEquals(TestValues.USER_ID_1, contributor.getUser().toString());
+        assertEquals(TestValues.USER_ID_2, contributorCopy.getUser().toString());
     }
     
     private Contributor createContributor() throws Exception {

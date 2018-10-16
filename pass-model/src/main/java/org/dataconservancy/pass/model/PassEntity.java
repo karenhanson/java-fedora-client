@@ -57,6 +57,28 @@ public abstract class PassEntity {
     @JsonProperty("@context")
     protected String context = null;
 
+    
+    /**
+     * PassEntity constructor
+     */
+    protected PassEntity() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param passEntity the PassEntity to copy
+     */
+    protected PassEntity(PassEntity passEntity) {
+        if (passEntity==null) {
+            throw new IllegalArgumentException("Null object provided. When creating a copy of "
+                                              + "an object, the model object cannot be null");
+        }
+        this.id = passEntity.id;
+        this.versionTag = passEntity.versionTag;
+        this.context = passEntity.context;
+    }
+    
+    
     /**
      * Retrieves the unique URI representing the resource.  
      * @return the id

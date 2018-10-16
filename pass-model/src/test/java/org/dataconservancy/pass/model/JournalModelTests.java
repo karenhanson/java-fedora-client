@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.net.URI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -101,6 +102,29 @@ public class JournalModelTests {
         journal1 = journal2;
         assertEquals(journal1.hashCode(),journal2.hashCode());
         
+    }
+    
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testJournalCopyConstructor() throws Exception {
+        Journal journal = createJournal();
+        List<String> issnsOrig = new ArrayList<String>(Arrays.asList(TestValues.JOURNAL_ISSN_1,TestValues.JOURNAL_ISSN_2));
+        journal.setIssns(issnsOrig);
+        Journal journalCopy = new Journal(journal);
+        
+        assertEquals(journal, journalCopy);
+        
+        journalCopy.setPmcParticipation(PmcParticipation.A);
+        assertEquals(PmcParticipation.valueOf(TestValues.JOURNAL_PMCPARTICIPATION), journal.getPmcParticipation());
+        assertEquals(PmcParticipation.A, journalCopy.getPmcParticipation());
+
+        List<String> issnsNew = new ArrayList<String>(Arrays.asList("9876-1234"));
+        journalCopy.setIssns(issnsNew);
+        assertEquals(issnsOrig, journal.getIssns());
+        assertEquals(issnsNew, journalCopy.getIssns());
     }
     
     private Journal createJournal() throws Exception {

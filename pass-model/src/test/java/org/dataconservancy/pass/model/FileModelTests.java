@@ -101,6 +101,26 @@ public class FileModelTests {
         
     }
     
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testFileCopyConstructor() throws Exception {
+        File file = createFile();
+        File fileCopy = new File(file);
+        assertEquals(file, fileCopy);
+        
+        fileCopy.setFileRole(FileRole.SUPPLEMENTAL);
+        assertEquals(FileRole.of(TestValues.FILE_ROLE), file.getFileRole());
+        assertEquals(FileRole.SUPPLEMENTAL, fileCopy.getFileRole());
+        
+        String newMimeType = "text/html";
+        fileCopy.setMimeType(newMimeType);
+        assertEquals(TestValues.FILE_MIMETYPE, file.getMimeType());
+        assertEquals(newMimeType, fileCopy.getMimeType());
+    }
+    
     private File createFile() throws Exception {
         File file = new File();
         file.setId(new URI(TestValues.FILE_ID_1));

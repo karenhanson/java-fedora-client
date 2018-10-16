@@ -45,6 +45,26 @@ public class Funder extends PassEntity {
      */
     private String localKey;
 
+    
+    /**
+     * Funder constructor
+     */
+    public Funder() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param funder the funder to copy
+     */
+    public Funder(Funder funder) {
+        super(funder);
+        this.name = funder.name;
+        this.url = funder.url;
+        this.policy = funder.policy;
+        this.localKey = funder.localKey;
+    }
+
+    
     /**
      * @return the name
      */

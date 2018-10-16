@@ -102,6 +102,32 @@ public class Submission extends PassEntity {
      * Note that the order of the list does not carry any particular significance
      */
     private List<URI> grants = new ArrayList<>();
+
+    
+    /**
+     * Submission constructor
+     */
+    public Submission() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param submission the submission to copy
+     */
+    public Submission(Submission submission) {
+        super(submission);
+        this.metadata = submission.metadata;
+        this.source = submission.source;
+        this.submitted = submission.submitted;
+        this.submittedDate = submission.submittedDate;
+        this.submissionStatus = submission.submissionStatus;
+        this.aggregatedDepositStatus = submission.aggregatedDepositStatus;
+        this.publication = submission.publication;
+        this.repositories = new ArrayList<URI>(submission.repositories);
+        this.submitter = submission.submitter;
+        this.preparers = new ArrayList<URI>(submission.preparers);
+        this.grants = new ArrayList<URI>(submission.grants);
+    }
     
     
     /** 

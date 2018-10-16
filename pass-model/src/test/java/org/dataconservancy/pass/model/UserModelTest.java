@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.net.URI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -114,6 +115,30 @@ public class UserModelTest {
         user1 = user2;
         assertEquals(user1.hashCode(),user2.hashCode());
         
+    }
+    
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testUserCopyConstructor() throws Exception {
+        User user = createUser();
+        List<Role> rolesOrig = new ArrayList<Role>(Arrays.asList(Role.ADMIN));
+        user.setRoles(rolesOrig);
+        
+        User userCopy = new User(user);
+        assertEquals(user, userCopy);
+        
+        String newOrcidId = "https://orcid.org/0000-new-orcid-id";
+        userCopy.setOrcidId(newOrcidId);
+        assertEquals(TestValues.USER_ORCID_ID, user.getOrcidId());
+        assertEquals(newOrcidId, userCopy.getOrcidId());
+
+        List<Role> rolesNew = new ArrayList<Role>(Arrays.asList(Role.ADMIN,Role.SUBMITTER));
+        userCopy.setRoles(rolesNew);
+        assertEquals(rolesOrig, user.getRoles());
+        assertEquals(rolesNew, userCopy.getRoles());
     }
     
     private User createUser() throws Exception {
