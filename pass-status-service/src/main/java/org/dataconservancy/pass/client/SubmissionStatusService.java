@@ -38,67 +38,53 @@ public class SubmissionStatusService
     private static final String PUBLICATION_MAP_KEY = "publication";
     
     private PassClient client;
-    
-    private Submission submission;
+
+    /**
+     * Initiate service 
+     */
+    public SubmissionStatusService() { 
+        this.client = PassClientFactory.getPassClient();
+    }    
     
     /**
-     * Initiate service using a Submission object
-     * @param submission The submission
+     * Supports setting a specific client.
+     * @param client PASS client
      */
-    public SubmissionStatusService(Submission submission) { 
+    public SubmissionStatusService(PassClient client) {
+        if (client==null) {
+            throw new IllegalArgumentException("PassClient cannot be null");
+        }
+        this.client = client;
+    }
+
+    
+    /**
+     * Calculates the appropriate {@link SubmissionStatus} for the {@code Submission.id} provided. 
+     * This is based on the status of associated {@link Deposit}s and {@link RepositoryCopy}s for 
+     * {@code submitted} records, and {@link SubmissionEvent}s for unsubmitted records.
+     * @param submissionId Submission URI
+     * @return calculated submission status.
+     */
+    public SubmissionStatus calculateSubmissionStatus(URI submissionId) {
+        Submission submission = loadSubmission(submissionId);
+        return calculateSubmissionStatus(submission);
+    }
+    
+    
+    /**
+     * Calculates the appropriate {@link SubmissionStatus} for the {@link Submission} provided. 
+     * This is based on the status of associated {@link Deposit}s and {@link RepositoryCopy}s for 
+     * {@code submitted} records, and {@link SubmissionEvent}s for unsubmitted records.
+     * @param submission The submission
+     * @return Calculated submission status
+     */
+    public SubmissionStatus calculateSubmissionStatus(Submission submission) {
         if (submission==null) {
             throw new IllegalArgumentException("submission cannot be null");
         }
         if (submission.getId()==null) {
             throw new IllegalArgumentException("No status could be calculated for the Submission as it does not have a `Submission.id`.");  
         }
-        this.client = PassClientFactory.getPassClient();
-        this.submission = submission;
-    }
-
-
-    /**
-     * Initiate service using a `Submission.id` 
-     * @param submissionId Submission URI
-     */
-    public SubmissionStatusService(URI submissionId) { 
-        if (submissionId==null) {
-            throw new IllegalArgumentException("submissionId cannot be null");
-        }
-        this.client = PassClientFactory.getPassClient();
-        try {
-            this.submission = client.readResource(submissionId, Submission.class);
-        } catch (Exception ex) {
-            String msg = String.format("Failed to retrieve Submission with ID %s from the database", submissionId);
-            throw new RuntimeException(msg);
-        }
-    }
-    
-    
-    /**
-     * Supports setting a specific client, primarily for testing.
-     * @param submission The submission
-     * @param client PASS client
-     */
-    public SubmissionStatusService(Submission submission, PassClient client) {
-        if (submission==null) {
-            throw new IllegalArgumentException("submission cannot be null");
-        }
-        if (client==null) {
-            throw new IllegalArgumentException("client cannot be null");
-        }
-        this.submission = submission;
-        this.client = client;
-    }
-
-    
-    /**
-     * Calculates the appropriate {@link SubmissionStatus} for the {@link Submission} provided. 
-     * This is based on the status of associated {@link Deposit}s and {@link RepositoryCopy}s for 
-     * {@code submitted} records, and {@link SubmissionEvent}s for unsubmitted records.
-     * @return Calculated submission status
-     */
-    public SubmissionStatus calculateSubmissionStatus() {
 
         URI submissionId = submission.getId();
         boolean submitted = submission.getSubmitted();
@@ -139,7 +125,7 @@ public class SubmissionStatusService
     
 
     /**
-     * Calculates the appropriate {@link SubmissionStatus} for the {@link Submission} provided. 
+     * Calculates the appropriate {@link SubmissionStatus} for the {@code Submission.id} provided. 
      * <p>
      * This is based on the status of associated {@link Deposit}s and {@link RepositoryCopy}s for 
      * {@code submitted} records, and {@link SubmissionEvent}s for unsubmitted records then updates 
@@ -152,10 +138,11 @@ public class SubmissionStatusService
      * been populated yet). To override this constraint, and replace the value anyway, use the method 
      * {@code calculateAndUpdateSubmissionStatus(boolean overrideUIStatus)} and supply a parameter of {@code true}
      * </p>
+     * @param submissionId Submission URI
      * @return Calculated submission status
      */
-    public SubmissionStatus calculateAndUpdateSubmissionStatus() {
-        return calculateAndUpdateSubmissionStatus(false);
+    public SubmissionStatus calculateAndUpdateSubmissionStatus(URI submissionId) {
+        return calculateAndUpdateSubmissionStatus(submissionId, false);
     }
     
     
@@ -174,14 +161,18 @@ public class SubmissionStatusService
      * been populated yet). To override this constraint, set the {@code overrideUIStatus} parameter to 
      * {@code true}
      * </p>
+     * @param submissionId Submission URI
      * @param overrideUIStatus - {@code true} will override the current pre-submission status on the 
      * {@code Submission} record, regardless of whether it was set by the UI.
      * {@code false} will not replace the current submission value, and favor the value set by the UI
      * @return calculated submission status.
      */
-    public SubmissionStatus calculateAndUpdateSubmissionStatus(boolean overrideUIStatus) {
+    public SubmissionStatus calculateAndUpdateSubmissionStatus(URI submissionId, boolean overrideUIStatus) {
+
+        Submission submission = loadSubmission(submissionId);
+        
         SubmissionStatus fromStatus = submission.getSubmissionStatus();
-        SubmissionStatus toStatus = calculateSubmissionStatus();
+        SubmissionStatus toStatus = calculateSubmissionStatus(submission);
 
         if (fromStatus==null || !fromStatus.equals(toStatus)) {
             
@@ -205,6 +196,25 @@ public class SubmissionStatusService
         return toStatus;
     }
     
+    
+    /**
+     * Load submission based on URI
+     * @param submissionId Submission URI
+     * @return The submission
+     */
+    private Submission loadSubmission(URI submissionId) {
+        if (submissionId==null) {
+            throw new IllegalArgumentException("submissionId cannot be null");  
+        }
+        Submission submission = null;
+        try {
+            submission = client.readResource(submissionId, Submission.class);
+        } catch (Exception ex) {
+            String msg = String.format("Failed to retrieve Submission with ID %s from the database", submissionId);
+            throw new RuntimeException(msg);
+        }
+        return submission;
+    }
     
     /**
      * Retrieve incoming links for resource, filtered by a map key.

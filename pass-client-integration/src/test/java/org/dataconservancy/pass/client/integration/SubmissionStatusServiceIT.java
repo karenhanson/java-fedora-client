@@ -90,8 +90,8 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         URI subEvent2Id = client.createResource(subEvent2);
         this.createdUris.put(subEvent2Id, SubmissionEvent.class);
 
-        SubmissionStatusService service = new SubmissionStatusService(submissionId);
-        SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus();
+        SubmissionStatusService service = new SubmissionStatusService();
+        SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus(submissionId);
         //check correct value returned
         assertEquals(SubmissionStatus.CANCELLED, newStatus);
         
@@ -135,8 +135,8 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         final URI subEvent2Id = client.createResource(subEvent2);
         this.createdUris.put(subEvent2Id, SubmissionEvent.class);
 
-        SubmissionStatusService service = new SubmissionStatusService(submissionId);
-        SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus();
+        SubmissionStatusService service = new SubmissionStatusService();
+        SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus(submissionId);
         //check correct value returned
         assertEquals(SubmissionStatus.APPROVAL_REQUESTED, newStatus);
         
@@ -182,9 +182,9 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         URI subEvent2Id = client.createResource(subEvent2);
         this.createdUris.put(subEvent2Id, SubmissionEvent.class);
         
-        SubmissionStatusService service = new SubmissionStatusService(submissionId);
+        SubmissionStatusService service = new SubmissionStatusService();
         //this time we set override to true
-        SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus(true);
+        SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus(submissionId, true);
         //check correct value returned
         assertEquals(SubmissionStatus.CHANGES_REQUESTED, newStatus);
         
@@ -229,9 +229,9 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         URI deposit2Id = client.createResource(deposit1);
         this.createdUris.put(deposit2Id, Deposit.class);
         
-        SubmissionStatusService service = new SubmissionStatusService(submissionId);
+        SubmissionStatusService service = new SubmissionStatusService();
         //this time we set override to true
-        SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus();
+        SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus(submissionId);
         //check correct value returned
         assertEquals(SubmissionStatus.SUBMITTED, newStatus);
         
@@ -293,9 +293,9 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         URI repoCopy2Id = client.createResource(repoCopy2);
         this.createdUris.put(repoCopy2Id, RepositoryCopy.class);
         
-        SubmissionStatusService service = new SubmissionStatusService(submissionId);
+        SubmissionStatusService service = new SubmissionStatusService();
         //this time we won't update Submission record, just return the value
-        SubmissionStatus newStatus = service.calculateSubmissionStatus();
+        SubmissionStatus newStatus = service.calculateSubmissionStatus(submissionId);
         assertEquals(SubmissionStatus.COMPLETE, newStatus);
         
         //also check database was not updated with the new value
@@ -350,8 +350,8 @@ public class SubmissionStatusServiceIT extends ClientITBase {
         URI repoCopy1Id = client.createResource(repoCopy1);
         this.createdUris.put(repoCopy1Id, RepositoryCopy.class);
 
-        SubmissionStatusService service = new SubmissionStatusService(submissionId);
-        SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus();
+        SubmissionStatusService service = new SubmissionStatusService();
+        SubmissionStatus newStatus = service.calculateAndUpdateSubmissionStatus(submissionId);
         assertEquals(SubmissionStatus.NEEDS_ATTENTION, newStatus);
         
         //also check database was not updated with the new value
