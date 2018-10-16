@@ -57,7 +57,27 @@ public class File extends PassEntity {
      * URI of the Submission the File is a part of
      */
     private URI submission;
+
     
+    /**
+     * File constructor
+     */
+    public File() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param file the file to copy
+     */
+    public File(File file) {
+        super(file);
+        this.name = file.name;
+        this.uri = file.uri;
+        this.description = file.description;
+        this.fileRole = file.fileRole;
+        this.mimeType = file.mimeType;
+        this.submission = file.submission;
+    }
 
     /** 
      * list of possible File Roles 

@@ -100,6 +100,25 @@ public class DepositModelTests {
         
     }
     
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testDepositCopyConstructor() throws Exception {
+        Deposit deposit = createDeposit();
+        Deposit depositCopy = new Deposit(deposit);
+        assertEquals(deposit, depositCopy);
+        
+        depositCopy.setDepositStatus(DepositStatus.REJECTED);
+        assertEquals(DepositStatus.of(TestValues.DEPOSIT_STATUS), deposit.getDepositStatus());
+        assertEquals(DepositStatus.REJECTED, depositCopy.getDepositStatus());
+        
+        depositCopy.setId(new URI(TestValues.DEPOSIT_ID_2));
+        assertEquals(TestValues.DEPOSIT_ID_1, deposit.getId().toString());
+        assertEquals(TestValues.DEPOSIT_ID_2, depositCopy.getId().toString());
+    }
+    
     private Deposit createDeposit() throws Exception {
         Deposit deposit = new Deposit();
         deposit.setId(new URI(TestValues.DEPOSIT_ID_1));

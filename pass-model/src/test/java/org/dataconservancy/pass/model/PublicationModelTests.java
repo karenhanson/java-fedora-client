@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.json.JSONObject;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -100,6 +101,27 @@ public class PublicationModelTests {
         publication1 = publication2;
         assertEquals(publication1.hashCode(),publication2.hashCode());
         
+    }
+    
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testPublicationCopyConstructor() throws Exception {
+        Publication publication = createPublication();        
+        Publication publicationCopy = new Publication(publication);
+        assertEquals(publication, publicationCopy);
+        
+        String newDoi ="different:doi";
+        publicationCopy.setDoi(newDoi);
+        assertEquals(TestValues.PUBLICATION_DOI, publication.getDoi());
+        assertEquals(newDoi, publicationCopy.getDoi());
+
+        String newVersionTag ="abcdef";
+        publicationCopy.setVersionTag(newVersionTag);
+        assertNull(publication.getVersionTag());
+        assertEquals(newVersionTag, publicationCopy.getVersionTag());
     }
     
     private Publication createPublication() throws Exception {

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
 
+import org.dataconservancy.pass.model.SubmissionEvent.EventType;
 import org.dataconservancy.pass.model.SubmissionEvent.PerformerRole;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
@@ -107,6 +108,26 @@ public class SubmissionEventModelTests {
         submissionEvent1 = submissionEvent2;
         assertEquals(submissionEvent1.hashCode(),submissionEvent2.hashCode());
         
+    }
+    
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testSubmissionEventCopyConstructor() throws Exception {
+        SubmissionEvent submissionEvent = createSubmissionEvent();
+        SubmissionEvent submissionEventCopy = new SubmissionEvent(submissionEvent);
+        assertEquals(submissionEvent, submissionEventCopy);
+        
+        URI newLink = new URI("different:link");
+        submissionEventCopy.setLink(newLink);
+        assertEquals(new URI(TestValues.SUBMISSIONEVENT_LINK), submissionEvent.getLink());
+        assertEquals(newLink, submissionEventCopy.getLink());
+        
+        submissionEventCopy.setEventType(EventType.CANCELLED);
+        assertEquals(SubmissionEvent.EventType.of(TestValues.SUBMISSIONEVENT_EVENT_TYPE), submissionEvent.getEventType());
+        assertEquals(EventType.CANCELLED, submissionEventCopy.getEventType());
     }
     
     private SubmissionEvent createSubmissionEvent() throws Exception {

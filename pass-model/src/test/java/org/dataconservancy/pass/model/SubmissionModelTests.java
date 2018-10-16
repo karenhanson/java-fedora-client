@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.net.URI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -138,6 +139,28 @@ public class SubmissionModelTests {
         
         Submission submission = createSubmission();
         assertTrue(submission.getSubmissionStatus().isSubmitted());
+    }
+    
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testSubmissionCopyConstructor() throws Exception {
+        Submission submission = createSubmission();
+        List<URI> preparersOrig = new ArrayList<URI>(Arrays.asList(new URI(TestValues.USER_ID_1)));
+        submission.setPreparers(preparersOrig);
+        Submission submissionCopy = new Submission(submission);
+        assertEquals(submission, submissionCopy);
+        
+        submissionCopy.setSubmissionStatus(SubmissionStatus.COMPLETE);
+        assertEquals(SubmissionStatus.of(TestValues.SUBMISSION_STATUS), submission.getSubmissionStatus());
+        assertEquals(SubmissionStatus.COMPLETE, submissionCopy.getSubmissionStatus());
+
+        List<URI> preparersNew = new ArrayList<URI>(Arrays.asList(new URI(TestValues.USER_ID_1),new URI(TestValues.USER_ID_2)));
+        submissionCopy.setPreparers(preparersNew);
+        assertEquals(preparersOrig, submission.getPreparers());
+        assertEquals(preparersNew, submissionCopy.getPreparers());
     }
     
     private Submission createSubmission() throws Exception {

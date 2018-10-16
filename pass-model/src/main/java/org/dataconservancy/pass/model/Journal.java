@@ -16,6 +16,7 @@
 package org.dataconservancy.pass.model;
 
 import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,27 @@ public class Journal extends PassEntity {
      * published article to PMC. If so, whether it requires additional processing fee.  
      */
     private PmcParticipation pmcParticipation;
+
+    
+    /**
+     * Journal constructor
+     */
+    public Journal() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param journal the journal to copy
+     */
+    public Journal(Journal journal) {
+        super(journal);
+        this.name = journal.name;
+        this.issns = new ArrayList<String>(journal.issns);
+        this.publisher = journal.publisher;
+        this.nlmta = journal.nlmta;
+        this.pmcParticipation = journal.pmcParticipation;
+    }
+    
     
     /**
      * @return the name

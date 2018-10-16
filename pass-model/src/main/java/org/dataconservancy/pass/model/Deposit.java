@@ -54,6 +54,26 @@ public class Deposit extends PassEntity {
      * URI of the Repository Copy representing the copy that is reltaed to this Deposit. The value is null if there is no copy
      */
     private URI repositoryCopy;
+
+    
+    /**
+     * Deposit constructor
+     */
+    public Deposit() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param deposit the deposit to copy
+     */
+    public Deposit(Deposit deposit) {
+        super(deposit);
+        this.depositStatusRef = deposit.depositStatusRef;
+        this.depositStatus = deposit.depositStatus;
+        this.submission = deposit.submission;
+        this.repository = deposit.repository;
+        this.repositoryCopy = deposit.repositoryCopy;
+    }
     
     /**
      * Possible deposit statuses. Note that some repositories may not go through every status.

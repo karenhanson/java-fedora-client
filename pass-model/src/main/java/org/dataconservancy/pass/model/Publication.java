@@ -61,6 +61,29 @@ public class Publication extends PassEntity {
      * Issue of journal that contains the publication (if article) 
      */
     private String issue;
+
+    
+    /**
+     * Publication constructor
+     */
+    public Publication() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param publication the publication to copy
+     */
+    public Publication(Publication publication) {
+        super(publication);
+        this.title = publication.title;
+        this.publicationAbstract = publication.publicationAbstract;
+        this.doi = publication.doi;
+        this.pmid = publication.pmid;
+        this.journal = publication.journal;
+        this.volume = publication.volume;
+        this.issue = publication.issue;
+    }
+    
         
     /**
      * @return the title

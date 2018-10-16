@@ -92,6 +92,26 @@ public class PublisherModelTests {
         
     }
     
+    /**
+     * Test copy constructor creates a valid duplicate that is not the same object
+     * @throws Exception
+     */
+    @Test
+    public void testPublisherCopyConstructor() throws Exception {
+        Publisher publisher = createPublisher();        
+        Publisher publisherCopy = new Publisher(publisher);
+        assertEquals(publisher, publisherCopy);
+        
+        String newContext ="different:context";
+        publisherCopy.setContext(newContext);
+        assertEquals(null, publisher.getContext());
+        assertEquals(newContext, publisherCopy.getContext());
+
+        publisherCopy.setPmcParticipation(PmcParticipation.A);
+        assertEquals(PmcParticipation.valueOf(TestValues.PUBLISHER_PMCPARTICIPATION), publisher.getPmcParticipation());
+        assertEquals(PmcParticipation.A, publisherCopy.getPmcParticipation());
+    }
+    
     private Publisher createPublisher() throws Exception {
         Publisher publisher = new Publisher();
         publisher.setId(new URI(TestValues.PUBLISHER_ID_1));

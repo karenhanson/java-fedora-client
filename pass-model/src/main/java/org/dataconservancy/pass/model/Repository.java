@@ -65,6 +65,29 @@ public class Repository extends PassEntity {
      */
     private String repositoryKey;
 
+    
+    /**
+     * Repository constructor
+     */
+    public Repository() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param repository the repository to copy
+     */
+    public Repository(Repository repository) {
+        super(repository);
+        this.name = repository.name;
+        this.description = repository.description;
+        this.url = repository.url;
+        this.agreementText = repository.agreementText;
+        this.formSchema = repository.formSchema;
+        this.integrationType = repository.integrationType;
+        this.repositoryKey = repository.repositoryKey;
+    }
+    
+
     /**
      * Possible deposit statuses. Note that some repositories may not go through every status.
      */

@@ -73,6 +73,29 @@ public class SubmissionEvent extends PassEntity {
      * this may contain an Ember application URL to the affected Submission.
      */
     private URI link;
+
+    
+    /**
+     * SubmissionEvent constructor
+     */
+    public SubmissionEvent() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param submissionEvent the submissionEvent to copy
+     */
+    public SubmissionEvent(SubmissionEvent submissionEvent) {
+        super(submissionEvent);
+        this.eventType = submissionEvent.eventType;
+        this.performedDate = submissionEvent.performedDate;
+        this.performedBy = submissionEvent.performedBy;
+        this.performerRole = submissionEvent.performerRole;
+        this.submission = submissionEvent.submission;
+        this.comment = submissionEvent.comment;
+        this.link = submissionEvent.link;
+    }
+    
     
     /** 
      * The types of events that might be recorded as SubmissionEvents

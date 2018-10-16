@@ -32,7 +32,25 @@ public class Publisher extends PassEntity {
      * published article to PMC. If so, whether it requires additional processing fee.  
      */
     private PmcParticipation pmcParticipation;
-        
+
+    
+    /**
+     * Publisher constructor
+     */
+    public Publisher() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param publisher the publisher to copy
+     */
+    public Publisher(Publisher publisher) {
+        super(publisher);
+        this.name = publisher.name;
+        this.pmcParticipation = publisher.pmcParticipation;
+    }
+    
+    
     /**
      * @return the name
      */

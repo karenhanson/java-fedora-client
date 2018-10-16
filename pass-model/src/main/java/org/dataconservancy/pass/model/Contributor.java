@@ -83,6 +83,31 @@ public class Contributor extends PassEntity {
      * URI of the user that represents the same person as this Contributor, where relevant
      */
     private URI user;
+
+    
+    /**
+     * Contributor constructor
+     */
+    public Contributor() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param contributor the contributor to copy
+     */
+    public Contributor(Contributor contributor) {
+        super(contributor);
+        this.firstName = contributor.firstName;
+        this.middleName = contributor.middleName;
+        this.lastName = contributor.lastName;
+        this.displayName = contributor.displayName;
+        this.email = contributor.email;
+        this.orcidId = contributor.orcidId;
+        this.affiliation = contributor.affiliation;
+        this.roles = new ArrayList<Role>(contributor.roles);
+        this.publication = contributor.publication;
+        this.user = contributor.user;
+    }
     
 
     /** 

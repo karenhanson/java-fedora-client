@@ -94,6 +94,33 @@ public class Grant extends PassEntity {
     @JsonSerialize(using = ZuluDateTimeSerializer.class)
     @JsonDeserialize(using = ZuluDateTimeDeserializer.class)
     private DateTime endDate;
+
+    
+    /**
+     * Grant constructor
+     */
+    public Grant() {};
+
+    
+    /**
+     * Copy constructor, this will copy the values of the object provided into the new object
+     * @param grant the grant to copy
+     */
+    public Grant(Grant grant) {
+        super(grant);
+        this.awardNumber = grant.awardNumber;
+        this.awardStatus = grant.awardStatus;
+        this.localKey = grant.localKey;
+        this.projectName = grant.projectName;
+        this.primaryFunder = grant.primaryFunder;
+        this.directFunder = grant.directFunder;
+        this.pi = grant.pi;
+        this.coPis = new ArrayList<URI>(grant.coPis);
+        this.awardDate = grant.awardDate;
+        this.startDate = grant.startDate;
+        this.endDate = grant.endDate;
+    }
+    
         
     /** Status of award/grant */
     public enum AwardStatus {
