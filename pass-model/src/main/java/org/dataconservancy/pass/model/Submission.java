@@ -82,12 +82,21 @@ public class Submission extends PassEntity {
     private List<URI> repositories = new ArrayList<>();
 
     /**
-     * URI of the User responsible for managing and submitting the Submission 
-     * this may be a a `User.id` or may temporarily hold a `mailto:` URI containing
-     * the encoded name and email address of the submitter (e.g. "mailto:John%20Doe%3Cjohndoe%40example.org%3E")
-     * 
+     * URI of the User (`User.id`) responsible for managing and submitting the Submission.
      */
     private URI submitter;
+    
+    /**
+     * Name of the submitter. Used with submitterEmail as a temporary store for user information
+     * in the absence of a User record
+     */
+    private String submitterName;
+
+    /**
+     * Email of the submitter as URI e.g. "mailto:j.smith@example.com". Used with submitterName 
+     * as a temporary store of user information in the absence of a User record
+     */
+    private URI submitterEmail;
 
     /**
      * URI of the User(s) who prepared, or who could contribute to the preparation of, the Submission.
@@ -125,6 +134,8 @@ public class Submission extends PassEntity {
         this.publication = submission.publication;
         this.repositories = new ArrayList<URI>(submission.repositories);
         this.submitter = submission.submitter;
+        this.submitterName = submission.submitterName;
+        this.submitterEmail = submission.submitterEmail;
         this.preparers = new ArrayList<URI>(submission.preparers);
         this.grants = new ArrayList<URI>(submission.grants);
     }
@@ -471,15 +482,49 @@ public class Submission extends PassEntity {
     }
 
     
-    /** Set the submitter
+    /** 
+     * Set the submitter
      * @param submitter the submitter to set
      */
     public void setSubmitter(URI submitter) {
         this.submitter = submitter;
     }
 
+    /**
+     * @return the submitter name
+     */
+    public String getSubmitterName() {
+		return submitterName;
+	}
+
     
-    /** Gets the list of preparers
+    /**
+     * Set the submitter name
+     * @param submitterName the submitter name to set
+     */
+	public void setSubmitterName(String submitterName) {
+		this.submitterName = submitterName;
+	}
+
+
+	/**
+	 * @return the submitter email
+	 */
+	public URI getSubmitterEmail() {
+		return submitterEmail;
+	}
+
+
+	/**
+	 * Set the submitter email
+	 * @param submitterEmail the submitter email to set
+	 */
+	public void setSubmitterEmail(URI submitterEmail) {
+		this.submitterEmail = submitterEmail;
+	}
+
+
+	/** Gets the list of preparers
      * @return the preparers
      */
     public List<URI> getPreparers() {
@@ -528,6 +573,8 @@ public class Submission extends PassEntity {
         if (publication != null ? !publication.equals(that.publication) : that.publication != null) return false;
         if (repositories != null ? !repositories.equals(that.repositories) : that.repositories != null) return false;
         if (submitter != null ? !submitter.equals(that.submitter) : that.submitter != null) return false;
+        if (submitterName != null ? !submitterName.equals(that.submitterName) : that.submitterName != null) return false;
+        if (submitterEmail != null ? !submitterEmail.equals(that.submitterEmail) : that.submitterEmail != null) return false;
         if (preparers != null ? !preparers.equals(that.preparers) : that.preparers != null) return false;
         if (grants != null ? !grants.equals(that.grants) : that.grants != null) return false;
         return true;
@@ -546,6 +593,8 @@ public class Submission extends PassEntity {
         result = 31 * result + (publication != null ? publication.hashCode() : 0);
         result = 31 * result + (repositories != null ? repositories.hashCode() : 0);
         result = 31 * result + (submitter != null ? submitter.hashCode() : 0);
+        result = 31 * result + (submitterName != null ? submitterName.hashCode() : 0);
+        result = 31 * result + (submitterEmail != null ? submitterEmail.hashCode() : 0);
         result = 31 * result + (preparers != null ? preparers.hashCode() : 0);
         result = 31 * result + (grants != null ? grants.hashCode() : 0);
         return result;

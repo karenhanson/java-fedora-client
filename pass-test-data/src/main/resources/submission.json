@@ -5,6 +5,8 @@
 	"aggregatedDepositStatus": "in-progress",
 	"publication": "https://example.org/fedora/publications/1",
 	"submitter": "https://example.org/fedora/users/1",
+	"submitterName": "J Smith",
+	"submitterEmail": "mailto:j.smith@example.com",
 	"preparers": ["https://example.org/fedora/users/2"],
 	"repositories": ["https://example.org/fedora/repositories/1","https://example.org/fedora/repositories/2"],
 	"grants": ["https://example.org/fedora/grants/1","https://example.org/fedora/grants/2"],
