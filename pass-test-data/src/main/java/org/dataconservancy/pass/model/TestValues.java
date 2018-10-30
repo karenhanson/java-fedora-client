@@ -231,7 +231,7 @@ public class TestValues {
 
     /** A test value */
     public static final String REPOSITORYCOPY_ACCESSURL = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12345/";
-
+    
     /** A test value */
     public static final String SUBMISSION_AGG_DEPOSIT_STATUS = "in-progress";
 
@@ -249,6 +249,12 @@ public class TestValues {
 
     /** A test value */
     public static final String SUBMISSION_METADATA = "{\"customFieldName\": \"value\"}";
+
+    /** A test value */
+    public static final String SUBMISSION_SUBMITTERNAME = "J Smith";
+
+    /** A test value */
+    public static final String SUBMISSION_SUBMITTEREMAIL = "mailto:j.smith@example.com";
 
     /** A test value */
     public static final String SUBMISSIONEVENT_EVENT_TYPE = "approval-requested";

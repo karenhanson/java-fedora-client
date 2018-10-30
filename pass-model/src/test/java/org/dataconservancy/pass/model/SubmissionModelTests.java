@@ -41,7 +41,9 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Model has been annotated with JSON tags. These tests do a simple check to ensure the
- * Jackson integration is functional and the equals / hashcode functions work
+ * Jackson integration is functional and the equals / hashcode functions work.
+ * Note that in these tests every field is set, though in a reality, either
+ * submitter OR submitterName/submitterEmail would be set, not both at once.
  * @author Karen Hanson
  */
 public class SubmissionModelTests {
@@ -66,6 +68,8 @@ public class SubmissionModelTests {
         assertEquals(TestValues.SUBMISSION_AGG_DEPOSIT_STATUS, submission.getAggregatedDepositStatus().toString());
         assertEquals(TestValues.PUBLICATION_ID_1, submission.getPublication().toString());
         assertEquals(TestValues.USER_ID_1, submission.getSubmitter().toString());
+        assertEquals(TestValues.SUBMISSION_SUBMITTEREMAIL, submission.getSubmitterEmail().toString());
+        assertEquals(TestValues.SUBMISSION_SUBMITTERNAME, submission.getSubmitterName());
         assertEquals(TestValues.USER_ID_2, submission.getPreparers().get(0).toString());
         assertEquals(TestValues.REPOSITORY_ID_1, submission.getRepositories().get(0).toString());
         assertEquals(TestValues.REPOSITORY_ID_2, submission.getRepositories().get(1).toString());
@@ -94,6 +98,8 @@ public class SubmissionModelTests {
         assertEquals(root.getString("aggregatedDepositStatus"),TestValues.SUBMISSION_AGG_DEPOSIT_STATUS);
         assertEquals(root.getString("publication"),TestValues.PUBLICATION_ID_1);
         assertEquals(root.getString("submitter"),TestValues.USER_ID_1);
+        assertEquals(root.getString("submitterName"),TestValues.SUBMISSION_SUBMITTERNAME);
+        assertEquals(root.getString("submitterEmail"),TestValues.SUBMISSION_SUBMITTEREMAIL);
         assertEquals(root.getJSONArray("preparers").get(0),TestValues.USER_ID_2);
         assertEquals(root.getBoolean("submitted"),TestValues.SUBMISSION_SUBMITTED);
         assertEquals(root.getString("metadata"),TestValues.SUBMISSION_METADATA);
@@ -172,6 +178,8 @@ public class SubmissionModelTests {
         submission.setSubmitted(TestValues.SUBMISSION_SUBMITTED);
         submission.setPublication(new URI(TestValues.PUBLICATION_ID_1));
         submission.setSubmitter(new URI(TestValues.USER_ID_1));
+        submission.setSubmitterName(TestValues.SUBMISSION_SUBMITTERNAME);
+        submission.setSubmitterEmail(new URI(TestValues.SUBMISSION_SUBMITTEREMAIL));
         submission.setSource(Source.PASS);
         
         List<URI> preparers = new ArrayList<URI>();
