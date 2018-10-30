@@ -24,6 +24,7 @@ local.properties
 *.iml
 *.ipr
 *.iws
+dependency-reduced-pom.xml
 
 # External tool builders
 .externalToolBuilders/
