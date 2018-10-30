@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.dataconservancy.pass</groupId>
     <artifactId>pass-client</artifactId>
-    <version>0.4.3-SNAPSHOT</version>
+    <version>0.5.0</version>
   </parent>
   <artifactId>pass-data-client</artifactId>
   <name>PASS Data Client</name>
