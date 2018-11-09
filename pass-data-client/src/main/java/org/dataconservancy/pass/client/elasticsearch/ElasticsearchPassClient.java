@@ -58,7 +58,7 @@ public class ElasticsearchPassClient {
     /**
      * Template for a search attribute e.g. AND fldname:"something"
      */
-    private static final String QS_ATTRIB_TEMPLATE  = "AND %s:\"%s\"";
+    private static final String QS_ATTRIB_TEMPLATE  = " AND %s:\"%s\"";
     
     /**
      * Template for a query string e.g. (@type:Submission AND fldname:"something")
