@@ -28,7 +28,6 @@ import java.util.Set;
 
 import org.dataconservancy.pass.model.Deposit;
 import org.dataconservancy.pass.model.Deposit.DepositStatus;
-import org.dataconservancy.pass.model.Repository;
 import org.dataconservancy.pass.model.RepositoryCopy;
 import org.dataconservancy.pass.model.RepositoryCopy.CopyStatus;
 import org.dataconservancy.pass.model.Submission;
@@ -173,7 +172,7 @@ public class SubmissionStatusCalculator  {
             statusMap.put(repositoryUri, null);            
         }
         for (Deposit d : deposits) {
-            if (d.getDepositStatus().equals(DepositStatus.REJECTED)) {
+            if (d.getDepositStatus()!=null && d.getDepositStatus().equals(DepositStatus.REJECTED)) {
                 statusMap.put(d.getRepository(), NEEDS_ATTENTION);                
             } else {
                 statusMap.put(d.getRepository(), SUBMITTED);
@@ -182,9 +181,9 @@ public class SubmissionStatusCalculator  {
         for (RepositoryCopy rc : repoCopies) {
             URI repoId = rc.getRepository();
             CopyStatus copyStatus = rc.getCopyStatus();
-            if (copyStatus.equals(CopyStatus.COMPLETE)) {
+            if (copyStatus!=null && copyStatus.equals(CopyStatus.COMPLETE)) {
                 statusMap.put(repoId, COMPLETE);
-            } else if (copyStatus.equals(CopyStatus.REJECTED) || copyStatus.equals(CopyStatus.STALLED)) {
+            } else if (copyStatus!=null && (copyStatus.equals(CopyStatus.REJECTED) || copyStatus.equals(CopyStatus.STALLED))) {
                 statusMap.put(repoId, NEEDS_ATTENTION);
             } else {
                 // There is a RepositoryCopy and nothing is wrong. Note in this state, it will overwrite a status of 

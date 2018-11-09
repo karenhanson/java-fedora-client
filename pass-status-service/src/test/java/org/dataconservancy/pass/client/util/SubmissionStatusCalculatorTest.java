@@ -100,6 +100,32 @@ public class SubmissionStatusCalculatorTest extends SubmissionStatusTestBase  {
           
     }
 
+
+    /**
+     * 1 repositories listed, no deposits, repositoryCopy only. copyStatus is null
+     * @throws Exception
+     */
+    @Test
+    public void testSubmittedNoDepositCopyNoStatus() throws Exception {
+        List<URI> repositories = Arrays.asList(repo1Id);
+        List<RepositoryCopy> repositoryCopies = Arrays.asList(repoCopy(null, repo1Id));
+    
+        assertEquals(SUBMITTED, SubmissionStatusCalculator.calculatePostSubmissionStatus(repositories, null, repositoryCopies));
+    }
+
+
+    /**
+     * 1 repositories listed, no deposits, repositoryCopy only. copyStatus is null
+     * @throws Exception
+     */
+    @Test
+    public void testSubmittedDepositNullStatusNoRepoCopy() throws Exception {
+        List<URI> repositories = Arrays.asList(repo1Id);
+        List<Deposit> deposits = Arrays.asList(deposit(null, repo1Id));
+    
+        assertEquals(SUBMITTED, SubmissionStatusCalculator.calculatePostSubmissionStatus(repositories, deposits, null));
+    }
+
     
     /**
      * 3 repositories with various states for deposits and repositoryCopies all of which should come out as 
