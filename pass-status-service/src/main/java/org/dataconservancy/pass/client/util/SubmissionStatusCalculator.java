@@ -172,7 +172,7 @@ public class SubmissionStatusCalculator  {
             statusMap.put(repositoryUri, null);            
         }
         for (Deposit d : deposits) {
-            if (d.getDepositStatus()!=null && d.getDepositStatus().equals(DepositStatus.REJECTED)) {
+            if (DepositStatus.REJECTED.equals(d.getDepositStatus())) {
                 statusMap.put(d.getRepository(), NEEDS_ATTENTION);                
             } else {
                 statusMap.put(d.getRepository(), SUBMITTED);
@@ -181,9 +181,9 @@ public class SubmissionStatusCalculator  {
         for (RepositoryCopy rc : repoCopies) {
             URI repoId = rc.getRepository();
             CopyStatus copyStatus = rc.getCopyStatus();
-            if (copyStatus!=null && copyStatus.equals(CopyStatus.COMPLETE)) {
+            if (CopyStatus.COMPLETE.equals(copyStatus)) {
                 statusMap.put(repoId, COMPLETE);
-            } else if (copyStatus!=null && (copyStatus.equals(CopyStatus.REJECTED) || copyStatus.equals(CopyStatus.STALLED))) {
+            } else if (CopyStatus.REJECTED.equals(copyStatus) || CopyStatus.STALLED.equals(copyStatus)) {
                 statusMap.put(repoId, NEEDS_ATTENTION);
             } else {
                 // There is a RepositoryCopy and nothing is wrong. Note in this state, it will overwrite a status of 
