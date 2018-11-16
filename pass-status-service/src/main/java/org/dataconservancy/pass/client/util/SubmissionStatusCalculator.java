@@ -70,9 +70,7 @@ public class SubmissionStatusCalculator  {
     public static SubmissionStatus calculatePostSubmissionStatus(List<URI> repositories,
                                             List<Deposit> deposits,
                                             List<RepositoryCopy> repositoryCopies) {
-        if (repositories==null || repositories.size()==0) {
-            throw new IllegalArgumentException("respositories cannot be null or empty when calculating a post-submission status.");
-        }
+        if (repositories==null) {repositories = new ArrayList<URI>();}
         if (deposits==null) {deposits = new ArrayList<Deposit>();}
         if (repositoryCopies==null) {repositoryCopies = new ArrayList<RepositoryCopy>();}
         Map<URI, SubmissionStatus> statusMap = mapPostSubmissionRepositoryStatuses(repositories, deposits, repositoryCopies);

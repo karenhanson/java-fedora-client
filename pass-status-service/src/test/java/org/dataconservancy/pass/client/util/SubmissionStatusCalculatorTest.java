@@ -28,6 +28,7 @@ import org.dataconservancy.pass.model.Deposit;
 import org.dataconservancy.pass.model.Deposit.DepositStatus;
 import org.dataconservancy.pass.model.RepositoryCopy;
 import org.dataconservancy.pass.model.RepositoryCopy.CopyStatus;
+import org.dataconservancy.pass.model.Submission.SubmissionStatus;
 import org.dataconservancy.pass.model.SubmissionEvent;
 import org.dataconservancy.pass.model.SubmissionEvent.EventType;
 import org.joda.time.DateTime;
@@ -277,12 +278,15 @@ public class SubmissionStatusCalculatorTest extends SubmissionStatusTestBase  {
 
     
     /**
-     * This confirms that if you try to provide a null fo the repositories list it will throw an exception
+     * This confirms that if you try to provide a null for all values, it will assume submitted.
+     * This would only happen if the only repositories were web linked and therefore there is no 
+     * Deposit to process.
      * @throws Exception
      */
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testPostSubmissionStatusNulls() throws Exception { 
-        SubmissionStatusCalculator.calculatePostSubmissionStatus(null, null, null);                
+        SubmissionStatus status = SubmissionStatusCalculator.calculatePostSubmissionStatus(null, null, null);                
+        assertEquals(SubmissionStatus.SUBMITTED, status);
     }
 
     
